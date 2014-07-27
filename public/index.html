@@ -7,13 +7,13 @@
 </head>
 <body>
 <div class="container">
-    <div class="title">Oscillator 1</div>
+    <div class="title">Oscillator</div>
     <button class="on">On</button>
     <button class="off">Off</button>
     <button class="mute">Mute</button>
 
     <div class="label" id="frequency-label">Frequency</div>
-    <input type="range" min="0" max="100" class="frequency" value="9" onchange="updateFrequency(this.value)">
+    <input type="range" min="0" max="100" class="frequency" value="4.4" onchange="updateFrequency(this.value)">
 
     <div class="label" id="volume-label">Volume</div>
     <input type="range" min="0" max="100" class="volume" value="100" onchange="updateVolume(this.value)">
@@ -31,34 +31,55 @@
     }
 
     var oscillator = context.createOscillator();
+    var oscillator1 = context.createOscillator();
+    var oscillator2 = context.createOscillator();
     var gainNode = context.createGain();
-    var initialFrequency = 900;
+    var gainNode1 = context.createGain();
+    var gainNode2 = context.createGain();
+    var initialFrequency = 440;
     var initialVolume = 0.2;
     var $mute = document.querySelector('.mute');
 
-
-
     $(document).on("click", ".on", function () {
         gainNode.connect(context.destination);
+        gainNode1.connect(context.destination);
+        gainNode2.connect(context.destination);
+        gainNode.gain.value = initialVolume;
+        gainNode1.gain.value = initialVolume;
+        gainNode2.gain.value = initialVolume*0.8;
         oscillator.connect(gainNode);
+        oscillator1.connect(gainNode);
+        oscillator2.connect(gainNode);
         oscillator.type = 0;
+        oscillator1.type = 1;
+        oscillator2.type = 3;
         oscillator.frequency.value = initialFrequency;
+        oscillator1.frequency.value = initialFrequency / 2;
+        oscillator2.frequency.value = initialFrequency / 2;
         oscillator.start(0);
+        oscillator1.start(0);
+        oscillator2.start(0);
         $mute.id = "active";
         $mute.innerHTML = "Mute";
     });
 
     $(document).on("click", ".off", function () {
         oscillator.disconnect(0);
+        oscillator1.disconnect(0);
+        oscillator2.disconnect(0);
     });
 
     $mute.onclick = function () {
         if (this.id === "") {
             gainNode.connect(context.destination);
+            gainNode1.connect(context.destination);
+            gainNode2.connect(context.destination);
             this.innerHTML = "Mute";
             this.id = "active";
         } else {
             gainNode.disconnect(0);
+            gainNode1.disconnect(0);
+            gainNode2.disconnect(0);
             this.innerHTML = "Unmute";
             this.id = "";
         }
@@ -66,11 +87,17 @@
 
     updateVolume = function(val) {
         gainNode.gain.value = (val/100);
+        gainNode1.gain.value = (val/100);
+        gainNode2.gain.value = (val/100)*0.8;
     };
 
     updateFrequency = function(val) {
         oscillator.frequency.value = (val*100);
+        oscillator1.frequency.value = (val*100)/2;
+        oscillator2.frequency.value = (val*100)/2;
         oscillator.start(0);
+        oscillator1.start(0);
+        oscillator2.start(0);
     };
 </script>
 </body>
