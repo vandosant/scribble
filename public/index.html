@@ -12,7 +12,7 @@
     <button class="off">Off</button>
 
     <div class="label" id="frequency-label">Frequency</div>
-    <input type="range" min="0" max="100" class="frequency" value="4.4" onchange="updateFrequency(this.value)">
+    <input type="range" min="0" max="100" class="frequency" value="2.6" onchange="updateFrequency(this.value)">
 
     <div class="label" id="volume-label">Volume</div>
     <input type="range" min="0" max="100" class="volume" value="100" onchange="updateVolume(this.value)">
@@ -35,7 +35,7 @@
     var gainNode = context.createGain();
     var gainNode1 = context.createGain();
     var gainNode2 = context.createGain();
-    var initialFrequency = 440;
+    var initialFrequency = 261.63;
     var initialVolume = 0.2;
 
     $(document).on("click", ".on", function () {
@@ -79,6 +79,37 @@
         oscillator1.start(0);
         oscillator2.start(0);
     };
+
+    updateNote = function(val) {
+        oscillator.frequency.value = (val);
+        oscillator1.frequency.value = (val)/2;
+        oscillator2.frequency.value = (val)/2;
+        oscillator.start(0);
+        oscillator1.start(0);
+        oscillator2.start(0);
+    };
+
+    $(document).keypress(function(e) {
+        if (e.which === 97) {
+            updateNote(261.63)
+        } else if (e.which === 115) {
+            updateNote(293.66)
+        } else if (e.which === 100) {
+            updateNote(329.63)
+        } else if (e.which === 102) {
+            updateNote(349.23)
+        } else if (e.which === 103) {
+            updateNote(392.00)
+        } else if (e.which === 104) {
+            updateNote(440.00)
+        } else if (e.which === 106) {
+            updateNote(493.88)
+        } else if (e.which === 107) {
+            updateNote(523.25)
+        } else if (e.which === 108) {
+            updateNote(587.33)
+        }
+    });
 </script>
 </body>
 </html>

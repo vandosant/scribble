@@ -7,6 +7,7 @@ Usage:
 - Fork and clone this repo.
 - Open a Chrome browser window and enter the path to the index.html source file, e.g:  
 `file:///path/to/directory/web-audio-spike/index.html`
-
+- Turn the oscillator on.
+- Use the keyboard to change notes.
 
 Brought to you by [Scott Skender](http://www.scottskender.com)
