@@ -1,11 +1,77 @@
 <html>
 <head>
     <title>Web Synthesizer</title>
-    <link type="text/css" href="public/vendors/css/application.css" rel="stylesheet">
-    <script type="text/javascript" src="public/vendors/javascript/jquery.2.1.1.js"></script>
+    <link href="css/application.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="vendors/javascript/jquery.2.1.1.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Cedarville+Cursive|Geo' rel='stylesheet' type='text/css'>
 </head>
 <body>
+<div class="container">
+    <div class="title">Oscillator 1</div>
+    <button class="on">On</button>
+    <button class="off">Off</button>
+    <button class="mute">Mute</button>
 
+    <div class="label" id="frequency-label">Frequency</div>
+    <input type="range" min="0" max="100" class="frequency" value="9" onchange="updateFrequency(this.value)">
+
+    <div class="label" id="volume-label">Volume</div>
+    <input type="range" min="0" max="100" class="volume" value="100" onchange="updateVolume(this.value)">
+</div>
+<script>
+    var contextClass = (window.AudioContext ||
+            window.webkitAudioContext ||
+            window.mozAudioContext ||
+            window.oAudioContext ||
+            window.msAudioContext);
+    if (contextClass) {
+        var context = new contextClass();
+    } else {
+        $(document).append('<div class="errors">Sorry, your browser is not supported.</div>');
+    }
+
+    var oscillator = context.createOscillator();
+    var gainNode = context.createGain();
+    var initialFrequency = 900;
+    var initialVolume = 0.2;
+    var $mute = document.querySelector('.mute');
+
+
+
+    $(document).on("click", ".on", function () {
+        gainNode.connect(context.destination);
+        oscillator.connect(gainNode);
+        oscillator.type = 0;
+        oscillator.frequency.value = initialFrequency;
+        oscillator.start(0);
+        $mute.id = "active";
+        $mute.innerHTML = "Mute";
+    });
+
+    $(document).on("click", ".off", function () {
+        oscillator.disconnect(0);
+    });
+
+    $mute.onclick = function () {
+        if (this.id === "") {
+            gainNode.connect(context.destination);
+            this.innerHTML = "Mute";
+            this.id = "active";
+        } else {
+            gainNode.disconnect(0);
+            this.innerHTML = "Unmute";
+            this.id = "";
+        }
+    };
+
+    updateVolume = function(val) {
+        gainNode.gain.value = (val/100);
+    };
+
+    updateFrequency = function(val) {
+        oscillator.frequency.value = (val*100);
+        oscillator.start(0);
+    };
+</script>
 </body>
 </html>

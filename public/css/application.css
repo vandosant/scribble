@@ -1,0 +1,48 @@
+body {
+    width: 100%;
+    font-family: 'Geo', sans-serif;
+}
+
+.title{
+    font-family: 'Cedarville Cursive', cursive;
+    font-size: 1.8em;
+}
+
+.container {
+    width: 30%;
+    margin: .6em auto;
+    padding: .6em;
+    background-color: #eeeeee;
+    border: 2px solid #b94d07;
+    text-align: center;
+}
+
+button {
+    font-size: 1em;
+    font-family: 'Geo', sans-serif;
+    background: #fff;
+    border: 2px solid #29009a;
+    outline: none;
+}
+
+button:hover{
+    background: #ffe2e7;
+}
+
+input[type='range'] {
+    -webkit-appearance: none;
+    background-color: silver;
+    width: 200px;
+    height:20px;
+    border-radius: 2em;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: #b94d07;
+    border: 2px solid black;
+    width: 2em;
+    height: 2em;
+    border-radius: 2em;
+}
