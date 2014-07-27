@@ -75,18 +75,12 @@
         oscillator.frequency.value = (val*100);
         oscillator1.frequency.value = (val*100)/2;
         oscillator2.frequency.value = (val*100)/2;
-        oscillator.start(0);
-        oscillator1.start(0);
-        oscillator2.start(0);
     };
 
     updateNote = function(val) {
         oscillator.frequency.value = (val);
         oscillator1.frequency.value = (val)/2;
         oscillator2.frequency.value = (val)/2;
-        oscillator.start(0);
-        oscillator1.start(0);
-        oscillator2.start(0);
     };
 
     $(document).keypress(function(e) {
