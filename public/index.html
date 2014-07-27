@@ -10,7 +10,6 @@
     <div class="title">Oscillator</div>
     <button class="on">On</button>
     <button class="off">Off</button>
-    <button class="mute">Mute</button>
 
     <div class="label" id="frequency-label">Frequency</div>
     <input type="range" min="0" max="100" class="frequency" value="4.4" onchange="updateFrequency(this.value)">
@@ -38,7 +37,6 @@
     var gainNode2 = context.createGain();
     var initialFrequency = 440;
     var initialVolume = 0.2;
-    var $mute = document.querySelector('.mute');
 
     $(document).on("click", ".on", function () {
         gainNode.connect(context.destination);
@@ -59,8 +57,6 @@
         oscillator.start(0);
         oscillator1.start(0);
         oscillator2.start(0);
-        $mute.id = "active";
-        $mute.innerHTML = "Mute";
     });
 
     $(document).on("click", ".off", function () {
@@ -68,22 +64,6 @@
         oscillator1.disconnect(0);
         oscillator2.disconnect(0);
     });
-
-    $mute.onclick = function () {
-        if (this.id === "") {
-            gainNode.connect(context.destination);
-            gainNode1.connect(context.destination);
-            gainNode2.connect(context.destination);
-            this.innerHTML = "Mute";
-            this.id = "active";
-        } else {
-            gainNode.disconnect(0);
-            gainNode1.disconnect(0);
-            gainNode2.disconnect(0);
-            this.innerHTML = "Unmute";
-            this.id = "";
-        }
-    };
 
     updateVolume = function(val) {
         gainNode.gain.value = (val/100);
