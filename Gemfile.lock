@@ -1,7 +1,10 @@
 GEM
+  remote: https://rubygems.org/
   specs:
+    high_voltage (2.2.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  high_voltage (~> 2.2.1)
