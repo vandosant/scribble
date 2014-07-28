@@ -1,3 +1,3 @@
 source "https://rubygems.org"
 
-gem 'high_voltage', '~> 2.2.1'
+gem "sinatra", "~> 1.4.5"
