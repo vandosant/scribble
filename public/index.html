@@ -17,6 +17,16 @@
     <div class="label" id="volume-label">Volume</div>
     <input type="range" min="0" max="100" class="volume" value="100" onchange="updateVolume(this.value)">
 </div>
+<div class="keyboard">
+    <div class="key"></div>
+    <div class="key"></div>
+    <div class="key"></div>
+    <div class="key"></div>
+    <div class="key"></div>
+    <div class="key"></div>
+    <div class="key"></div>
+    <div class="key"></div>
+</div>
 <script>
     var contextClass = (window.AudioContext ||
             window.webkitAudioContext ||
@@ -37,6 +47,8 @@
     var gainNode2 = context.createGain();
     var initialFrequency = 261.63;
     var initialVolume = 0.2;
+    var currentVolume = 0.2;
+    var $key = $(".key");
 
     $(document).on("click", ".on", function () {
         gainNode.connect(context.destination);
@@ -85,23 +97,72 @@
 
     $(document).keypress(function(e) {
         if (e.which === 97) {
-            updateNote(261.63)
+            updateNote(261.63);
+            updateVolume(100);
+            $(".keyboard .key:nth-child(1)").toggleClass("keyon");
         } else if (e.which === 115) {
-            updateNote(293.66)
+            updateNote(293.66);
+            updateVolume(100);
+            $(".keyboard .key:nth-child(2)").toggleClass("keyon");
         } else if (e.which === 100) {
-            updateNote(329.63)
+            updateNote(329.63);
+            updateVolume(100);
+            $(".keyboard .key:nth-child(3)").toggleClass("keyon");
         } else if (e.which === 102) {
-            updateNote(349.23)
+            updateNote(349.23);
+            updateVolume(100);
+            $(".keyboard .key:nth-child(4)").toggleClass("keyon");
         } else if (e.which === 103) {
-            updateNote(392.00)
+            updateNote(392.00);
+            updateVolume(100);
+            $(".keyboard .key:nth-child(5)").toggleClass("keyon");
         } else if (e.which === 104) {
-            updateNote(440.00)
+            updateNote(440.00);
+            updateVolume(100);
+            $(".keyboard .key:nth-child(6)").toggleClass("keyon");
         } else if (e.which === 106) {
-            updateNote(493.88)
+            updateNote(493.88);
+            updateVolume(100);
+            $(".keyboard .key:nth-child(7)").toggleClass("keyon");
         } else if (e.which === 107) {
-            updateNote(523.25)
+            updateNote(523.25);
+            updateVolume(100);
+            $(".keyboard .key:nth-child(8)").toggleClass("keyon");
         } else if (e.which === 108) {
-            updateNote(587.33)
+            updateNote(587.33);
+            updateVolume(100);
+            $(".keyboard .key:nth-child(9)").toggleClass("keyon");
+        }
+    });
+
+    $(document).keyup(function(e) {
+        if (e.which === 65) {
+            updateVolume(0);
+            $(".keyboard .key:nth-child(1)").toggleClass("keyon");
+        } else if (e.which === 83) {
+            updateVolume(0);
+            $(".keyboard .key:nth-child(2)").toggleClass("keyon");
+        } else if (e.which === 68) {
+            updateVolume(0);
+            $(".keyboard .key:nth-child(3)").toggleClass("keyon");
+        } else if (e.which === 70) {
+            updateVolume(0);
+            $(".keyboard .key:nth-child(4)").toggleClass("keyon");
+        } else if (e.which === 71) {
+            updateVolume(0);
+            $(".keyboard .key:nth-child(5)").toggleClass("keyon");
+        } else if (e.which === 72) {
+            updateVolume(0);
+            $(".keyboard .key:nth-child(6)").toggleClass("keyon");
+        } else if (e.which === 74) {
+            updateVolume(0);
+            $(".keyboard .key:nth-child(7)").toggleClass("keyon");
+        } else if (e.which === 75) {
+            updateVolume(0);
+            $(".keyboard .key:nth-child(8)").toggleClass("keyon");
+        } else if (e.which === 76) {
+            updateVolume(0);
+            $(".keyboard .key:nth-child(9)").toggleClass("keyon");
         }
     });
 </script>

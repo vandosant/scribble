@@ -46,3 +46,19 @@ input[type="range"]::-webkit-slider-thumb {
     height: 2em;
     border-radius: 2em;
 }
+
+.keyboard {
+    margin: 0 auto;
+    text-align: center;
+}
+.key {
+    display: inline-block;
+    height: 10em;
+    width: 2em;
+    border: .3em solid black;
+    background: #fff
+}
+
+.keyon {
+    background: rgba(163, 116, 21, 0.55);
+}
