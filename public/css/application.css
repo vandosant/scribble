@@ -11,9 +11,9 @@ body {
 .container {
     width: 30%;
     margin: .6em auto;
-    padding: .6em;
+    padding: .6em .6em 1.2em .6em;
     background-color: #eeeeee;
-    border: 2px solid #b94d07;
+    border: .4em solid #b94d07;
     text-align: center;
 }
 
