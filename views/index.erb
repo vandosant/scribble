@@ -31,129 +31,92 @@
         $(document).append('<div class="errors">Sorry, your browser is not supported.</div>');
     }
 
-    var oscillator = context.createOscillator();
-    var oscillator1 = context.createOscillator();
-    var oscillator2 = context.createOscillator();
-    var gainNode = context.createGain();
-    var gainNode1 = context.createGain();
-    var gainNode2 = context.createGain();
     var initialFrequency = 261.63;
     var initialVolume = 0.2;
     var currentVolume = 0.2;
     var $key = $(".key");
+    var osc = new Oscillator(context, initialFrequency, initialVolume);
+    $(document).keypress(function(e) {
+      if (e.which === 111) {
+        osc.connect();
+      }
+    });
 
     $(document).on("click", ".on", function () {
-        gainNode.connect(context.destination);
-        gainNode1.connect(context.destination);
-        gainNode2.connect(context.destination);
-        gainNode.gain.value = initialVolume;
-        gainNode1.gain.value = initialVolume;
-        gainNode2.gain.value = initialVolume*0.8;
-        oscillator.connect(gainNode);
-        oscillator1.connect(gainNode);
-        oscillator2.connect(gainNode);
-        oscillator.type = 0;
-        oscillator1.type = 1;
-        oscillator2.type = 3;
-        oscillator.frequency.value = initialFrequency;
-        oscillator1.frequency.value = initialFrequency / 2;
-        oscillator2.frequency.value = initialFrequency / 2;
-        oscillator.start(0);
-        oscillator1.start(0);
-        oscillator2.start(0);
+        osc.connect();
     });
 
     $(document).on("click", ".off", function () {
-        oscillator.disconnect(0);
-        oscillator1.disconnect(0);
-        oscillator2.disconnect(0);
+        osc.disconnect();
     });
-
-    updateVolume = function(val) {
-        gainNode.gain.value = (val/100);
-        gainNode1.gain.value = (val/100);
-        gainNode2.gain.value = (val/100)*0.8;
-    };
-
-    updateFrequency = function(val) {
-        oscillator.frequency.value = (val*100);
-        oscillator1.frequency.value = (val*100)/2;
-        oscillator2.frequency.value = (val*100)/2;
-    };
-
-    updateNote = function(val) {
-        oscillator.frequency.value = (val);
-        oscillator1.frequency.value = (val)/2;
-        oscillator2.frequency.value = (val)/2;
-    };
 
     $(document).keypress(function(e) {
         if (e.which === 97) {
-            updateNote(261.63);
-            updateVolume(100);
+            osc.updateNote(261.63);
+            osc.updateVolume(100);
             $(".keyboard .key:nth-child(1)").toggleClass("keyon");
         } else if (e.which === 115) {
-            updateNote(293.66);
-            updateVolume(100);
+            osc.updateNote(293.66);
+            osc.updateVolume(100);
             $(".keyboard .key:nth-child(2)").toggleClass("keyon");
         } else if (e.which === 100) {
-            updateNote(329.63);
-            updateVolume(100);
+            osc.updateNote(329.63);
+            osc.updateVolume(100);
             $(".keyboard .key:nth-child(3)").toggleClass("keyon");
         } else if (e.which === 102) {
-            updateNote(349.23);
-            updateVolume(100);
+            osc.updateNote(349.23);
+            osc.updateVolume(100);
             $(".keyboard .key:nth-child(4)").toggleClass("keyon");
         } else if (e.which === 103) {
-            updateNote(392.00);
-            updateVolume(100);
+            osc.updateNote(392.00);
+            osc.updateVolume(100);
             $(".keyboard .key:nth-child(5)").toggleClass("keyon");
         } else if (e.which === 104) {
-            updateNote(440.00);
-            updateVolume(100);
+            osc.updateNote(440.00);
+            osc.updateVolume(100);
             $(".keyboard .key:nth-child(6)").toggleClass("keyon");
         } else if (e.which === 106) {
-            updateNote(493.88);
-            updateVolume(100);
+            osc.updateNote(493.88);
+            osc.updateVolume(100);
             $(".keyboard .key:nth-child(7)").toggleClass("keyon");
         } else if (e.which === 107) {
-            updateNote(523.25);
-            updateVolume(100);
+            osc.updateNote(523.25);
+            osc.updateVolume(100);
             $(".keyboard .key:nth-child(8)").toggleClass("keyon");
         } else if (e.which === 108) {
-            updateNote(587.33);
-            updateVolume(100);
+            osc.updateNote(587.33);
+            osc.updateVolume(100);
             $(".keyboard .key:nth-child(9)").toggleClass("keyon");
         }
     });
 
     $(document).keyup(function(e) {
         if (e.which === 65) {
-            updateVolume(0);
+            osc.updateVolume(0);
             $(".keyboard .key:nth-child(1)").toggleClass("keyon");
         } else if (e.which === 83) {
-            updateVolume(0);
+            osc.updateVolume(0);
             $(".keyboard .key:nth-child(2)").toggleClass("keyon");
         } else if (e.which === 68) {
-            updateVolume(0);
+            osc.updateVolume(0);
             $(".keyboard .key:nth-child(3)").toggleClass("keyon");
         } else if (e.which === 70) {
-            updateVolume(0);
+            osc.updateVolume(0);
             $(".keyboard .key:nth-child(4)").toggleClass("keyon");
         } else if (e.which === 71) {
-            updateVolume(0);
+            osc.updateVolume(0);
             $(".keyboard .key:nth-child(5)").toggleClass("keyon");
         } else if (e.which === 72) {
-            updateVolume(0);
+            osc.updateVolume(0);
             $(".keyboard .key:nth-child(6)").toggleClass("keyon");
         } else if (e.which === 74) {
-            updateVolume(0);
+            osc.updateVolume(0);
             $(".keyboard .key:nth-child(7)").toggleClass("keyon");
         } else if (e.which === 75) {
-            updateVolume(0);
+            osc.updateVolume(0);
             $(".keyboard .key:nth-child(8)").toggleClass("keyon");
         } else if (e.which === 76) {
-            updateVolume(0);
+            osc.updateVolume(0);
             $(".keyboard .key:nth-child(9)").toggleClass("keyon");
         }
     });
