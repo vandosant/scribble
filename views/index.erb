@@ -60,41 +60,42 @@
         osc.disconnect();
     });
 
-    $(document).keypress(function(e) {
+    $(document).keydown(function(e) {
+      console.log(e.which);
       if(keysDown.indexOf(e.which) === -1) {
-        if (e.which === 97) {
+        if (e.which === 65) {
             oscillators[0].updateNote(261.63);
             oscillators[0].updateVolume(100);
             $(".keyboard .key:nth-child(1)").toggleClass("keyon");
-        } else if (e.which === 115) {
+        } else if (e.which === 83) {
           oscillators[1].updateNote(293.66);
           oscillators[1].updateVolume(100);
             $(".keyboard .key:nth-child(2)").toggleClass("keyon");
-        } else if (e.which === 100) {
+        } else if (e.which === 68) {
           oscillators[2].updateNote(329.63);
           oscillators[2].updateVolume(100);
             $(".keyboard .key:nth-child(3)").toggleClass("keyon");
-        } else if (e.which === 102) {
+        } else if (e.which === 70) {
           oscillators[3].updateNote(349.23);
           oscillators[3].updateVolume(100);
             $(".keyboard .key:nth-child(4)").toggleClass("keyon");
-        } else if (e.which === 103) {
+        } else if (e.which === 71) {
           oscillators[4].updateNote(392.00);
           oscillators[4].updateVolume(100);
             $(".keyboard .key:nth-child(5)").toggleClass("keyon");
-        } else if (e.which === 104) {
+        } else if (e.which === 72) {
             oscillators[5].updateNote(440.00);
             oscillators[5].updateVolume(100);
             $(".keyboard .key:nth-child(6)").toggleClass("keyon");
-        } else if (e.which === 106) {
+        } else if (e.which === 74) {
             oscillators[6].updateNote(493.88);
             oscillators[6].updateVolume(100);
             $(".keyboard .key:nth-child(7)").toggleClass("keyon");
-        } else if (e.which === 107) {
+        } else if (e.which === 75) {
             oscillators[7].updateNote(523.25);
             oscillators[7].updateVolume(100);
             $(".keyboard .key:nth-child(8)").toggleClass("keyon");
-        } else if (e.which === 108) {
+        } else if (e.which === 76) {
             oscillators[8].updateNote(587.33);
             oscillators[8].updateVolume(100);
             $(".keyboard .key:nth-child(9)").toggleClass("keyon");
@@ -106,40 +107,32 @@
     $(document).keyup(function(e) {
       if (e.which === 65) {
             oscillators[0].updateVolume(0);
-            keysDown.pop(97);
             $(".keyboard .key:nth-child(1)").toggleClass("keyon");
         } else if (e.which === 83) {
             oscillators[1].updateVolume(0);
-            keysDown.pop(115);
              $(".keyboard .key:nth-child(2)").toggleClass("keyon");
         } else if (e.which === 68) {
             oscillators[2].updateVolume(0);
-            keysDown.pop(100);
            $(".keyboard .key:nth-child(3)").toggleClass("keyon");
         } else if (e.which === 70) {
             oscillators[3].updateVolume(0);
-            keysDown.pop(102);
             $(".keyboard .key:nth-child(4)").toggleClass("keyon");
         } else if (e.which === 71) {
             oscillators[4].updateVolume(0);
-            keysDown.pop(103);
              $(".keyboard .key:nth-child(5)").toggleClass("keyon");
         } else if (e.which === 72) {
             oscillators[5].updateVolume(0);
-            keysDown.pop(104);
             $(".keyboard .key:nth-child(6)").toggleClass("keyon");
         } else if (e.which === 74) {
             oscillators[6].updateVolume(0);
-            keysDown.pop(106);
             $(".keyboard .key:nth-child(7)").toggleClass("keyon");
         } else if (e.which === 75) {
             oscillators[7].updateVolume(0);
-            keysDown.pop(107);
             $(".keyboard .key:nth-child(8)").toggleClass("keyon");
         } else if (e.which === 76) {
             oscillators[8].updateVolume(0);
-            keysDown.pop(108);
             $(".keyboard .key:nth-child(9)").toggleClass("keyon");
         }
+      keysDown.pop(e.which);
     });
 </script>
