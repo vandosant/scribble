@@ -61,7 +61,6 @@
     });
 
     $(document).keydown(function(e) {
-      console.log(e.which);
       if(keysDown.indexOf(e.which) === -1) {
         if (e.which === 65) {
             oscillators[0].updateNote(261.63);
