@@ -1,24 +1,19 @@
 <div class="container">
   <div class="title">Oscillator</div>
-  <button class="on">On</button>
-  <button class="off">Off</button>
-
-  <div class="label" id="frequency-label">Frequency</div>
-  <input type="range" min="0" max="100" class="frequency" value="2.6" onchange="updateFrequency(this.value)">
 
   <div class="label" id="volume-label">Volume</div>
-  <input type="range" min="0" max="100" class="volume" value="100" onchange="updateVolume(this.value)">
+  <input type="range" min="0" max="100" class="volume" value="100">
 </div>
 <div class="keyboard">
-  <div class="key"></div>
-  <div class="key"></div>
-  <div class="key"></div>
-  <div class="key"></div>
-  <div class="key"></div>
-  <div class="key"></div>
-  <div class="key"></div>
-  <div class="key"></div>
-  <div class="key"></div>
+  <div class="key" id="key-A"></div>
+  <div class="key" id="key-S"></div>
+  <div class="key" id="key-D"></div>
+  <div class="key" id="key-F"></div>
+  <div class="key" id="key-G"></div>
+  <div class="key" id="key-H"></div>
+  <div class="key" id="key-J"></div>
+  <div class="key" id="key-K"></div>
+  <div class="key" id="key-L"></div>
 </div>
 <script>
   var contextClass = (window.AudioContext ||
@@ -34,112 +29,95 @@
 
   var initialFrequency = 261.63;
   var initialVolume = 0;
-  var currentVolume = 0.2;
+  var currentVolume = 100;
   var $key = $(".key");
   var keysDown = [];
   var oscillators = [];
 
-  for (var i = 0; i < 10; i++) {
-    var osc = new Oscillator(context, initialFrequency, initialVolume);
-    oscillators.push(osc);
-  }
 
-  $(document).keypress(function (e) {
-    if (e.which === 111) {
-      osc.connect();
+  var int = function () {
+    for (var i = 0; i < 10; i++) {
+      var osc = new Oscillator(context, initialFrequency, initialVolume);
+      oscillators.push(osc);
     }
+  };
+
+  int();
+
+  oscillators.forEach(function (osc) {
+    osc.connect();
   });
 
-  $(document).on("click", ".on", function () {
-    oscillators.forEach(function (osc) {
-      osc.connect();
-    });
-  });
+  var keys = {
+    'A' : {
+      key : 65,
+      index: 0,
+      freq: 261.63
+    },
+    'S' : {
+      key : 83,
+      index: 1,
+      freq: 293.66
+    },
+    'D' : {
+      key : 68,
+      index : 2,
+      freq:329.63
+    },
+    'F': {
+      key: 70,
+      index:3,
+      freq:349.23
+    },
+    'G': {
+      key: 71,
+      index: 4,
+      freq: 392.00
+    },
+    'H': {
+      key: 72,
+      index: 5,
+      freq: 440.00
+    },
+    'J': {
+      key: 74,
+      index: 6,
+      freq: 493.88
+    },
+    'K': {
+      key: 75,
+      index: 7,
+      freq: 523.25
+    },
+    'L': {
+      key: 76,
+      index: 8,
+      freq: 587.33
+    }
+  };
 
-  $(document).on("click", ".off", function () {
-    osc.disconnect();
+  $('.volume').change(function () {
+    currentVolume = this.value;
   });
 
   $(document).keydown(function (e) {
     if (keysDown.indexOf(e.which) === -1) {
-      if (e.which === 65) {
-        oscillators[0].updateNote(261.63);
-        oscillators[0].updateVolume(100);
+      var char = String.fromCharCode(e.which);
+      var key = keys[char];
+      if(key) {
+        oscillators[key.index].updateNote(key.freq);
+        oscillators[key.index].updateVolume(currentVolume);
         keysDown.push(e.which);
-        $(".keyboard .key:nth-child(1)").toggleClass("keyon");
-      } else if (e.which === 83) {
-        oscillators[1].updateNote(293.66);
-        oscillators[1].updateVolume(100);
-        keysDown.push(e.which);
-        $(".keyboard .key:nth-child(2)").toggleClass("keyon");
-      } else if (e.which === 68) {
-        oscillators[2].updateNote(329.63);
-        oscillators[2].updateVolume(100);
-        keysDown.push(e.which);
-        $(".keyboard .key:nth-child(3)").toggleClass("keyon");
-      } else if (e.which === 70) {
-        oscillators[3].updateNote(349.23);
-        oscillators[3].updateVolume(100);
-        keysDown.push(e.which);
-        $(".keyboard .key:nth-child(4)").toggleClass("keyon");
-      } else if (e.which === 71) {
-        oscillators[4].updateNote(392.00);
-        oscillators[4].updateVolume(100);
-        keysDown.push(e.which);
-        $(".keyboard .key:nth-child(5)").toggleClass("keyon");
-      } else if (e.which === 72) {
-        oscillators[5].updateNote(440.00);
-        oscillators[5].updateVolume(100);
-        keysDown.push(e.which);
-        $(".keyboard .key:nth-child(6)").toggleClass("keyon");
-      } else if (e.which === 74) {
-        oscillators[6].updateNote(493.88);
-        oscillators[6].updateVolume(100);
-        keysDown.push(e.which);
-        $(".keyboard .key:nth-child(7)").toggleClass("keyon");
-      } else if (e.which === 75) {
-        oscillators[7].updateNote(523.25);
-        oscillators[7].updateVolume(100);
-        keysDown.push(e.which);
-        $(".keyboard .key:nth-child(8)").toggleClass("keyon");
-      } else if (e.which === 76) {
-        oscillators[8].updateNote(587.33);
-        oscillators[8].updateVolume(100);
-        keysDown.push(e.which);
-        $(".keyboard .key:nth-child(9)").toggleClass("keyon");
+        $("#key-"+char).addClass("keyon");
       }
     }
   });
 
   $(document).keyup(function (e) {
-    if (e.which === 65) {
-      oscillators[0].updateVolume(0);
-      $(".keyboard .key:nth-child(1)").toggleClass("keyon");
-    } else if (e.which === 83) {
-      oscillators[1].updateVolume(0);
-      $(".keyboard .key:nth-child(2)").toggleClass("keyon");
-    } else if (e.which === 68) {
-      oscillators[2].updateVolume(0);
-      $(".keyboard .key:nth-child(3)").toggleClass("keyon");
-    } else if (e.which === 70) {
-      oscillators[3].updateVolume(0);
-      $(".keyboard .key:nth-child(4)").toggleClass("keyon");
-    } else if (e.which === 71) {
-      oscillators[4].updateVolume(0);
-      $(".keyboard .key:nth-child(5)").toggleClass("keyon");
-    } else if (e.which === 72) {
-      oscillators[5].updateVolume(0);
-      $(".keyboard .key:nth-child(6)").toggleClass("keyon");
-    } else if (e.which === 74) {
-      oscillators[6].updateVolume(0);
-      $(".keyboard .key:nth-child(7)").toggleClass("keyon");
-    } else if (e.which === 75) {
-      oscillators[7].updateVolume(0);
-      $(".keyboard .key:nth-child(8)").toggleClass("keyon");
-    } else if (e.which === 76) {
-      oscillators[8].updateVolume(0);
-      $(".keyboard .key:nth-child(9)").toggleClass("keyon");
-    }
+    var char = String.fromCharCode(e.which);
+    var key = keys[char];
+    oscillators[key.index].updateVolume(0);
+    $("#key-" + char).removeClass("keyon");
     keysDown.pop(e.which);
   });
 </script>
