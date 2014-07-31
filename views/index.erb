@@ -47,27 +47,26 @@
   oscillators.forEach(function (osc) {
     osc.connect();
   });
-
   var keys = {
-    'A' : {
-      key : 65,
+    'A': {
+      key: 65,
       index: 0,
       freq: 261.63
     },
-    'S' : {
-      key : 83,
+    'S': {
+      key: 83,
       index: 1,
       freq: 293.66
     },
-    'D' : {
-      key : 68,
-      index : 2,
-      freq:329.63
+    'D': {
+      key: 68,
+      index: 2,
+      freq: 329.63
     },
     'F': {
       key: 70,
-      index:3,
-      freq:349.23
+      index: 3,
+      freq: 349.23
     },
     'G': {
       key: 71,
@@ -104,11 +103,11 @@
     if (keysDown.indexOf(e.which) === -1) {
       var char = String.fromCharCode(e.which);
       var key = keys[char];
-      if(key) {
+      if (key) {
         oscillators[key.index].updateNote(key.freq);
         oscillators[key.index].updateVolume(currentVolume);
         keysDown.push(e.which);
-        $("#key-"+char).addClass("keyon");
+        $("#key-" + char).addClass("keyon");
       }
     }
   });
