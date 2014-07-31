@@ -4,17 +4,21 @@
   <div class="label" id="volume-label">Volume</div>
   <input type="range" min="0" max="100" class="volume" value="100">
 </div>
-<div class="keyboard">
-  <div class="key" id="key-A"></div>
-  <div class="key" id="key-S"></div>
-  <div class="key" id="key-D"></div>
-  <div class="key" id="key-F"></div>
-  <div class="key" id="key-G"></div>
-  <div class="key" id="key-H"></div>
-  <div class="key" id="key-J"></div>
-  <div class="key" id="key-K"></div>
-  <div class="key" id="key-L"></div>
-</div>
+  <div class="keyboard">
+    <div class="black-key" id="key-W"></div>
+    <div class="black-key" id="key-E"></div>
+    <div class="black-key" id="key-T"></div>
+    <div class="black-key" id="key-Y"></div>
+    <div class="black-key" id="key-U"></div>
+    <div class="key" id="key-A"></div>
+    <div class="key" id="key-S"></div>
+    <div class="key" id="key-D"></div>
+    <div class="key" id="key-F"></div>
+    <div class="key" id="key-G"></div>
+    <div class="key" id="key-H"></div>
+    <div class="key" id="key-J"></div>
+    <div class="key" id="key-K"></div>
+  </div>
 <script>
   var contextClass = (window.AudioContext ||
     window.webkitAudioContext ||
@@ -36,7 +40,7 @@
 
 
   var int = function () {
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 13; i++) {
       var osc = new Oscillator(context, initialFrequency, initialVolume);
       oscillators.push(osc);
     }
@@ -53,45 +57,65 @@
       index: 0,
       freq: 261.63
     },
+    'W': {
+      key: 87,
+      index: 1,
+      freq: 277.18
+    },
     'S': {
       key: 83,
-      index: 1,
+      index: 2,
       freq: 293.66
+    },
+    'E': {
+      key: 69,
+      index: 3,
+      freq: 311.13
     },
     'D': {
       key: 68,
-      index: 2,
+      index: 4,
       freq: 329.63
     },
     'F': {
       key: 70,
-      index: 3,
+      index: 5,
       freq: 349.23
+    },
+    'T': {
+      key: 84,
+      index: 6,
+      freq: 369.99
     },
     'G': {
       key: 71,
-      index: 4,
+      index: 7,
       freq: 392.00
+    },
+    'Y': {
+      key: 89,
+      index: 8,
+      freq: 415.30
     },
     'H': {
       key: 72,
-      index: 5,
+      index: 9,
       freq: 440.00
+    },
+    'U': {
+      key: 85,
+      index: 10,
+      freq: 466.16
     },
     'J': {
       key: 74,
-      index: 6,
+      index: 11,
       freq: 493.88
     },
     'K': {
       key: 75,
-      index: 7,
+      index: 12,
       freq: 523.25
-    },
-    'L': {
-      key: 76,
-      index: 8,
-      freq: 587.33
     }
   };
 

@@ -1,6 +1,9 @@
 body {
     width: 100%;
     font-family: 'Geo', sans-serif;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .title{
@@ -49,14 +52,49 @@ input[type="range"]::-webkit-slider-thumb {
 
 .keyboard {
     margin: 0 auto;
+    position: relative;
     text-align: center;
+    width: 17.9em;
 }
+
 .key {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     display: inline-block;
     height: 10em;
     width: 2em;
     border: .3em solid black;
     background: #fff
+}
+
+.black-key {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    position: absolute;
+    vertical-align: top;
+    display: inline-block;
+    height: 7em;
+    width: 1.4em;
+    border: .3em solid black;
+    background: #000;
+    margin: 0;
+}
+.black-key:nth-child(1) {
+    left: 1.7em;
+}
+.black-key:nth-child(2) {
+    left: 3.8em;
+}
+.black-key:nth-child(3) {
+    left: 8.2em;
+}
+.black-key:nth-child(4) {
+    left: 10.4em;
+}
+.black-key:nth-child(5) {
+    left: 12.6em;
 }
 
 .keyon {
