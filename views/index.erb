@@ -115,8 +115,10 @@
   $(document).keyup(function (e) {
     var char = String.fromCharCode(e.which);
     var key = keys[char];
-    oscillators[key.index].updateVolume(0);
-    $("#key-" + char).removeClass("keyon");
-    keysDown.pop(e.which);
+    if (key) {
+      oscillators[key.index].updateVolume(0);
+      $("#key-" + char).removeClass("keyon");
+      keysDown.pop(e.which);
+    }
   });
 </script>
