@@ -2,6 +2,8 @@ Description:
 A web-based synthesizer. Inspired by [this talk by Stuart Memo](https://www.youtube.com/watch?v=PN8Eg1K9xjE#t=15).  
 More info about the Web Audio API [here](http://webaudio.github.io/web-audio-api/).  
 
+[Staging URL](http://web-synth.herokuapp.com/)
+
 Usage:
 - Note--This will only work in Chrome.
 - Fork and clone this repo.
