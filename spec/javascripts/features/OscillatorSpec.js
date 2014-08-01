@@ -45,7 +45,7 @@ describe("Oscillator", function () {
     expect(round(oscillator.gainNode3.gain.value, 1)).toEqual(0.2);
   });
 
-  it("should allow it's note to be updated", function() {
+  it("should allow its note to be updated", function() {
     oscillator.connect();
 
     var newNote = 440.00;
@@ -54,5 +54,16 @@ describe("Oscillator", function () {
     expect(oscillator.osc1.frequency.value).toEqual(newNote);
     expect(oscillator.osc2.frequency.value).toEqual(newNote / 2);
     expect(oscillator.osc3.frequency.value).toEqual(newNote / 2);
+  });
+
+  it("should allow its volume to be updated", function() {
+    oscillator.connect();
+
+    var newVolume = 0.5;
+    oscillator.updateVolume(newVolume);
+
+    expect(round(oscillator.gainNode1.gain.value, 2)).toEqual(newVolume);
+    expect(round(oscillator.gainNode2.gain.value, 2)).toEqual(newVolume);
+    expect(round(oscillator.gainNode3.gain.value, 2)).toEqual((newVolume) * 0.8);
   });
 });
