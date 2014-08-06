@@ -33,7 +33,7 @@
 
   var initialFrequency = 261.63;
   var initialVolume = 0;
-  var currentVolume = 1;
+  var currentVolume = 0.8;
   var $key = $(".key");
   var keysDown = [];
   var oscillators = [];
@@ -120,7 +120,7 @@
   };
 
   $('.volume').change(function () {
-    currentVolume = this.value / 100;
+    currentVolume = (this.value / 100) * 0.8;
   });
 
   $(document).keydown(function (e) {
