@@ -100,3 +100,14 @@ input[type="range"]::-webkit-slider-thumb {
 .keyon {
     background: rgba(163, 116, 21, 0.55);
 }
+
+.drum-button {
+    width: 3em;
+    height: 1em;
+    border: .3em solid black;
+    cursor: pointer;
+}
+
+.drum-button:hover {
+    background: #29009a;
+}

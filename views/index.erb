@@ -19,6 +19,10 @@
     <div class="key" id="key-J"></div>
     <div class="key" id="key-K"></div>
   </div>
+
+  <div class="drum-machine">
+    <div class="drum-button" id="bass-drum"></div>
+  </div>
 <script>
   var contextClass = (window.AudioContext ||
     window.webkitAudioContext ||
@@ -37,6 +41,7 @@
   var $key = $(".key");
   var keysDown = [];
   var oscillators = [];
+  var drumMachine = new DrumMachine(context, initialVolume);
 
 
   var int = function () {
@@ -144,5 +149,9 @@
       $("#key-" + char).removeClass("keyon");
       keysDown.pop(e.which);
     }
+  });
+
+  $(document).click('#bass-drum', function() {
+    drumMachine.bassKick();
   });
 </script>
