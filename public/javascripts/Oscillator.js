@@ -40,6 +40,7 @@ Oscillator.prototype.disconnect = function () {
 };
 
 Oscillator.prototype.updateVolume = function (value) {
+  this.volume = value;
   this.gainNode1.gain.value = value;
   this.gainNode2.gain.value = value;
   this.gainNode3.gain.value = value * 0.8;

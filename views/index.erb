@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="title">Oscillator</div>
+  <div class="title">Scribble</div>
 
   <div class="label" id="volume-label">Volume</div>
   <input type="range" min="0" max="100" class="volume" value="100">
@@ -44,7 +44,7 @@
 
   var initialFrequency = 261.63;
   var initialVolume = 0;
-  var currentVolume = 0.8;
+  var currentVolume = 0.25;
   var $key = $(".key");
   var keysDown = [];
   var oscillators = [];
@@ -132,7 +132,7 @@
   };
 
   $('.volume').change(function () {
-    currentVolume = (this.value / 100) * 0.8;
+    currentVolume = (this.value / 100) * 0.25;
   });
 
   $(document).keydown(function (e) {
