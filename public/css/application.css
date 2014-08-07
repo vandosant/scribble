@@ -101,14 +101,22 @@ input[type="range"]::-webkit-slider-thumb {
     background: rgba(163, 116, 21, 0.55);
 }
 
+.drum-machine {
+    margin: 0 auto;
+    width: 80%;
+    text-align: center;
+}
+
 .drum-button {
     width: 3em;
     height: 1em;
     border: .3em solid black;
     cursor: pointer;
+    display: inline-block;
 }
 
 .drum-button:hover {
+    display: inline-block;
     background: #29009a;
 }
 
