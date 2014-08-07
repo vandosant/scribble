@@ -6,7 +6,7 @@ DrumMachine.prototype.bassKick = function () {
   var bassDrum = this.context.createOscillator();
   var bassNode = this.context.createGain();
 
-  bassNode.gain.value = 0.8;
+  bassNode.gain.value = 1;
   bassNode.connect(this.context.destination);
   bassDrum.connect(bassNode);
   bassDrum.frequency.value = 52;

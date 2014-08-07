@@ -21,14 +21,14 @@ Oscillator.prototype.connect = function () {
   this.gainNode2.connect(this.context.destination);
   this.gainNode2.gain.value = this.volume;
   this.osc2.connect(this.gainNode2);
-  this.osc2.type = "sawtooth";
+  this.osc2.type = "sine";
   this.osc2.frequency.value = this.frequency / 2;
   this.osc2.start(0);
 
   this.gainNode3.connect(this.context.destination);
   this.gainNode3.gain.value = this.volume * 0.8;
   this.osc3.connect(this.gainNode3);
-  this.osc3.type = "square";
+  this.osc3.type = "triangle";
   this.osc3.frequency.value = this.frequency / 2;
   this.osc3.start(0);
 };
