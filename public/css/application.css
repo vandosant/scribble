@@ -111,3 +111,11 @@ input[type="range"]::-webkit-slider-thumb {
 .drum-button:hover {
     background: #29009a;
 }
+
+.drum-button-active {
+    border: .3em solid #b94d07;
+}
+
+.drum-button-selected {
+    background: #29009a;
+}

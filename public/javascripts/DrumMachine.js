@@ -1,16 +1,27 @@
-function DrumMachine(context, initialVolume) {
+function DrumMachine(context) {
   this.context = context;
-  this.bassDrum = this.context.createOscillator();
-  this.bassNode = context.createGain();
-  this.bassNode.gain.value = initialVolume;
-  this.volume = initialVolume;
 }
 
-DrumMachine.prototype.bassKick = function() {
-  this.bassNode.gain.value = 0.8;
-  this.bassNode.connect(this.context.destination);
-  this.bassDrum.connect(this.bassNode);
-  this.bassDrum.frequency.value = 52;
-  this.bassDrum.type = "sine";
-  this.bassDrum.start(0);
+DrumMachine.prototype.bassKick = function () {
+  var bassDrum = this.context.createOscillator();
+  var bassNode = this.context.createGain();
+
+  bassNode.gain.value = 0.8;
+  bassNode.connect(this.context.destination);
+  bassDrum.connect(bassNode);
+  bassDrum.frequency.value = 52;
+  bassDrum.type = "sine";
+  bassDrum.start(0);
+
+  var fadeTimeout = setInterval(function () {
+    if (bassNode.gain.value > 0) {
+      bassNode.gain.value -= 0.01;
+    }
+  }, 5);
+
+  setTimeout(function () {
+    clearInterval(fadeTimeout);
+    bassDrum.stop(0);
+  }, 1000);
+
 };
