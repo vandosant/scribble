@@ -12,6 +12,7 @@ GEM
     rack-protection (1.5.3)
       rack
     rake (10.3.2)
+    sass (3.3.10)
     sinatra (1.4.5)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -23,4 +24,5 @@ PLATFORMS
 
 DEPENDENCIES
   jasmine (~> 2.0.2)
+  sass (~> 3.3.10)
   sinatra (~> 1.4.5)

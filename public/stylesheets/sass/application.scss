@@ -112,11 +112,14 @@ input[type="range"]::-webkit-slider-thumb {
     border: .3em solid black;
     cursor: pointer;
     display: inline-block;
+  &:hover {
+    display: inline-block;
+    background: #29009a;
+  }
 }
 
 .drum-button:hover {
-    display: inline-block;
-    background: #29009a;
+
 }
 
 .drum-button-active {
