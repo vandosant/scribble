@@ -1,3 +1,5 @@
+@import "variables";
+
 body {
     width: 100%;
     font-family: 'Geo', sans-serif;
@@ -9,6 +11,7 @@ body {
 .title {
     font-family: 'Cedarville Cursive', cursive;
     font-size: 1.8em;
+    color: $fourth-color
 }
 
 .container {
@@ -16,7 +19,7 @@ body {
     margin: .6em auto;
     padding: .6em .6em 1.2em .6em;
     background-color: #eeeeee;
-    border: .4em solid #b94d07;
+    border: .4em solid $primary-color;
     text-align: center;
 }
 
@@ -24,17 +27,13 @@ button {
     font-size: 1em;
     font-family: 'Geo', sans-serif;
     background: #fff;
-    border: 2px solid #29009a;
+    border: 2px solid $second-color;
     outline: none;
-}
-
-button:hover {
-    background: #ffe2e7;
 }
 
 input[type='range'] {
     -webkit-appearance: none;
-    background-color: silver;
+    background-color: rgba(192,192,192,.7);
     width: 200px;
     height: 20px;
     border-radius: 2em;
@@ -43,8 +42,8 @@ input[type='range'] {
 
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    background-color: #b94d07;
-    border: 2px solid black;
+    background-color: $fifth-color;
+    border: 2px solid $fourth-color;
     width: 2em;
     height: 2em;
     border-radius: 2em;
@@ -97,7 +96,7 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .keyon {
-    background: #B2A187;
+    background: $third-color;
 }
 
 .drum-machine {
@@ -114,7 +113,7 @@ input[type="range"]::-webkit-slider-thumb {
     display: inline-block;
   &:hover {
     display: inline-block;
-    background: #29009a;
+    background: $second-color;
   }
 }
 
@@ -123,9 +122,9 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .drum-button-active {
-    border: .3em solid #b94d07;
+    border: .3em solid $primary-color;
 }
 
 .drum-button-selected {
-    background: #29009a;
+    background: $second-color;
 }
