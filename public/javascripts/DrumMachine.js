@@ -18,10 +18,4 @@ DrumMachine.prototype.bassKick = function () {
       bassNode.gain.value -= 0.02;
     }
   }, 5);
-
-  setTimeout(function () {
-    clearInterval(fadeTimeout);
-    bassDrum.stop(0);
-  }, 1000);
-
 };
