@@ -21,14 +21,24 @@
 </div>
 
 <div class="drum-machine">
-  <div class="drum-button" id="drum-0"></div>
-  <div class="drum-button" id="drum-1"></div>
-  <div class="drum-button" id="drum-2"></div>
-  <div class="drum-button" id="drum-3"></div>
-  <div class="drum-button" id="drum-4"></div>
-  <div class="drum-button" id="drum-5"></div>
-  <div class="drum-button" id="drum-6"></div>
-  <div class="drum-button" id="drum-7"></div>
+  <div class="drum-button" id="drum-0">1</div>
+  <div class="drum-button" id="drum-1">2</div>
+  <div class="drum-button" id="drum-2">3</div>
+  <div class="drum-button" id="drum-3">4</div>
+  <div class="drum-button" id="drum-4">5</div>
+  <div class="drum-button" id="drum-5">6</div>
+  <div class="drum-button" id="drum-6">7</div>
+  <div class="drum-button" id="drum-7">8</div>
+</div>
+<div class="drum-machine">
+  <div class="drum-button" id="drum-8">9</div>
+  <div class="drum-button" id="drum-9">10</div>
+  <div class="drum-button" id="drum-10">11</div>
+  <div class="drum-button" id="drum-11">12</div>
+  <div class="drum-button" id="drum-12">13</div>
+  <div class="drum-button" id="drum-13">14</div>
+  <div class="drum-button" id="drum-14">15</div>
+  <div class="drum-button" id="drum-15">16</div>
 </div>
 <script>
   var contextClass = (window.AudioContext ||
@@ -167,12 +177,12 @@
       drumMachine.bassKick();
     }
 
-    if (node === 7) {
+    if (node === 15) {
       node = 0;
     } else {
       node++;
     }
-  }, 800);
+  }, 250);
 
   $('.drum-button').click(function () {
     $(this).toggleClass('drum-button-selected');

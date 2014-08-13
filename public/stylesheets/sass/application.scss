@@ -111,6 +111,7 @@ input[type="range"]::-webkit-slider-thumb {
     border: .3em solid black;
     cursor: pointer;
     display: inline-block;
+    line-height: .9em;
   &:hover {
     display: inline-block;
     background: $second-color;
