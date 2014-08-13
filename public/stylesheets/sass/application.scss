@@ -128,3 +128,10 @@ input[type="range"]::-webkit-slider-thumb {
 .drum-button-selected {
     background: $second-color;
 }
+
+.bass-drum, .snare-drum {
+  &:hover,
+  &.drum-button-selected {
+    background: $fifth-color;
+  }
+}
