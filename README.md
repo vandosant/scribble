@@ -3,6 +3,7 @@ A web-based synthesizer. Inspired by [this talk by Stuart Memo](https://www.yout
 More info about the Web Audio API [here](http://webaudio.github.io/web-audio-api/).  
 
 [Staging URL](http://web-synth.herokuapp.com/)
+[Production URL](http://scribble.scottskender.com)
 
 Usage:
 - Note--This will only work in Chrome.
