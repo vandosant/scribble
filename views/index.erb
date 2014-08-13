@@ -40,6 +40,10 @@
   <div class="drum-button" id="drum-14">15</div>
   <div class="drum-button" id="drum-15">16</div>
 </div>
+<div class="drum-machine">
+  <div class="drum-button bass-drum">Bass</div>
+  <div class="drum-button snare-drum">Snare</div>
+</div>
 <script>
   var contextClass = (window.AudioContext ||
     window.webkitAudioContext ||
@@ -174,7 +178,11 @@
     $('#drum-' + node).addClass('drum-button-active');
 
     if ($('#drum-' + node).hasClass('drum-button-selected')) {
-      drumMachine.bassKick();
+      if ($(".bass-drum").hasClass('drum-button-selected')) {
+        drumMachine.bassKick();
+      } else if ($(".snare-drum").hasClass('drum-button-selected')) {
+        drumMachine.snareHit();
+      }
     }
 
     if (node === 15) {
@@ -186,5 +194,17 @@
 
   $('.drum-button').click(function () {
     $(this).toggleClass('drum-button-selected');
+  });
+
+  $('.bass-drum').click(function () {
+    $('.bass-drum').removeClass('drum-button-selected');
+    $('.snare-drum').removeClass('drum-button-selected');
+    $(this).addClass('drum-button-selected');
+  });
+
+  $('.snare-drum').click(function () {
+    $('.bass-drum').removeClass('drum-button-selected');
+    $('.snare-drum').removeClass('drum-button-selected');
+    $(this).addClass('drum-button-selected');
   });
 </script>

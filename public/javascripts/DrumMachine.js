@@ -19,3 +19,21 @@ DrumMachine.prototype.bassKick = function () {
     }
   }, 5);
 };
+
+DrumMachine.prototype.snareHit = function () {
+  var snareDrum = this.context.createOscillator();
+  var snareNode = this.context.createGain();
+
+  snareNode.gain.value = 1;
+  snareNode.connect(this.context.destination);
+  snareDrum.connect(snareNode);
+  snareDrum.frequency.value = 200;
+  snareDrum.type = "sine";
+  snareDrum.start(0);
+
+  var fadeTimeout = setInterval(function () {
+    if (snareNode.gain.value > 0) {
+      snareNode.gain.value -= 0.5;
+    }
+  }, 5);
+};
