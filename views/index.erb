@@ -41,8 +41,8 @@
   <div class="drum-button" id="drum-15">16</div>
 </div>
 <div class="drum-machine">
-  <div class="drum-button bass-drum">Bass</div>
-  <div class="drum-button snare-drum">Snare</div>
+  <div class="bass-drum">Bass</div>
+  <div class="snare-drum">Snare</div>
 </div>
 <script>
   var contextClass = (window.AudioContext ||
@@ -63,6 +63,8 @@
   var keysDown = [];
   var oscillators = [];
   var drumMachine = new DrumMachine(context);
+  var bassDrumNodes = [];
+  var snareDrumNodes = [];
 
 
   var int = function () {
@@ -177,12 +179,11 @@
     $('.drum-button').removeClass('drum-button-active');
     $('#drum-' + node).addClass('drum-button-active');
 
-    if ($('#drum-' + node).hasClass('drum-button-selected')) {
-      if ($(".bass-drum").hasClass('drum-button-selected')) {
-        drumMachine.bassKick();
-      } else if ($(".snare-drum").hasClass('drum-button-selected')) {
-        drumMachine.snareHit();
-      }
+    if (bassDrumNodes.indexOf(node) >= 0) {
+      drumMachine.bassKick();
+    }
+    if (snareDrumNodes.indexOf(node) >= 0) {
+      drumMachine.snareHit();
     }
 
     if (node === 15) {
@@ -192,19 +193,50 @@
     }
   }, 250);
 
+  var selectBassDrum = function () {
+    $('.bass-drum').addClass('drum-button-selected');
+  };
+  $(document).ready(selectBassDrum());
+
   $('.drum-button').click(function () {
     $(this).toggleClass('drum-button-selected');
+    var index = Number(this.id.split('-').pop());
+    if ($('.bass-drum').hasClass('drum-button-selected')) {
+      var bassIndex = bassDrumNodes.indexOf(index);
+      if (bassIndex >= 0) {
+        bassDrumNodes[bassIndex] = null;
+      } else if (bassIndex === -1) {
+        bassDrumNodes.push(index);
+      }
+    } else if ($('.snare-drum').hasClass('drum-button-selected')) {
+      var snareIndex = snareDrumNodes.indexOf(index);
+      if (snareIndex >= 0) {
+        snareDrumNodes[snareIndex] = null;
+      } else if (snareIndex === -1) {
+        snareDrumNodes.push(index);
+      }
+    }
   });
 
   $('.bass-drum').click(function () {
-    $('.bass-drum').removeClass('drum-button-selected');
-    $('.snare-drum').removeClass('drum-button-selected');
     $(this).addClass('drum-button-selected');
+    $('.snare-drum').removeClass('drum-button-selected');
+    for (var node = 0; node < 15; node++) {
+      $('#drum-' + node).removeClass('drum-button-selected');
+      if (bassDrumNodes.indexOf(node) >= 0) {
+        $('#drum-' + node).addClass('drum-button-selected');
+      }
+    }
   });
 
   $('.snare-drum').click(function () {
-    $('.bass-drum').removeClass('drum-button-selected');
-    $('.snare-drum').removeClass('drum-button-selected');
     $(this).addClass('drum-button-selected');
+    $('.bass-drum').removeClass('drum-button-selected');
+    for (var node = 0; node < 15; node++) {
+      $('#drum-' + node).removeClass('drum-button-selected');
+      if (snareDrumNodes.indexOf(node) >= 0) {
+        $('#drum-' + node).addClass('drum-button-selected');
+      }
+    }
   });
 </script>
