@@ -20,30 +20,18 @@
   <div class="key" id="key-K"></div>
 </div>
 
-<div class="drum-machine">
-  <div class="drum-button" id="drum-0">1</div>
-  <div class="drum-button" id="drum-1">2</div>
-  <div class="drum-button" id="drum-2">3</div>
-  <div class="drum-button" id="drum-3">4</div>
-  <div class="drum-button" id="drum-4">5</div>
-  <div class="drum-button" id="drum-5">6</div>
-  <div class="drum-button" id="drum-6">7</div>
-  <div class="drum-button" id="drum-7">8</div>
+<div class="drum-machine" id="drums"></div>
+
+<div class="drum-machine" id="drum-types">
+  <div class="bass-drum drum-button-selected" id="bass-drums">Bass</div>
+  <div class="snare-drum" id="snare-drums">Snare</div>
 </div>
-<div class="drum-machine">
-  <div class="drum-button" id="drum-8">9</div>
-  <div class="drum-button" id="drum-9">10</div>
-  <div class="drum-button" id="drum-10">11</div>
-  <div class="drum-button" id="drum-11">12</div>
-  <div class="drum-button" id="drum-12">13</div>
-  <div class="drum-button" id="drum-13">14</div>
-  <div class="drum-button" id="drum-14">15</div>
-  <div class="drum-button" id="drum-15">16</div>
+
+<div class="container">
+  <div class="label" id="tempo-label">Tempo</div>
+  <input type="range" min="60" max="320" class="volume" value="100" id="tempo">
 </div>
-<div class="drum-machine">
-  <div class="bass-drum">Bass</div>
-  <div class="snare-drum">Snare</div>
-</div>
+
 <script>
   var contextClass = (window.AudioContext ||
     window.webkitAudioContext ||
@@ -174,51 +162,36 @@
     }
   });
 
-  var node = 0;
-  setInterval(function () {
-    $('.drum-button').removeClass('drum-button-active');
-    $('#drum-' + node).addClass('drum-button-active');
-
-    if (bassDrumNodes.indexOf(node) >= 0) {
-      drumMachine.bassKick();
+  var drums = {
+    'snare': {
+      'machine': new DrumMachine(context, 200, 'sine', 1, 0.5),
+      'selected': false
+    },
+    'bass': {
+      'machine': new DrumMachine(context, 58, 'sine', 1, 0.02),
+      'selected': false
     }
-    if (snareDrumNodes.indexOf(node) >= 0) {
-      drumMachine.snareHit();
-    }
-
-    if (node === 15) {
-      node = 0;
-    } else {
-      node++;
-    }
-  }, 250);
-
-  var selectBassDrum = function () {
-    $('.bass-drum').addClass('drum-button-selected');
   };
-  $(document).ready(selectBassDrum());
 
-  $('.drum-button').click(function () {
-    $(this).toggleClass('drum-button-selected');
-    var index = Number(this.id.split('-').pop());
-    if ($('.bass-drum').hasClass('drum-button-selected')) {
-      var bassIndex = bassDrumNodes.indexOf(index);
-      if (bassIndex >= 0) {
-        bassDrumNodes[bassIndex] = null;
-      } else if (bassIndex === -1) {
-        bassDrumNodes.push(index);
-      }
-    } else if ($('.snare-drum').hasClass('drum-button-selected')) {
-      var snareIndex = snareDrumNodes.indexOf(index);
-      if (snareIndex >= 0) {
-        snareDrumNodes[snareIndex] = null;
-      } else if (snareIndex === -1) {
-        snareDrumNodes.push(index);
-      }
-    }
+  var ctlr = new DrumController(drums, '#drums');
+  ctlr.render();
+  ctlr.setTempo(100);
+  ctlr.selectDrum('bass');
+  ctlr.start();
+
+  $('#tempo').change(function () {
+    ctlr.setTempo($(this).val());
   });
 
+  $('.drum-button').click(function () {
+    ctlr.selectBeat(this);
+  });
+
+
+
   $('.bass-drum').click(function () {
+    ctlr.selectDrum(this);
+
     $(this).addClass('drum-button-selected');
     $('.snare-drum').removeClass('drum-button-selected');
     for (var node = 0; node < 15; node++) {
