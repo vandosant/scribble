@@ -23,13 +23,11 @@
 <div class="drum-machine" id="drums"></div>
 
 <div class="drum-machine" id="drum-types">
-  <div class="bass-drum drum-button-selected" id="bass-drums">Bass</div>
-  <div class="snare-drum" id="snare-drums">Snare</div>
 </div>
 
 <div class="container">
   <div class="label" id="tempo-label">Tempo</div>
-  <input type="range" min="60" max="320" class="volume" value="100" id="tempo">
+  <input type="range" min="60" max="320" class="volume" value="120" id="tempo">
 </div>
 
 <script>
@@ -163,20 +161,20 @@
   });
 
   var drums = {
-    'snare': {
-      'machine': new DrumMachine(context, 200, 'sine', 1, 0.5),
-      'selected': false
-    },
     'bass': {
       'machine': new DrumMachine(context, 58, 'sine', 1, 0.02),
+      'selected': false
+    },
+    'snare': {
+      'machine': new DrumMachine(context, 200, 'sine', 1, 0.5),
       'selected': false
     }
   };
 
   var ctlr = new DrumController(drums, '#drums');
   ctlr.render();
-  ctlr.setTempo(100);
-  ctlr.selectDrum('bass');
+  ctlr.setTempo(120);
+  ctlr.selectDrum('#bass');
   ctlr.start();
 
   $('#tempo').change(function () {
@@ -187,29 +185,7 @@
     ctlr.selectBeat(this);
   });
 
-
-
-  $('.bass-drum').click(function () {
+  $('.drum-type').click(function () {
     ctlr.selectDrum(this);
-
-    $(this).addClass('drum-button-selected');
-    $('.snare-drum').removeClass('drum-button-selected');
-    for (var node = 0; node < 15; node++) {
-      $('#drum-' + node).removeClass('drum-button-selected');
-      if (bassDrumNodes.indexOf(node) >= 0) {
-        $('#drum-' + node).addClass('drum-button-selected');
-      }
-    }
-  });
-
-  $('.snare-drum').click(function () {
-    $(this).addClass('drum-button-selected');
-    $('.bass-drum').removeClass('drum-button-selected');
-    for (var node = 0; node < 15; node++) {
-      $('#drum-' + node).removeClass('drum-button-selected');
-      if (snareDrumNodes.indexOf(node) >= 0) {
-        $('#drum-' + node).addClass('drum-button-selected');
-      }
-    }
   });
 </script>

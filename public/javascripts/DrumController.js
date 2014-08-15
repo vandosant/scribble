@@ -5,11 +5,12 @@ function DrumController(drums, container, tempo) {
 }
 
 DrumController.prototype.render = function () {
-
   var that = this;
+  var typeContainer = $('<div class="drum-container"></div>');
+  typeContainer.attr('id', 'drum-types');
+
   $.each(this.drums, function (key, drum) {
     drum['beats'] = [];
-
     var buttonContainer = $('<div class="drum-container"></div>');
     buttonContainer.attr('id', 'drum-' + key);
     for (var i = 0; i < 16; i++) {
@@ -25,7 +26,13 @@ DrumController.prototype.render = function () {
       }
     }
     that.container.append(buttonContainer);
+
+    var typeButton = $('<div class="drum-type">' + key + '</div>');
+    typeButton.attr('id', key);
+    typeContainer.append(typeButton);
+
   });
+  that.container.append(typeContainer);
 
 };
 
@@ -68,7 +75,23 @@ DrumController.prototype.selectBeat = function (button) {
 };
 
 DrumController.prototype.selectDrum = function (button) {
-//  console.log(button)
+  that = this;
+  var $button = $(button);
+  var id = $button.attr('id');
+
+  $button.parent().find('.drum-type').removeClass('drum-button-selected');
+  $button.addClass('drum-button-selected');
+
+  $.each(this.drums, function (key, drum) {
+    if (key === id) {
+      that.container.find('#drum-' + key).css('visibility', 'visible');
+      that.container.find('#drum-' + key).css('height', '');
+    } else {
+      that.container.find('#drum-' + key).css('visibility', 'hidden');
+      that.container.find('#drum-' + key).css('height', '0');
+    }
+  });
+
 };
 
 DrumController.prototype.setTempo = function (tempo) {

@@ -105,6 +105,14 @@ input[type="range"]::-webkit-slider-thumb {
     text-align: center;
 }
 
+.drum-container > .drum-button {
+  margin-bottom: .2em;
+}
+
+.drum-button + .drum-button {
+  margin-left: .2em;
+}
+
 .drum-button {
     width: 3em;
     height: 1em;
@@ -129,8 +137,9 @@ input[type="range"]::-webkit-slider-thumb {
     background: $second-color;
 }
 
-.bass-drum, .snare-drum {
+.drum-type {
   @extend .drum-button;
+  line-height: 1em;
   &:hover,
   &.drum-button-selected {
     background: $fifth-color;
