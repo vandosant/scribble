@@ -2,7 +2,7 @@
   <div class="title">Scribble</div>
 
   <div class="label" id="volume-label">Volume</div>
-  <input type="range" min="0" max="100" class="volume" value="100">
+  <input type="range" min="0" max="100" value="100">
 </div>
 <div class="keyboard">
   <div class="key" id="key-A"></div>
@@ -25,9 +25,16 @@
 <div class="drum-machine" id="drum-types">
 </div>
 
-<div class="container">
-  <div class="label" id="tempo-label">Tempo</div>
-  <input type="range" min="60" max="320" class="volume" value="120" id="tempo">
+<div class="drum-machine" id="drum-properties">
+    <ul>
+      <li>
+        <div id="drum-status"></div>
+      </li>
+      <li>
+        <div class="label" id="tempo-label">Tempo</div>
+        <input type="range" min="60" max="320" value="180" id="tempo">
+      </li>
+    </ul>
 </div>
 
 <script>
@@ -186,9 +193,9 @@
 
   var ctlr = new DrumController(drums, '#drums');
   ctlr.render();
-  ctlr.setTempo(120);
+  ctlr.setTempo(180);
   ctlr.selectDrum('#bass');
-  ctlr.start();
+  ctlr.start('#drum-status');
 
   $('#tempo').change(function () {
     ctlr.setTempo($(this).val());
@@ -201,4 +208,13 @@
   $('.drum-type').click(function () {
     ctlr.selectDrum(this);
   });
+
+  $('#drum-status').click(function () {
+    var $this = $(this);
+    if ($this.hasClass('active') === true) {
+      ctlr.stop('#drum-status');
+    } else {
+      ctlr.start('#drum-status');
+    }
+  })
 </script>

@@ -145,3 +145,65 @@ input[type="range"]::-webkit-slider-thumb {
     background: $fifth-color;
   }
 }
+
+#play, #pause, #fwd, #rew {
+  width:80px;
+  height: 80px;
+  background: white;
+  position: relative;
+  display: block;
+}
+
+#play:before {
+  width: 0;
+  height: 0;
+  border-left: 15px solid $primary-color;
+  border-right: 15px solid transparent;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  position: absolute;
+  content: "";
+  top: 2px;
+  left: 40px;
+}
+
+#pause:before {
+  width: 8px;
+  height: 25px;
+  background: $primary-color;
+  position: absolute;
+  content: "";
+  top: 5px;
+  left: 35px;
+}
+
+#pause:after {
+  width: 8px;
+  height: 25px;
+  background: $primary-color;
+  position: absolute;
+  content: "";
+  top: 5px;
+  right: 25px;
+}
+
+#drum-properties {
+  overflow: hidden;
+  width: 25%;
+  margin: 0 auto;
+    ul {
+      li {
+        float: left;
+        list-style-type: none;
+        padding-left: 1em;
+      }
+      input[type='range'] {
+        width: 100px;
+        height: 9px;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        width: 1em;
+        height: 1em;
+      }
+  }
+}

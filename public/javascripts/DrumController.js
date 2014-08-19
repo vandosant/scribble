@@ -1,7 +1,7 @@
 function DrumController(drums, container, tempo) {
   this.drums = drums;
   this.container = $(container);
-  this.tempo = tempo
+  this.tempo = tempo;
 }
 
 DrumController.prototype.render = function () {
@@ -40,7 +40,7 @@ DrumController.parseTempo = function (tempo) {
   return (60 * 1000) / tempo;
 };
 
-DrumController.prototype.start = function () {
+DrumController.prototype.start = function (statusButton) {
   var that = this;
   var node = 0;
   clearInterval(this.interval);
@@ -60,6 +60,12 @@ DrumController.prototype.start = function () {
     }
 
   }, DrumController.parseTempo(this.tempo));
+
+  var $statusButton = $(statusButton);
+  var $statusDiv = $('<div id="pause"></div>');
+  $statusButton.addClass('active');
+  $statusButton.children().remove();
+  $statusButton.append($statusDiv);
 };
 
 DrumController.prototype.selectBeat = function (button) {
@@ -97,4 +103,15 @@ DrumController.prototype.selectDrum = function (button) {
 DrumController.prototype.setTempo = function (tempo) {
   this.tempo = tempo;
   this.start();
+};
+
+DrumController.prototype.stop = function (statusButton) {
+  clearInterval(this.interval);
+  var $statusButton = $(statusButton);
+  var $statusDiv = $('<div id="play"></div>');
+  $statusButton.removeClass('active');
+  $statusButton.addClass('inactive');
+  $statusButton.children().remove();
+  $statusButton.append($statusDiv);
+  this.container.find('.drum-button-active').removeClass('drum-button-active');
 };
