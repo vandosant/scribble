@@ -158,7 +158,7 @@ input[type="range"]::-webkit-slider-thumb {
 #play:before {
   width: 0;
   height: 0;
-  border-left: 15px solid $primary-color;
+  border-left: 15px solid $fourth-color;
   border-right: 15px solid transparent;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
@@ -171,7 +171,7 @@ input[type="range"]::-webkit-slider-thumb {
 #pause:before {
   width: 8px;
   height: 25px;
-  background: $primary-color;
+  background: $fourth-color;
   position: absolute;
   content: "";
   top: 5px;
@@ -181,7 +181,7 @@ input[type="range"]::-webkit-slider-thumb {
 #pause:after {
   width: 8px;
   height: 25px;
-  background: $primary-color;
+  background: $fourth-color;
   position: absolute;
   content: "";
   top: 5px;
