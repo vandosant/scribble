@@ -153,10 +153,11 @@
   $(document).keyup(function (e) {
     var char = String.fromCharCode(e.which);
     var key = keys[char];
-    if (key) {
+    var keyIndex = keysDown.indexOf(e.which);
+    if (keyIndex >= 0) {
       oscillators[key.index].updateVolume(0);
+      delete keysDown[keyIndex];
       $("#key-" + char).removeClass("keyon");
-      keysDown.pop(e.which);
     }
   });
 
