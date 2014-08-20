@@ -23,6 +23,20 @@ body {
   text-align: center;
 }
 
+.oscillator-container {
+  width: 70%;
+  margin: .6em auto;
+  text-align: center;
+  border: none;
+  padding: 0;
+  background: none;
+  select {
+    background: white;
+    border-radius: 0px;
+    outline: none;
+  }
+}
+
 button {
   font-size: 1em;
   font-family: 'Geo', sans-serif;
@@ -153,6 +167,7 @@ input[type="range"]::-webkit-slider-thumb {
   background: white;
   position: relative;
   display: block;
+  cursor: hand;
 }
 
 #play:before {
@@ -207,4 +222,13 @@ input[type="range"]::-webkit-slider-thumb {
       height: 1em;
     }
   }
+}
+
+.oscillator {
+  display: inline-block;
+  height: 3em;
+  width: 6em;
+  padding-top: .3em;
+  background: $second-color;
+  border: .4em solid $fourth-color;
 }

@@ -51,3 +51,13 @@ Oscillator.prototype.updateNote = function (value) {
   this.osc2.frequency.value = (value) / 2;
   this.osc3.frequency.value = (value) / 2;
 };
+
+Oscillator.prototype.updateWave = function (id, newWave) {
+  if (id === 1) {
+    this.osc1.type = newWave;
+  } else if (id === 2) {
+    this.osc2.type = newWave;
+  } else if (id === 3) {
+    this.osc3.type = newWave;
+  }
+};
