@@ -5,8 +5,9 @@ function DrumController(drums, container, tempo) {
 }
 
 DrumController.prototype.render = function () {
-  var that = this;
-  var typeContainer = $('<div class="drum-container"></div>');
+  var that = this,
+    typeContainer = $('<div class="drum-container"></div>');
+
   typeContainer.attr('id', 'drum-types');
 
   $.each(this.drums, function (key, drum) {
@@ -41,12 +42,13 @@ DrumController.parseTempo = function (tempo) {
 };
 
 DrumController.prototype.start = function (statusButton) {
-  var that = this;
-  var node = 0;
+  var that = this,
+    node = 0;
+
   clearInterval(this.interval);
   this.interval = setInterval(function () {
     that.container.find('.drum-button-active').removeClass('drum-button-active');
-    $.each(this.drums, function (key, drum) {
+    $.each(that.drums, function (key, drum) {
       drum.beats[node].el.addClass('drum-button-active');
       if (drum.beats[node].selected === true) {
         drum.machine.hit();
@@ -61,8 +63,8 @@ DrumController.prototype.start = function (statusButton) {
 
   }, DrumController.parseTempo(this.tempo));
 
-  var $statusButton = $(statusButton);
-  var $statusDiv = $('<div id="pause"></div>');
+  var $statusButton = $(statusButton),
+    $statusDiv = $('<div id="pause"></div>');
   $statusButton.addClass('active');
   $statusButton.children().remove();
   $statusButton.append($statusDiv);
@@ -81,9 +83,9 @@ DrumController.prototype.selectBeat = function (button) {
 };
 
 DrumController.prototype.selectDrum = function (button) {
-  that = this;
-  var $button = $(button);
-  var id = $button.attr('id');
+  var that = this,
+    $button = $(button),
+    id = $button.attr('id');
 
   $button.parent().find('.drum-type').removeClass('drum-button-selected');
   $button.addClass('drum-button-selected');
@@ -106,9 +108,9 @@ DrumController.prototype.setTempo = function (tempo) {
 };
 
 DrumController.prototype.stop = function (statusButton) {
+  var $statusButton = $(statusButton),
+    $statusDiv = $('<div id="play"></div>');
   clearInterval(this.interval);
-  var $statusButton = $(statusButton);
-  var $statusDiv = $('<div id="play"></div>');
   $statusButton.removeClass('active');
   $statusButton.addClass('inactive');
   $statusButton.children().remove();
