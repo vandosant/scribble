@@ -1,7 +1,8 @@
-function DrumController(drums, container, tempo) {
+function DrumController(drums, container, tempo, volume) {
   this.drums = drums;
   this.container = $(container);
   this.tempo = tempo;
+  this.startVolume = volume;
 }
 
 DrumController.prototype.render = function () {
@@ -116,4 +117,11 @@ DrumController.prototype.stop = function (statusButton) {
   $statusButton.children().remove();
   $statusButton.append($statusDiv);
   this.container.find('.drum-button-active').removeClass('drum-button-active');
+};
+
+DrumController.prototype.setVolume = function (volumeModifier) {
+  var that = this;
+  $.each(this.drums, function (key, drum) {
+    drum.machine.gainVal = that.startVolume * volumeModifier;
+  });
 };

@@ -1,7 +1,9 @@
 <div class="container">
   <div class="title">Scribble</div>
-  <div class="label" id="volume-label">Volume</div>
-  <input type="range" min="0" max="100" value="100" class="volume">
+  <div class="label" id="volume-label">Keyboard Volume</div>
+  <input type="range" min="0" max="100" value="100" class="keyboard-volume">
+  <div class="label" id="volume-label">Drum Volume</div>
+  <input type="range" min="0" max="100" value="100" class="drum-volume">
 </div>
 
 <div class="oscillator-container">
@@ -178,7 +180,7 @@
     }
   };
 
-  $('.volume').change(function () {
+  $('.keyboard-volume').change(function () {
     currentVolume = (this.value / 100) * 0.25;
   });
 
@@ -215,32 +217,32 @@
     }
   });
 
+  var drumVol = 1.3;
   var drums = {
     'bass': {
-      'machine': new DrumMachine(context, 47, 'sine', 1.3, 0.03),
+      'machine': new DrumMachine(context, 47, 'sine', drumVol, 0.03),
       'selected': false
     },
     'tom1': {
-      'machine': new DrumMachine(context, 64, 'sine', 1.3, 0.05),
+      'machine': new DrumMachine(context, 64, 'sine', drumVol, 0.05),
       'selected': false
     },
     'tom2': {
-      'machine': new DrumMachine(context, 160, 'sine', 1.3, 0.05),
+      'machine': new DrumMachine(context, 160, 'sine', drumVol, 0.05),
       'selected': false
     },
     'snare': {
-      'machine': new DrumMachine(context, 188, 'sine', 1.3, 0.07),
+      'machine': new DrumMachine(context, 188, 'sine', drumVol, 0.07),
       'selected': false
     },
     'pad': {
-      'machine': new DrumMachine(context, 261.63, 'triangle', 1.3, 0.02),
+      'machine': new DrumMachine(context, 261.63, 'triangle', drumVol, 0.02),
       'selected': false
     }
   };
 
-  var ctlr = new DrumController(drums, '#drums');
+  var ctlr = new DrumController(drums, '#drums', 180, drumVol);
   ctlr.render();
-  ctlr.setTempo(180);
   ctlr.selectDrum('#bass');
   ctlr.start('#drum-status');
 
@@ -263,5 +265,10 @@
     } else {
       ctlr.start('#drum-status');
     }
-  })
+  });
+
+  $('.drum-volume').change(function (e) {
+    volumeModifier = (this.value / 100);
+    ctlr.setVolume(volumeModifier);
+  });
 </script>
