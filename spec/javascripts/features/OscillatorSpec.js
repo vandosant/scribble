@@ -29,19 +29,19 @@ describe("Oscillator", function () {
     oscillator.connect();
 
     expect(oscillator.osc1.type).toEqual("sine");
-    expect(oscillator.osc2.type).toEqual("sawtooth");
-    expect(oscillator.osc3.type).toEqual("square");
+    expect(oscillator.osc2.type).toEqual("sine");
+    expect(oscillator.osc3.type).toEqual("triangle");
 
-    expect(round(oscillator.osc1.frequency.value, 3)).toEqual(initialFrequency);
-    expect(round(oscillator.osc2.frequency.value, 3)).toEqual(initialFrequency / 2);
-    expect(round(oscillator.osc3.frequency.value, 3)).toEqual(initialFrequency / 2);
+    expect(oscillator.osc1.frequency.value).toBeCloseTo(initialFrequency);
+    expect(oscillator.osc2.frequency.value).toBeCloseTo(initialFrequency / 2);
+    expect(oscillator.osc3.frequency.value).toBeCloseTo(initialFrequency / 2);
   });
 
   it("should have 3 gain nodes each with a value when connected", function () {
     oscillator.connect();
 
-    expect(round(oscillator.gainNode1.gain.value, 1)).toEqual(0.2);
-    expect(round(oscillator.gainNode2.gain.value, 1)).toEqual(0.2);
+    expect(oscillator.gainNode1.gain.value).toBeCloseTo(0.2);
+    expect(oscillator.gainNode2.gain.value).toBeCloseTo(0.2);
     expect(round(oscillator.gainNode3.gain.value, 1)).toEqual(0.2);
   });
 
@@ -62,8 +62,8 @@ describe("Oscillator", function () {
     var newVolume = 0.5;
     oscillator.updateVolume(newVolume);
 
-    expect(round(oscillator.gainNode1.gain.value, 2)).toEqual(newVolume);
-    expect(round(oscillator.gainNode2.gain.value, 2)).toEqual(newVolume);
-    expect(round(oscillator.gainNode3.gain.value, 2)).toEqual((newVolume) * 0.8);
+    expect(oscillator.gainNode1.gain.value).toBeCloseTo(newVolume);
+    expect(oscillator.gainNode2.gain.value).toBeCloseTo(newVolume);
+    expect(oscillator.gainNode3.gain.value).toBeCloseTo(newVolume * 0.8);
   });
 });
