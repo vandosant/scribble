@@ -9,6 +9,7 @@ Usage:
 - Fork and clone this repo.
 - Run `bundle install`
 - Start the server with `rerun rackup`
+- Run specs with `rake jasmine`
 - Open a Chrome browser window and point to http://localhost:9292
 - Use the keyboard to play notes (keys A-k).
 - You can change the keyboard's volume.
