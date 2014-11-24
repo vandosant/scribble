@@ -1,8 +1,9 @@
+[![Code Climate](https://codeclimate.com/github/vandosant/web-synthesizer/badges/gpa.svg)](https://codeclimate.com/github/vandosant/web-synthesizer)  
+
 Description:    
 A web-based synthesizer. Inspired by [this talk by Stuart Memo](https://www.youtube.com/watch?v=PN8Eg1K9xjE#t=15).  
 More info about the Web Audio API [here](http://webaudio.github.io/web-audio-api/).  
 
-[![Code Climate](https://codeclimate.com/github/vandosant/web-synthesizer/badges/gpa.svg)](https://codeclimate.com/github/vandosant/web-synthesizer)
 [Live Demo](http://scribble.scottskender.com)  
 
 Usage:
