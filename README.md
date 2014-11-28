@@ -10,7 +10,7 @@ Usage:
 - Note--This will only work in Chrome.
 - Fork and clone this repo.
 - Run `bundle install`
-- Start the server with `rerun rackup`
+- Start the server with `rackup`
 - Run specs with `rake jasmine`
 - Open a Chrome browser window and point to http://localhost:9292
 - Use the keyboard to play notes (keys A-k).
