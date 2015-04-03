@@ -193,18 +193,8 @@
     });
   });
 
-  $(document).keydown(function (e) {
-    if (keysDown.indexOf(e.which) === -1) {
-      var char = String.fromCharCode(e.which);
-      var key = keys[char];
-      if (key) {
-        oscillators[key.index].updateNote(key.freq);
-        oscillators[key.index].updateVolume(currentVolume);
-        keysDown.push(e.which);
-        $("#key-" + char).addClass("keyon");
-      }
-    }
-  });
+  var keyboard = new Keyboard()
+  keyboard.listen()
 
   $(document).keyup(function (e) {
     var char = String.fromCharCode(e.which);
