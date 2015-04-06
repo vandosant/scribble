@@ -1,4 +1,10 @@
-var Keyboard = function () {
+var Keyboard = function (obj) {
+  if (obj) {
+    this.volumeSelector = obj.volumeSelector;
+    this.volume = obj.volume || 0.25;
+  } else {
+    this.volume = 0.25
+  }
 };
 Keyboard.prototype = function () {
   var keys = {
@@ -72,12 +78,13 @@ Keyboard.prototype = function () {
   var keysDown = [];
 
   var keydown = function keydown(keyChar) {
+    var that = this;
     if (keysDown.indexOf(keyChar.which) === -1) {
       var char = String.fromCharCode(keyChar.which);
       var key = keys[char];
       if (key) {
         oscillators[key.index].updateNote(key.freq);
-        oscillators[key.index].updateVolume(currentVolume);
+        oscillators[key.index].updateVolume(that.volume);
         keysDown.push(keyChar.which);
         $("#key-" + char).addClass("keyon");
       }
@@ -104,11 +111,19 @@ Keyboard.prototype = function () {
     $(document).keyup(function (e) {
       that.keyup(e);
     });
+
+    $(that.volumeSelector).change(function () {
+      console.log(this);
+      console.log(this.value);
+      that.volume = (this.value / 100) * 0.25;
+    });
   };
 
   return {
     initialize: initialize,
     keydown: keydown,
-    keyup: keyup
+    keyup: keyup,
+    volumeSelector: this.volumeSelector,
+    volume: this.volume
   }
 }();

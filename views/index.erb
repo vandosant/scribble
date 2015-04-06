@@ -91,13 +91,15 @@
 
   var initialFrequency = 261.63;
   var initialVolume = 0;
-  var currentVolume = 0.25;
   var $key = $(".key");
   var oscillators = [];
   var drumMachine = new DrumMachine(context);
   var bassDrumNodes = [];
   var snareDrumNodes = [];
+  var volumeSelector = ".keyboard-volume";
+  var keyboard = new Keyboard({volumeSelector: volumeSelector});
 
+  keyboard.initialize();
 
   var int = function () {
     for (var i = 0; i < 13; i++) {
@@ -112,10 +114,6 @@
     osc.connect();
   });
 
-  $('.keyboard-volume').change(function () {
-    currentVolume = (this.value / 100) * 0.25;
-  });
-
   $('.oscillator-wave').change(function () {
     var wave = $(this).val();
     var id = Number(this.id);
@@ -125,8 +123,6 @@
     });
   });
 
-  var keyboard = new Keyboard();
-  keyboard.initialize();
 
   var drumVol = 1.3;
   var drums = {
