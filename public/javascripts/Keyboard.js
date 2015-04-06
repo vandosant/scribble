@@ -95,7 +95,7 @@ Keyboard.prototype = function () {
     }
   };
 
-  var listen = function () {
+  var initialize = function () {
     var that = this;
     $(document).keydown(function (e) {
       that.keydown(e);
@@ -107,7 +107,7 @@ Keyboard.prototype = function () {
   };
 
   return {
-    listen: listen,
+    initialize: initialize,
     keydown: keydown,
     keyup: keyup
   }

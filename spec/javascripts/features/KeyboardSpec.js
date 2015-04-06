@@ -5,7 +5,7 @@ describe("Keyboard", function() {
 
   it("should listen for keydown events", function(){
     var keyboard = new Keyboard();
-    keyboard.listen();
+    keyboard.initialize();
 
     spyOn(keyboard, "keydown");
     var keyDownEvent = jQuery.Event("keydown");
@@ -16,7 +16,7 @@ describe("Keyboard", function() {
 
   it("should listen for keyup events", function(){
     var keyboard = new Keyboard();
-    keyboard.listen();
+    keyboard.initialize();
 
     spyOn(keyboard, "keyup");
     var keyUpEvent = jQuery.Event("keyup");
