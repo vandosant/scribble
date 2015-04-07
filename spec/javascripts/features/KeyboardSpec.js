@@ -42,14 +42,13 @@ describe("Keyboard", function() {
     expect(keyboard.volumeSelector).toEqual(".test-selector");
   });
 
-  xit("should update the volume", function() {
-    keyboard = new Keyboard({volumeSelector: ".test-selector"});
+  it("should update the volume", function() {
+    keyboard = new Keyboard();
     keyboard.initialize();
 
     var firstVolume = keyboard.volume;
 
-    var volumeEvent = jQuery.Event("change");
-    $(keyboard.volumeSelector).val(65).trigger(volumeEvent);
+    keyboard.updateVolume(65);
 
     var secondVolume = keyboard.volume;
     expect(secondVolume).toBeLessThan(firstVolume);

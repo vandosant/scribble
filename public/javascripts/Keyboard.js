@@ -102,6 +102,11 @@ Keyboard.prototype = function () {
     }
   };
 
+  var updateVolume = function (rangeVal) {
+    var that = this;
+    that.volume = (rangeVal / 100) * 0.25;
+  };
+
   var initialize = function () {
     var that = this;
     $(document).keydown(function (e) {
@@ -113,9 +118,7 @@ Keyboard.prototype = function () {
     });
 
     $(that.volumeSelector).change(function () {
-      console.log(this);
-      console.log(this.value);
-      that.volume = (this.value / 100) * 0.25;
+      that.updateVolume(this.value);
     });
   };
 
@@ -124,6 +127,7 @@ Keyboard.prototype = function () {
     keydown: keydown,
     keyup: keyup,
     volumeSelector: this.volumeSelector,
-    volume: this.volume
+    volume: this.volume,
+    updateVolume: updateVolume
   }
 }();
