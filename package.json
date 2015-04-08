@@ -1,0 +1,27 @@
+{
+  "name": "web-synthesizer",
+  "version": "1.0.0",
+  "description": "[![Code Climate](https://codeclimate.com/github/vandosant/web-synthesizer/badges/gpa.svg)](https://codeclimate.com/github/vandosant/web-synthesizer)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vandosant/web-synthesizer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vandosant/web-synthesizer/issues"
+  },
+  "homepage": "https://github.com/vandosant/web-synthesizer",
+  "devDependencies": {
+    "jasmine-core": "^2.2.0",
+    "karma": "^0.12.31",
+    "karma-chrome-launcher": "^0.1.7",
+    "karma-jasmine": "^0.3.5",
+    "karma-requirejs": "^0.2.2",
+    "requirejs": "^2.1.17"
+  }
+}
