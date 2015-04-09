@@ -2,6 +2,7 @@
   <div class="title">Scribble</div>
   <div class="label" id="volume-label">Keyboard Volume</div>
   <input type="range" min="0" max="100" value="100" class="keyboard-volume">
+
   <div class="label" id="volume-label">Drum Volume</div>
   <input type="range" min="0" max="100" value="100" class="drum-volume">
 </div>
@@ -11,12 +12,12 @@
   <div class="oscillator">
     Oscillator 1
     <div class="form-row">
-    <select name="osc1" class="oscillator-wave" id="1">
-      <option selected="selected" value="sine">Sine</option>
-      <option value="square">Square</option>
-      <option value="sawtooth">Sawtooth</option>
-      <option value="triangle">Triangle</option>
-    </select>
+      <select name="osc1" class="oscillator-wave" id="1">
+        <option selected="selected" value="sine">Sine</option>
+        <option value="square">Square</option>
+        <option value="sawtooth">Sawtooth</option>
+        <option value="triangle">Triangle</option>
+      </select>
     </div>
   </div>
   <div class="oscillator">
@@ -66,18 +67,22 @@
 </div>
 
 <div class="drum-machine" id="drum-properties">
-    <ul>
-      <li>
-        <div id="drum-status"></div>
-      </li>
-      <li>
-        <div class="label" id="tempo-label">Tempo</div>
-        <input type="number" value="120" id="tempo">
-      </li>
-    </ul>
+  <ul>
+    <li>
+      <div id="drum-status"></div>
+    </li>
+    <li>
+      <div class="label" id="tempo-label">Tempo</div>
+      <input type="number" value="120" id="tempo">
+    </li>
+  </ul>
 </div>
 
 <script>
+  var oscillators = [];
+  var bassDrumNodes = [];
+  var snareDrumNodes = [];
+
   var contextClass = (window.AudioContext ||
     window.webkitAudioContext ||
     window.mozAudioContext ||
@@ -89,40 +94,40 @@
     $(document).append('<div class="errors">Sorry, your browser is not supported.</div>');
   }
 
-  var initialFrequency = 261.63;
-  var initialVolume = 0;
-  var $key = $(".key");
-  var oscillators = [];
-  var drumMachine = new DrumMachine(context);
-  var bassDrumNodes = [];
-  var snareDrumNodes = [];
   var volumeSelector = ".keyboard-volume";
   var keyboard = new Keyboard({volumeSelector: volumeSelector});
-
   keyboard.initialize();
 
-  var int = function () {
+  var drumMachine = new DrumMachine(context);
+
+  var initialFrequency = 261.63;
+  var initialVolume = 0;
+  var createOscillators = function () {
     for (var i = 0; i < 13; i++) {
       var osc = new Oscillator(context, initialFrequency, initialVolume);
       oscillators.push(osc);
     }
   };
+  createOscillators();
 
-  int();
-
-  oscillators.forEach(function (osc) {
-    osc.connect();
-  });
-
-  $('.oscillator-wave').change(function () {
-    var wave = $(this).val();
-    var id = Number(this.id);
-
+  var connectOscillators = function () {
     oscillators.forEach(function (osc) {
-      osc.updateWave(id, wave);
+      osc.connect();
     });
-  });
+  };
+  connectOscillators();
 
+  var watchOscillatorWaves = function () {
+    $('.oscillator-wave').change(function () {
+      var wave = $(this).val();
+      var id = Number(this.id);
+
+      oscillators.forEach(function (osc) {
+        osc.updateWave(id, wave);
+      });
+    });
+  };
+  watchOscillatorWaves();
 
   var drumVol = 1.3;
   var drums = {
@@ -148,34 +153,34 @@
     }
   };
 
-  var ctlr = new DrumController(drums, '#drums', 180, drumVol);
-  ctlr.render();
-  ctlr.selectDrum('#bass');
-  ctlr.start('#drum-status');
+  var drumCtlr = new DrumController(drums, '#drums', 180, drumVol);
+  drumCtlr.render();
+  drumCtlr.selectDrum('#bass');
+  drumCtlr.start('#drum-status');
 
   $('#tempo').change(function () {
-    ctlr.setTempo($(this).val());
+    drumCtlr.setTempo($(this).val());
   });
 
   $('.drum-button').click(function () {
-    ctlr.selectBeat(this);
+    drumCtlr.selectBeat(this);
   });
 
   $('.drum-type').click(function () {
-    ctlr.selectDrum(this);
+    drumCtlr.selectDrum(this);
   });
 
   $('#drum-status').click(function () {
     var $this = $(this);
     if ($this.hasClass('active') === true) {
-      ctlr.stop('#drum-status');
+      drumCtlr.stop('#drum-status');
     } else {
-      ctlr.start('#drum-status');
+      drumCtlr.start('#drum-status');
     }
   });
 
   $('.drum-volume').change(function (e) {
-    volumeModifier = (this.value / 100);
-    ctlr.setVolume(volumeModifier);
+    var volumeModifier = (this.value / 100);
+    drumCtlr.setVolume(volumeModifier);
   });
 </script>
