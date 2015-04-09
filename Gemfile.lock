@@ -5,21 +5,13 @@ GEM
       timers (~> 4.0.0)
     ffi (1.9.6)
     hitimes (1.2.2)
-    jasmine (2.0.2)
-      jasmine-core (~> 2.0.0)
-      phantomjs
-      rack (>= 1.2.1)
-      rake
-    jasmine-core (2.0.1)
     listen (2.8.3)
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
-    phantomjs (1.9.7.1)
     rack (1.5.2)
     rack-protection (1.5.3)
       rack
-    rake (10.3.2)
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
@@ -38,7 +30,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  jasmine (~> 2.0.2)
   rerun
   sass (~> 3.3.10)
   sinatra (~> 1.4.5)
