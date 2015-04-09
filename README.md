@@ -11,7 +11,8 @@ Usage:
 - Fork and clone this repo.
 - Run `bundle install`
 - Start the server with `rerun rackup`
-- Run specs with `rake jasmine`
+- Run `npm install`
+- Run specs with `./node_modules/karma/bin/karma start`
 - Open a Chrome browser window and point to http://localhost:9292
 - Use the keyboard to play notes (keys A-k).
 - Click on drum buttons to activate sound for that beat.
