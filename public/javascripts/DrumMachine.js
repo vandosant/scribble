@@ -8,10 +8,10 @@ function DrumMachine(context, frequency, wave, gainVal, sustain) {
 
 DrumMachine.prototype.hit = function () {
   var drum1 = this.context.createOscillator(),
-      node1 = this.context.createGain(),
-      drum2 = this.context.createOscillator(),
-      node2 = this.context.createGain(),
-      sustain = this.sustain;
+    node1 = this.context.createGain(),
+    drum2 = this.context.createOscillator(),
+    node2 = this.context.createGain(),
+    sustain = this.sustain;
 
   node1.gain.value = this.gainVal;
   node1.connect(this.context.destination);

@@ -13,15 +13,15 @@ describe("Oscillator", function () {
     oscillator = new Oscillator(context, initialFrequency, initialVolume);
   });
 
-  it("should have a frequency", function() {
+  it("should have a frequency", function () {
     expect(oscillator.frequency).toEqual(initialFrequency);
   });
 
-  it("should have a volume", function() {
+  it("should have a volume", function () {
     expect(oscillator.volume).toEqual(initialVolume);
   });
 
-  it("should have a context", function() {
+  it("should have a context", function () {
     expect(oscillator.context).toEqual(context);
   });
 
@@ -45,7 +45,7 @@ describe("Oscillator", function () {
     expect(round(oscillator.gainNode3.gain.value, 1)).toEqual(0.2);
   });
 
-  it("should allow its note to be updated", function() {
+  it("should allow its note to be updated", function () {
     oscillator.connect();
 
     var newNote = 440.00;
@@ -56,7 +56,7 @@ describe("Oscillator", function () {
     expect(oscillator.osc3.frequency.value).toEqual(newNote / 2);
   });
 
-  it("should allow its volume to be updated", function() {
+  it("should allow its volume to be updated", function () {
     oscillator.connect();
 
     var newVolume = 0.5;

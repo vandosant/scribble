@@ -1,11 +1,11 @@
-describe("Keyboard", function() {
+describe("Keyboard", function () {
   var keyboard;
 
   beforeEach(function () {
     keyboard = new Keyboard();
   });
 
-  it("should listen for keydown events", function(){
+  it("should listen for keydown events", function () {
     keyboard.initialize();
 
     spyOn(keyboard, "keydown");
@@ -16,7 +16,7 @@ describe("Keyboard", function() {
     expect(keyboard.keydown).toHaveBeenCalled();
   });
 
-  it("should listen for keyup events", function(){
+  it("should listen for keyup events", function () {
     keyboard.initialize();
 
     spyOn(keyboard, "keyup");
@@ -27,22 +27,22 @@ describe("Keyboard", function() {
     expect(keyboard.keyup).toHaveBeenCalled();
   });
 
-  it("should set a default volume on creation", function() {
+  it("should set a default volume on creation", function () {
     keyboard = new Keyboard();
     expect(keyboard.volume).toEqual(.25);
   });
 
-  it("should accept a volume on creation", function() {
+  it("should accept a volume on creation", function () {
     keyboard = new Keyboard({volume: .25});
     expect(keyboard.volume).toEqual(.25);
   });
 
-  it("should accept a volume selector on creation", function() {
+  it("should accept a volume selector on creation", function () {
     keyboard = new Keyboard({volumeSelector: ".test-selector"});
     expect(keyboard.volumeSelector).toEqual(".test-selector");
   });
 
-  it("should update the volume", function() {
+  it("should update the volume", function () {
     keyboard = new Keyboard();
     keyboard.initialize();
 
