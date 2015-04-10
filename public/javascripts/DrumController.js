@@ -12,13 +12,13 @@ DrumController.prototype.render = function () {
   typeContainer.attr('id', 'drum-types');
 
   $.each(this.drums, function (key, drum) {
-    drum['beats'] = [];
+    drum.beats = [];
     var buttonContainer = $('<div class="drum-container"></div>');
     buttonContainer.attr('id', 'drum-' + key);
     for (var i = 0; i < 16; i++) {
       var beatEl = $('<div class="drum-button">' + (i + 1) + '</div>');
 
-      drum['beats'].push({
+      drum.beats.push({
         selected: false,
         el: beatEl
       });
@@ -76,7 +76,7 @@ DrumController.prototype.selectBeat = function (button) {
   $button.toggleClass('drum-button-selected');
   var index = $button.text() - 1;
   var type = $button.parent().attr('id').split('-')[1];
-  if (this.drums[type].beats[index].selected == true) {
+  if (this.drums[type].beats[index].selected) {
     this.drums[type].beats[index].selected = false;
   } else {
     this.drums[type].beats[index].selected = true;
