@@ -1,6 +1,6 @@
 var OscillatorController = function () {
 };
-OscillatorController.prototype = function () {
+OscillatorController.prototype = (function () {
   var createOscillators = function () {
     for (var i = 0; i < 13; i++) {
       var osc = new Oscillator(context, initialFrequency, initialVolume);
@@ -33,5 +33,5 @@ OscillatorController.prototype = function () {
 
   return {
     initialize: initialize
-  }
-}();
+  };
+}());

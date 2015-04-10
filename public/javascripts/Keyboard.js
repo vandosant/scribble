@@ -3,10 +3,11 @@ var Keyboard = function (obj) {
     this.volumeSelector = obj.volumeSelector;
     this.volume = obj.volume || 0.25;
   } else {
-    this.volume = 0.25
+    this.volume = 0.25;
   }
 };
-Keyboard.prototype = function () {
+
+Keyboard.prototype = (function () {
   var keys = {
     'A': {
       key: 65,
@@ -129,5 +130,5 @@ Keyboard.prototype = function () {
     volumeSelector: this.volumeSelector,
     volume: this.volume,
     updateVolume: updateVolume
-  }
-}();
+  };
+}());
