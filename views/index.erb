@@ -79,9 +79,6 @@
 </div>
 
 <script>
-  var bassDrumNodes = [];
-  var snareDrumNodes = [];
-
   var contextClass = (window.AudioContext ||
     window.webkitAudioContext ||
     window.mozAudioContext ||
@@ -97,15 +94,14 @@
   var keyboard = new Keyboard({volumeSelector: volumeSelector});
   keyboard.initialize();
 
-  var drumMachine = new DrumMachine(context);
-
-  var oscillators = [];
   var initialFrequency = 261.63;
   var initialVolume = 0;
+  var oscillators = [];
   var OscillatorController = new OscillatorController(oscillators, initialFrequency, initialVolume);
   OscillatorController.initialize();
 
   var drumVol = 1.3;
+  var drumMachine = new DrumMachine(context);
   var drums = {
     'bass': {
       'machine': new DrumMachine(context, 47, 'sine', drumVol, 0.03),
