@@ -79,7 +79,6 @@
 </div>
 
 <script>
-  var oscillators = [];
   var bassDrumNodes = [];
   var snareDrumNodes = [];
 
@@ -100,10 +99,10 @@
 
   var drumMachine = new DrumMachine(context);
 
+  var oscillators = [];
   var initialFrequency = 261.63;
   var initialVolume = 0;
-
-  var OscillatorController = new OscillatorController();
+  var OscillatorController = new OscillatorController(oscillators, initialFrequency, initialVolume);
   OscillatorController.initialize();
 
   var drumVol = 1.3;
