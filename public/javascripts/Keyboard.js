@@ -127,8 +127,8 @@ Keyboard.prototype = (function () {
     initialize: initialize,
     keydown: keydown,
     keyup: keyup,
-    volumeSelector: this.volumeSelector,
-    volume: this.volume,
+    volumeSelector: Keyboard.volumeSelector,
+    volume: Keyboard.volume,
     updateVolume: updateVolume
   };
 }());
