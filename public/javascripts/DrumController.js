@@ -125,3 +125,31 @@ DrumController.prototype.setVolume = function (volumeModifier) {
     drum.machine.gainVal = that.startVolume * volumeModifier;
   });
 };
+
+DrumController.prototype.listen = function (tempoSelector, beatSelector, drumSelector, statusSelector, drumVolumeSelector) {
+  $(tempoSelector).change(function () {
+    drumCtlr.setTempo($(this).val());
+  });
+
+  $(beatSelector).click(function () {
+    drumCtlr.selectBeat(this);
+  });
+
+  $(drumSelector).click(function () {
+    drumCtlr.selectDrum(this);
+  });
+
+  $(statusSelector).click(function () {
+    var $this = $(this);
+    if ($this.hasClass('active') === true) {
+      drumCtlr.stop(statusSelector);
+    } else {
+      drumCtlr.start(statusSelector);
+    }
+  });
+
+  $(drumVolumeSelector).change(function (e) {
+    var volumeModifier = (this.value / 100);
+    drumCtlr.setVolume(volumeModifier);
+  });
+};

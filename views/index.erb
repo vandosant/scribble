@@ -132,30 +132,5 @@
   drumCtlr.render();
   drumCtlr.selectDrum('#bass');
   drumCtlr.start('#drum-status');
-
-  $('#tempo').change(function () {
-    drumCtlr.setTempo($(this).val());
-  });
-
-  $('.drum-button').click(function () {
-    drumCtlr.selectBeat(this);
-  });
-
-  $('.drum-type').click(function () {
-    drumCtlr.selectDrum(this);
-  });
-
-  $('#drum-status').click(function () {
-    var $this = $(this);
-    if ($this.hasClass('active') === true) {
-      drumCtlr.stop('#drum-status');
-    } else {
-      drumCtlr.start('#drum-status');
-    }
-  });
-
-  $('.drum-volume').change(function (e) {
-    var volumeModifier = (this.value / 100);
-    drumCtlr.setVolume(volumeModifier);
-  });
+  drumCtlr.listen('#tempo', '.drum-button', '.drum-type', '#drum-status', '.drum-volume');
 </script>
