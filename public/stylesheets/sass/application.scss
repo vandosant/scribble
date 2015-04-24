@@ -233,6 +233,11 @@ input[type="range"]::-webkit-slider-thumb {
   border: .4em solid $fourth-color;
 }
 
+.oscillator-modes {
+  @extend .oscillator;
+  background: $third-color;
+}
+
 #tempo {
   width: 4em;
 }
