@@ -18,11 +18,11 @@ OscillatorController.prototype = (function () {
   };
 
   var watchOscillatorWaves = function () {
+    var that = this;
     $('.oscillator-wave').change(function () {
       var wave = $(this).val();
       var id = Number(this.id);
-
-      this.oscillators.forEach(function (osc) {
+      that.oscillators.forEach(function (osc) {
         osc.updateWave(id, wave);
       });
     });
