@@ -34,7 +34,18 @@ OscillatorController.prototype = (function () {
     watchOscillatorWaves();
   };
 
+  var update = function (options) {
+    var id = 1;
+    options.forEach(function (wave) {
+      this.oscillators.forEach(function (osc) {
+        osc.updateWave(id, wave);
+      });
+      id++;
+    });
+  };
+
   return {
-    initialize: initialize
+    initialize: initialize,
+    update: update
   };
 }());
