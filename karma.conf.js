@@ -1,25 +1,25 @@
 // Karma configuration
-// Generated on Tue Apr 07 2015 19:29:55 GMT-0600 (MDT)
+// Generated on Fri Apr 24 2015 15:54:43 GMT-0600 (MDT)
 
-module.exports = function (config) {
+module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: './',
+    basePath: '',
 
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'requirejs'],
+    frameworks: ['jasmine'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'test-main.js',
-      {pattern: 'public/vendors/javascripts/*.js', included: true},
-      {pattern: 'spec/javascripts/**/*Spec.js', included: false},
-      {pattern: 'spec/javascripts/helpers/Helpers.js', included: true},
-      {pattern: 'public/javascripts/*.js', included: true}
+      'spec/javascripts/features/*.js',
+      'spec/javascripts/helpers/*.js',
+      'public/javascripts/*.js',
+      'public/vendors/javascripts/*.js'
+
     ],
 
 
@@ -31,19 +31,6 @@ module.exports = function (config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'public/javascripts/*.js': ['babel']
-    },
-
-    babelPreprocessor: {
-      options: {
-        sourceMap: 'inline'
-      },
-      filename: function (file) {
-        return file.originalPath.replace(/\.js$/, '.es5.js');
-      },
-      sourceFileName: function (file) {
-        return file.originalPath;
-      }
     },
 
 
