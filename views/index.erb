@@ -78,14 +78,28 @@
   </ul>
 </div>
 
+<div class="oscillator-container">
+  <div id="mode" class="oscillator">
+    Keys Mode
+    <div class="form-row">
+      <select class="oscillator-mode">
+        <option value="standard" selected="selected">Default</option>
+        <option value="raspy">Rasp</option>
+        <option value="game">Game</option>
+        <option value="organ">Organ</option>
+      </select>
+    </div>
+  </div>
+</div>
+
 <script>
   var context;
   var setContext = (function () {
     var contextClass = (window.AudioContext ||
-      window.webkitAudioContext ||
-      window.mozAudioContext ||
-      window.oAudioContext ||
-      window.msAudioContext);
+    window.webkitAudioContext ||
+    window.mozAudioContext ||
+    window.oAudioContext ||
+    window.msAudioContext);
     if (contextClass) {
       context = new contextClass();
     } else {
@@ -133,4 +147,21 @@
   drumCtlr.selectDrum('#bass');
   drumCtlr.start('#drum-status');
   drumCtlr.listen('#tempo', '.drum-button', '.drum-type', '#drum-status', '.drum-volume');
+
+  var modes = {
+    standard: ['sine', 'square', 'sawtooth'],
+    raspy: ['sine', 'square', 'sawtooth'],
+    organ: ['sine', 'sine', 'sine'],
+    game: ['square', 'sine', 'triangle']
+  };
+
+  $('.oscillator-mode').change(function () {
+    var mode = $(this).val();
+    OscillatorController.update(modes[mode]);
+
+    $('.oscillator-wave').each(function (oscSelector) {
+      $(this).val(modes[mode][oscSelector])
+    });
+  });
+
 </script>
