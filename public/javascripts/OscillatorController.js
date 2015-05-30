@@ -1,23 +1,26 @@
-var OscillatorController = function OscillatorController(oscillators, initialFrequency, initialVolume) {
+var OscillatorController = function OscillatorController(options) {
+  this.oscillators = options['oscillators'] || [];
+  this.initialFrequency = options['initialFrequency'] || 261.63;
+  this.initialVolume = options['initialVolume'] || 0;
+
   var createOscillators = function () {
     for (var i = 0; i < 13; i++) {
-      var osc = new Oscillator(context, this.initialFrequency, this.initialVolume);
-      this.oscillators.push(osc);
+      var osc = new Oscillator(context, initialFrequency, initialVolume);
+      oscillators.push(osc);
     }
   };
 
   var connectOscillators = function () {
-    this.oscillators.forEach(function (osc) {
+    oscillators.forEach(function (osc) {
       osc.connect();
     });
   };
 
   var watchOscillatorWaves = function () {
-    var that = this;
     $('.oscillator-wave').change(function () {
       var wave = $(this).val();
       var id = Number(this.id);
-      that.oscillators.forEach(function (osc) {
+      oscillators.forEach(function (osc) {
         osc.updateWave(id, wave);
       });
     });
@@ -32,7 +35,7 @@ var OscillatorController = function OscillatorController(oscillators, initialFre
   var update = function (options) {
     var id = 1;
     options.forEach(function (wave) {
-      this.oscillators.forEach(function (osc) {
+      oscillators.forEach(function (osc) {
         osc.updateWave(id, wave);
       });
       id++;
