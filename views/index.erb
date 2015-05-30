@@ -114,26 +114,26 @@
   OscillatorController.initialize();
 
   var drumVol = 1.3;
-  var drumMachine = new DrumMachine(context);
+  var drumMachine = DrumMachine(context);
   var drums = {
     'bass': {
-      'machine': new DrumMachine(context, 47, 'sine', drumVol, 0.03),
+      'machine': DrumMachine(context, 47, 'sine', drumVol, 0.03),
       'selected': false
     },
     'tom1': {
-      'machine': new DrumMachine(context, 64, 'sine', drumVol, 0.05),
+      'machine': DrumMachine(context, 64, 'sine', drumVol, 0.05),
       'selected': false
     },
     'tom2': {
-      'machine': new DrumMachine(context, 160, 'sine', drumVol, 0.05),
+      'machine': DrumMachine(context, 160, 'sine', drumVol, 0.05),
       'selected': false
     },
     'snare': {
-      'machine': new DrumMachine(context, 188, 'sine', drumVol, 0.07),
+      'machine': DrumMachine(context, 188, 'sine', drumVol, 0.07),
       'selected': false
     },
     'pad': {
-      'machine': new DrumMachine(context, 261.63, 'triangle', drumVol, 0.02),
+      'machine': DrumMachine(context, 261.63, 'triangle', drumVol, 0.02),
       'selected': false
     }
   };
