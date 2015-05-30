@@ -1,13 +1,12 @@
-var Keyboard = function (obj) {
+function Keyboard(obj) {
+  var volumeSelector, volume;
   if (obj) {
-    this.volumeSelector = obj.volumeSelector;
-    this.volume = obj.volume || 0.25;
+    volumeSelector = obj.volumeSelector;
+    volume = obj.volume || 0.25;
   } else {
-    this.volume = 0.25;
+    volume = 0.25;
   }
-};
 
-Keyboard.prototype = (function () {
   var keys = {
     'A': {
       key: 65,
@@ -127,8 +126,8 @@ Keyboard.prototype = (function () {
     initialize: initialize,
     keydown: keydown,
     keyup: keyup,
-    volumeSelector: Keyboard.volumeSelector,
-    volume: Keyboard.volume,
-    updateVolume: updateVolume
-  };
-}());
+    updateVolume: updateVolume,
+    volume: volume,
+    volumeSelector: volumeSelector
+  }
+}
