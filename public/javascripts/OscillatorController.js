@@ -1,7 +1,7 @@
 var OscillatorController = function OscillatorController(options) {
   this.oscillators = options['oscillators'] || [];
-  this.initialFrequency = options['initialFrequency'] || 261.63;
-  this.initialVolume = options['initialVolume'] || 0;
+  var initialFrequency = options['initialFrequency'] || 261.63;
+  var initialVolume = options['initialVolume'] || 0;
   this.oscillatorSelector = options['oscillatorSelector'] || '.oscillator-wave';
 
   var createOscillators = function () {
@@ -46,8 +46,6 @@ var OscillatorController = function OscillatorController(options) {
   return {
     initialize: initialize,
     update: update,
-    oscillators: oscillators,
-    initialFrequency: initialFrequency,
-    initialVolume: initialVolume
+    oscillators: oscillators
   };
 };
