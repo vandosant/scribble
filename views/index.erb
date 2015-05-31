@@ -106,7 +106,12 @@
   var keyboard = Keyboard({volumeSelector: ".keyboard-volume"});
   keyboard.initialize();
 
-  var OscillatorController = OscillatorController({oscillators: [], initialVolume: 0, initialFrequency: 261.63});
+  var OscillatorController = OscillatorController({
+    oscillators: [],
+    initialVolume: 0,
+    initialFrequency: 261.63,
+    oscillatorSelector: '.oscillator-wave'
+  });
   OscillatorController.initialize();
 
   var drumVol = 1.3;

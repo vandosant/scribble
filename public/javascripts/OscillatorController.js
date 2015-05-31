@@ -2,6 +2,7 @@ var OscillatorController = function OscillatorController(options) {
   this.oscillators = options['oscillators'] || [];
   this.initialFrequency = options['initialFrequency'] || 261.63;
   this.initialVolume = options['initialVolume'] || 0;
+  this.oscillatorSelector = options['oscillatorSelector'] || '.oscillator-wave';
 
   var createOscillators = function () {
     for (var i = 0; i < 13; i++) {
@@ -17,7 +18,7 @@ var OscillatorController = function OscillatorController(options) {
   };
 
   var watchOscillatorWaves = function () {
-    $('.oscillator-wave').change(function () {
+    $(oscillatorSelector).change(function () {
       var wave = $(this).val();
       var id = Number(this.id);
       oscillators.forEach(function (osc) {
