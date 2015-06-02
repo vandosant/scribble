@@ -2,12 +2,11 @@ describe("Keyboard", function () {
   var keyboard;
 
   beforeEach(function () {
-    keyboard = new Keyboard();
+    keyboard = Keyboard({volumeSelector: ".test-selector"});
+    keyboard.initialize();
   });
 
   it("should listen for keydown events", function () {
-    keyboard.initialize();
-
     spyOn(keyboard, "keydown");
     var keyDownEvent = jQuery.Event("keydown");
     keyDownEvent.keyCode = 65;
@@ -17,8 +16,6 @@ describe("Keyboard", function () {
   });
 
   it("should listen for keyup events", function () {
-    keyboard.initialize();
-
     spyOn(keyboard, "keyup");
     var keyUpEvent = jQuery.Event("keyup");
     keyUpEvent.keyCode = 65;
@@ -28,24 +25,20 @@ describe("Keyboard", function () {
   });
 
   it("should set a default volume on creation", function () {
-    keyboard = new Keyboard();
     expect(keyboard.volume).toEqual(.25);
   });
 
   it("should accept a volume on creation", function () {
-    keyboard = new Keyboard({volume: .25});
+    keyboard = Keyboard({volume: .25});
     expect(keyboard.volume).toEqual(.25);
   });
 
   it("should accept a volume selector on creation", function () {
-    keyboard = new Keyboard({volumeSelector: ".test-selector"});
+    keyboard = Keyboard({volumeSelector: ".test-selector"});
     expect(keyboard.volumeSelector).toEqual(".test-selector");
   });
 
   it("should update the volume", function () {
-    keyboard = new Keyboard();
-    keyboard.initialize();
-
     var firstVolume = keyboard.volume;
 
     keyboard.updateVolume(65);
