@@ -1,13 +1,10 @@
 function Keyboard(obj) {
-  var volumeSelector, volume;
-  if (obj) {
-    volumeSelector = obj.volumeSelector;
-    volume = obj.volume || 0.25;
-  } else {
-    volume = 0.25;
-  }
+  var volumeSelector, volume, keysDown, keys;
 
-  var keys = {
+  keysDown = [];
+  volumeSelector = obj.volumeSelector || undefined;
+  volume = obj.volume || 0.25;
+  keys = {
     'A': {
       key: 65,
       index: 0,
@@ -74,8 +71,6 @@ function Keyboard(obj) {
       freq: 523.25
     }
   };
-
-  var keysDown = [];
 
   var keydown = function keydown(keyChar) {
     var that = this;
