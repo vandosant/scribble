@@ -103,8 +103,7 @@ function Keyboard(obj) {
   };
 
   var updateVolume = function (rangeVal) {
-    var that = this;
-    that.volume = (rangeVal / 100) * 0.25;
+    this.volume = (rangeVal / 100) * 0.25;
   };
 
   var initialize = function () {
