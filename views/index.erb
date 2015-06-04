@@ -117,19 +117,19 @@
   var drumVol = 1.3;
   var drums = {
     'bass': {
-      'machine': DrumMachine(context, 47, 'sine', drumVol, 0.03),
+      'machine': DrumMachine({context: context, frequency: 47, wave: 'sine', gainVal: drumVol, sustain: 0.03})
     },
     'tom1': {
-      'machine': DrumMachine(context, 64, 'sine', drumVol, 0.05),
+      'machine': DrumMachine({context: context, frequency: 64, wave: 'sine', gainVal: drumVol, sustain: 0.05})
     },
     'tom2': {
-      'machine': DrumMachine(context, 160, 'sine', drumVol, 0.05),
+      'machine': DrumMachine({context: context, frequency: 160, wave: 'sine', gainVal: drumVol, sustain: 0.05})
     },
     'snare': {
-      'machine': DrumMachine(context, 188, 'sine', drumVol, 0.07),
+      'machine': DrumMachine({context: context, frequency: 188, wave: 'sine', gainVal: drumVol, sustain: 0.07})
     },
     'pad': {
-      'machine': DrumMachine(context, 261.63, 'triangle', drumVol, 0.02),
+      'machine': DrumMachine({context: context, frequency: 261.63, wave: 'triangle', gainVal: drumVol, sustain: 0.02})
     }
   };
 

@@ -6,9 +6,9 @@ describe("DrumMachine", function () {
     window.msAudioContext);
   var context = new contextClass();
   var initialVolume = 0.2;
-
+  var drumMachine;
   beforeEach(function () {
-    drumMachine = new DrumMachine(context, initialVolume);
+    drumMachine = new DrumMachine({context: context, gainVal: initialVolume});
   });
 
   it("should have a context", function () {
