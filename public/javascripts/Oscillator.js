@@ -1,4 +1,4 @@
-function Oscillator(context, frequency, volume) {
+function Oscillator(context, frequency, volume, filter) {
   this.context = context;
   this.osc1 = this.context.createOscillator();
   this.osc2 = this.context.createOscillator();
@@ -8,12 +8,14 @@ function Oscillator(context, frequency, volume) {
   this.gainNode3 = context.createGain();
   this.frequency = frequency;
   this.volume = volume;
+  this.filter = filter;
 }
 
 Oscillator.prototype.connect = function () {
   this.gainNode1.connect(this.context.destination);
   this.gainNode1.gain.value = this.volume;
   this.osc1.connect(this.gainNode1);
+  this.osc1.connect(this.filter);
   this.osc1.type = "sine";
   this.osc1.frequency.value = this.frequency;
   this.osc1.start(0);
@@ -21,6 +23,7 @@ Oscillator.prototype.connect = function () {
   this.gainNode2.connect(this.context.destination);
   this.gainNode2.gain.value = this.volume;
   this.osc2.connect(this.gainNode2);
+  this.osc2.connect(this.filter);
   this.osc2.type = "sine";
   this.osc2.frequency.value = this.frequency / 2;
   this.osc2.start(0);
@@ -28,6 +31,7 @@ Oscillator.prototype.connect = function () {
   this.gainNode3.connect(this.context.destination);
   this.gainNode3.gain.value = this.volume * 0.8;
   this.osc3.connect(this.gainNode3);
+  this.osc3.connect(this.filter);
   this.osc3.type = "triangle";
   this.osc3.frequency.value = this.frequency / 2;
   this.osc3.start(0);

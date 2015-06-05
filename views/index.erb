@@ -100,9 +100,27 @@
   var snareDrumNodes = [];
 
 
+  var convolver = context.createConvolver();
+  convolver.connect(context.destination);
+
+  var request = new XMLHttpRequest();
+  request.open("GET", "assets/audio_2_100.wav", true);
+  request.responseType = "arraybuffer";
+
+  request.onload = function () {
+    console.log(context.createBuffer);
+    convolver.buffer = context.createBuffer(request.response, false);
+//    filter.buffer = context.createBuffer(2, 44100, 44100);
+  };
+  request.send();
+
+
+
+
+
   var int = function () {
     for (var i = 0; i < 13; i++) {
-      var osc = new Oscillator(context, initialFrequency, initialVolume);
+      var osc = new Oscillator(context, initialFrequency, initialVolume, convolver);
       oscillators.push(osc);
     }
   };
