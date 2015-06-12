@@ -1,10 +1,7 @@
 function DrumController(drums, container, tempo, volume) {
-  this.drums = drums;
-  this.container = $(container);
-  this.tempo = tempo;
-  this.startVolume = volume;
+  var container = $(container);
 
-  var render = function () {
+  function render() {
     var that = this,
       typeContainer = $('<div class="drum-container"></div>');
 
@@ -35,13 +32,13 @@ function DrumController(drums, container, tempo, volume) {
     });
     that.container.append(typeContainer);
 
-  };
+  }
 
-  var parseTempo = function (tempo) {
+  function parseTempo(tempo) {
     return (60 * 1000) / tempo;
-  };
+  }
 
-  var start = function (statusButton) {
+  function start(statusButton) {
     var that = this,
       node = 0;
 
@@ -68,9 +65,9 @@ function DrumController(drums, container, tempo, volume) {
     $statusButton.addClass('active');
     $statusButton.children().remove();
     $statusButton.append($statusDiv);
-  };
+  }
 
-  var selectBeat = function (button) {
+  function selectBeat(button) {
     var that = this;
     var $button = $(button);
     $button.toggleClass('drum-button-selected');
@@ -81,9 +78,9 @@ function DrumController(drums, container, tempo, volume) {
     } else {
       that.drums[type].beats[index].selected = true;
     }
-  };
+  }
 
-  var selectDrum = function (button) {
+  function selectDrum(button) {
     var that = this,
       $button = $(button),
       id = $button.attr('id');
@@ -101,14 +98,14 @@ function DrumController(drums, container, tempo, volume) {
       }
     });
 
-  };
+  }
 
-  var setTempo = function (newTempo) {
+  function setTempo(newTempo) {
     this.tempo = newTempo;
     this.start();
-  };
+  }
 
-  var stop = function (statusButton) {
+  function stop(statusButton) {
     var that = this;
     var $statusButton = $(statusButton),
       $statusDiv = $('<div id="play"></div>');
@@ -118,16 +115,16 @@ function DrumController(drums, container, tempo, volume) {
     $statusButton.children().remove();
     $statusButton.append($statusDiv);
     that.container.find('.drum-button-active').removeClass('drum-button-active');
-  };
+  }
 
-  var setVolume = function (volumeModifier) {
+  function setVolume(volumeModifier) {
     var that = this;
     $.each(that.drums, function (key, drum) {
       drum.machine.gainVal = that.startVolume * volumeModifier;
     });
-  };
+  }
 
-  var listen = function (tempoSelector, beatSelector, drumSelector, statusSelector, drumVolumeSelector) {
+  function listen(tempoSelector, beatSelector, drumSelector, statusSelector, drumVolumeSelector) {
     $(tempoSelector).change(function () {
       drumController.setTempo($(this).val());
     });
@@ -153,13 +150,13 @@ function DrumController(drums, container, tempo, volume) {
       var volumeModifier = (this.value / 100);
       drumController.setVolume(volumeModifier);
     });
-  };
+  }
 
   return {
-    drums: this.drums,
-    container: this.container,
-    tempo: this.tempo,
-    startVolume: this.startVolume,
+    drums: drums,
+    container: container,
+    tempo: tempo,
+    startVolume: volume,
     render: render,
     parseTempo: parseTempo,
     start: start,
