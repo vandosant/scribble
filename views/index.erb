@@ -133,11 +133,11 @@
     }
   };
 
-  var drumCtlr = new DrumController(drums, '#drums', 180, drumVol);
-  drumCtlr.render();
-  drumCtlr.selectDrum('#bass');
-  drumCtlr.start('#drum-status');
-  drumCtlr.listen('#tempo', '.drum-button', '.drum-type', '#drum-status', '.drum-volume');
+  var drumController = DrumController(drums, '#drums', 180, drumVol);
+  drumController.render();
+  drumController.selectDrum('#bass');
+  drumController.start('#drum-status');
+  drumController.listen('#tempo', '.drum-button', '.drum-type', '#drum-status', '.drum-volume');
 
   var modes = {
     standard: ['sine', 'sine', 'triangle'],
