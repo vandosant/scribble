@@ -1,4 +1,4 @@
-function Keyboard(obj) {
+function keyboard(obj) {
   var volumeSelector, volume, keysDown, keys;
 
   keysDown = [];
