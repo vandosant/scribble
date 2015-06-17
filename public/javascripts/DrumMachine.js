@@ -1,4 +1,4 @@
-function DrumMachine(options) {
+function drumMachine(options) {
   var context, frequency, wave, gainVal, sustain;
   context = options['context'];
   frequency = options['frequency'];

@@ -1,4 +1,4 @@
-describe("DrumMachine", function () {
+describe("drumMachine", function () {
   var contextClass = (window.AudioContext ||
     window.webkitAudioContext ||
     window.mozAudioContext ||
@@ -6,12 +6,12 @@ describe("DrumMachine", function () {
     window.msAudioContext);
   var context = new contextClass();
   var initialVolume = 0.2;
-  var drumMachine;
+  var drumMachineInstance;
   beforeEach(function () {
-    drumMachine = new DrumMachine({context: context, gainVal: initialVolume});
+    drumMachineInstance = drumMachine({context: context, gainVal: initialVolume});
   });
 
   it("should have a context", function () {
-    expect(drumMachine.context).toEqual(context);
+    expect(drumMachineInstance.context).toEqual(context);
   });
 });
