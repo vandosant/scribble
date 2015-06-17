@@ -6,7 +6,7 @@ function oscillatorController(options) {
 
   var createOscillators = function () {
     for (var i = 0; i < 13; i++) {
-      var osc = new Oscillator(context, initialFrequency, initialVolume);
+      var osc = oscillator(context, initialFrequency, initialVolume);
       oscillators.push(osc);
     }
   };

@@ -1,69 +1,69 @@
-describe("Oscillator", function () {
+describe("oscillator", function () {
   var contextClass = (window.AudioContext ||
     window.webkitAudioContext ||
     window.mozAudioContext ||
     window.oAudioContext ||
     window.msAudioContext);
   var context = new contextClass();
-  var oscillator;
+  var oscillatorInstance;
   var initialFrequency = 261.63;
   var initialVolume = 0.2;
 
   beforeEach(function () {
-    oscillator = new Oscillator(context, initialFrequency, initialVolume);
+    oscillatorInstance = oscillator(context, initialFrequency, initialVolume);
   });
 
   it("should have a frequency", function () {
-    expect(oscillator.frequency).toEqual(initialFrequency);
+    expect(oscillatorInstance.frequency).toEqual(initialFrequency);
   });
 
   it("should have a volume", function () {
-    expect(oscillator.volume).toEqual(initialVolume);
+    expect(oscillatorInstance.volume).toEqual(initialVolume);
   });
 
   it("should have a context", function () {
-    expect(oscillator.context).toEqual(context);
+    expect(oscillatorInstance.context).toEqual(context);
   });
 
   it("should have 3 oscillators each with a type and a frequency when connected", function () {
-    oscillator.connect();
+    oscillatorInstance.connect();
 
-    expect(oscillator.osc1.type).toEqual("sine");
-    expect(oscillator.osc2.type).toEqual("sine");
-    expect(oscillator.osc3.type).toEqual("triangle");
+    expect(oscillatorInstance.osc1.type).toEqual("sine");
+    expect(oscillatorInstance.osc2.type).toEqual("sine");
+    expect(oscillatorInstance.osc3.type).toEqual("triangle");
 
-    expect(oscillator.osc1.frequency.value).toBeCloseTo(initialFrequency);
-    expect(oscillator.osc2.frequency.value).toBeCloseTo(initialFrequency / 2);
-    expect(oscillator.osc3.frequency.value).toBeCloseTo(initialFrequency / 2);
+    expect(oscillatorInstance.osc1.frequency.value).toBeCloseTo(initialFrequency);
+    expect(oscillatorInstance.osc2.frequency.value).toBeCloseTo(initialFrequency / 2);
+    expect(oscillatorInstance.osc3.frequency.value).toBeCloseTo(initialFrequency / 2);
   });
 
   it("should have 3 gain nodes each with a value when connected", function () {
-    oscillator.connect();
+    oscillatorInstance.connect();
 
-    expect(oscillator.gainNode1.gain.value).toBeCloseTo(0.2);
-    expect(oscillator.gainNode2.gain.value).toBeCloseTo(0.2);
-    expect(round(oscillator.gainNode3.gain.value, 1)).toEqual(0.2);
+    expect(oscillatorInstance.gainNode1.gain.value).toBeCloseTo(0.2);
+    expect(oscillatorInstance.gainNode2.gain.value).toBeCloseTo(0.2);
+    expect(round(oscillatorInstance.gainNode3.gain.value, 1)).toEqual(0.2);
   });
 
   it("should allow its note to be updated", function () {
-    oscillator.connect();
+    oscillatorInstance.connect();
 
     var newNote = 440.00;
-    oscillator.updateNote(newNote);
+    oscillatorInstance.updateNote(newNote);
 
-    expect(oscillator.osc1.frequency.value).toEqual(newNote);
-    expect(oscillator.osc2.frequency.value).toEqual(newNote / 2);
-    expect(oscillator.osc3.frequency.value).toEqual(newNote / 2);
+    expect(oscillatorInstance.osc1.frequency.value).toEqual(newNote);
+    expect(oscillatorInstance.osc2.frequency.value).toEqual(newNote / 2);
+    expect(oscillatorInstance.osc3.frequency.value).toEqual(newNote / 2);
   });
 
   it("should allow its volume to be updated", function () {
-    oscillator.connect();
+    oscillatorInstance.connect();
 
     var newVolume = 0.5;
-    oscillator.updateVolume(newVolume);
+    oscillatorInstance.updateVolume(newVolume);
 
-    expect(oscillator.gainNode1.gain.value).toBeCloseTo(newVolume);
-    expect(oscillator.gainNode2.gain.value).toBeCloseTo(newVolume);
-    expect(oscillator.gainNode3.gain.value).toBeCloseTo(newVolume * 0.8);
+    expect(oscillatorInstance.gainNode1.gain.value).toBeCloseTo(newVolume);
+    expect(oscillatorInstance.gainNode2.gain.value).toBeCloseTo(newVolume);
+    expect(oscillatorInstance.gainNode3.gain.value).toBeCloseTo(newVolume * 0.8);
   });
 });
