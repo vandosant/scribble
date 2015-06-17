@@ -1,4 +1,4 @@
-var OscillatorController = function OscillatorController(options) {
+function oscillatorController(options) {
   this.oscillators = options['oscillators'] || [];
   var initialFrequency = options['initialFrequency'] || 261.63;
   var initialVolume = options['initialVolume'] || 0;

@@ -106,13 +106,13 @@
   var keyboard = keyboard({volumeSelector: ".keyboard-volume"});
   keyboard.initialize();
 
-  var OscillatorController = OscillatorController({
+  var oscillatorCtrl = oscillatorController({
     oscillators: [],
     initialVolume: 0,
     initialFrequency: 261.63,
     oscillatorSelector: '.oscillator-wave'
   });
-  OscillatorController.initialize();
+  oscillatorCtrl.initialize();
 
   var drumVol = 1.3;
   var drums = {
@@ -148,7 +148,7 @@
 
   $('.oscillator-mode').change(function () {
     var mode = $(this).val();
-    OscillatorController.update(modes[mode]);
+    oscillatorCtrl.update(modes[mode]);
 
     $('.oscillator-wave').each(function (oscSelector) {
       $(this).val(modes[mode][oscSelector])
