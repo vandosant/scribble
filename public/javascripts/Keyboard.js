@@ -103,7 +103,7 @@ function keyboard(obj) {
 
   var muteIfHidden = function () {
     if (typeof document.addEventListener !== 'undefined' &&
-      typeof document.visibilityState !== undefined) {
+      typeof document.visibilityState !== 'undefined') {
       document.addEventListener('visibilitychange', function () {
         if (document.hidden) {
           oscillators.forEach(function (o) {
