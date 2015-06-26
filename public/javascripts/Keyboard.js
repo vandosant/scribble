@@ -101,6 +101,19 @@ function keyboard(obj) {
     this.volume = (rangeVal / 100) * 0.25;
   };
 
+  var muteIfHidden = function () {
+    if (typeof document.addEventListener !== 'undefined' &&
+      typeof document.visibilityState !== undefined) {
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+          oscillators.forEach(function (o) {
+            o.updateVolume(0)
+          });
+        }
+      }, false)
+    }
+  };
+
   var initialize = function () {
     var that = this;
     $(document).keydown(function (e) {
@@ -114,6 +127,8 @@ function keyboard(obj) {
     $(that.volumeSelector).change(function () {
       that.updateVolume(this.value);
     });
+
+    muteIfHidden()
   };
 
   return {
