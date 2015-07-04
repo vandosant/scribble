@@ -2,8 +2,15 @@ function keyboard(obj) {
   var volumeSelector, volume, keysDown, keys;
 
   keysDown = [];
-  volumeSelector = obj.volumeSelector || undefined;
-  volume = obj.volume || 0.25;
+  if (obj && obj.volume) {
+    volume = obj.volume;
+  } else {
+    volume = 0.25;
+  }
+
+  if (obj && obj.volumeSelector) {
+    volumeSelector = obj.volumeSelector;
+  }
   keys = {
     'A': {
       key: 65,
@@ -102,8 +109,7 @@ function keyboard(obj) {
   };
 
   var muteIfHidden = function () {
-    if (typeof document.addEventListener &&
-      typeof document.visibilityState) {
+    if (typeof document.addEventListener && typeof document.visibilityState) {
       document.addEventListener('visibilitychange', function () {
         if (document.hidden) {
           oscillators.forEach(function (o) {

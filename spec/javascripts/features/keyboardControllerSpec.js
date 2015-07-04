@@ -11,8 +11,10 @@ describe("keyboardController", function () {
 
   it("should initialize a keyboard", function () {
     expect(keyboardCtrl.keyboard).toEqual(undefined);
-    keyboardCtrl.initialize({keyboard: {}});
-    expect(keyboardCtrl.keyboard).toEqual({})
+    keyboardCtrl.initialize();
+    expect(typeof keyboardCtrl.keyboard).toEqual("object");
+    expect(typeof keyboardCtrl.keyboard.keydown).toEqual("function");
+    expect(typeof keyboardCtrl.keyboard.keyup).toEqual("function");
   });
 
   describe("volumeSelector", function () {
