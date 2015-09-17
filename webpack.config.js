@@ -10,6 +10,11 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         loader: 'babel'
       }
-    ]
+    ],
+  },
+  resolve: {
+    alias: {
+      jquery: "../../vendors/javascripts/jquery"
+    }
   }
 };
