@@ -1,4 +1,5 @@
 var context = require("./Context");
+var oscillator = require("./Oscillator");
 
 function oscillatorController(options) {
   this.oscillators = options['oscillators'] || [];
