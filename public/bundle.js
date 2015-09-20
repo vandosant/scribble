@@ -48,7 +48,9 @@
 	var context = __webpack_require__(4);
 	var keyboard = __webpack_require__(5);
 	var oscillatorCtrl = __webpack_require__(6);
-	var drumController = __webpack_require__(7);
+	var DrumController = __webpack_require__(8);
+	var drumMachine = __webpack_require__(9);
+	var oscillator = __webpack_require__(7);
 
 	var modes = {
 	  standard: ['sine', 'sine', 'triangle'],
@@ -66,10 +68,46 @@
 	  });
 	});
 
-	drumController.render();
-	drumController.selectDrum('#bass');
-	drumController.start('#drum-status');
-	drumController.listen('#tempo', '.drum-button', '.drum-type', '#drum-status', '.drum-volume');
+	var drumVol = 1.3;
+	var drums = [
+	  {
+	    identifier: 'bass',
+	    'bass': {
+	    'machine': drumMachine({context: context, frequency: 47, wave: 'sine', gainVal: drumVol, sustain: 0.03})
+	    }
+	  },
+	  {
+	    identifier: 'tom1',
+	    'tom1': {
+	    'machine': drumMachine({context: context, frequency: 64, wave: 'sine', gainVal: drumVol, sustain: 0.05})
+	    }
+	  },
+	  {
+	    identifier: 'tom2',
+	    'tom2': {
+	    'machine': drumMachine({context: context, frequency: 160, wave: 'sine', gainVal: drumVol, sustain: 0.05})
+	    }
+	  },
+	  {
+	    identifier: 'snare',
+	    'snare': {
+	    'machine': drumMachine({context: context, frequency: 188, wave: 'sine', gainVal: drumVol, sustain: 0.07})
+	    }
+	  },
+	  {
+	    identifier: 'pad',
+	    'pad': {
+	    'machine': drumMachine({context: context, frequency: 261.63, wave: 'triangle', gainVal: drumVol, sustain: 0.02})
+	    }
+	  }
+	];
+	var drumController = DrumController(drums, 'drums', 180, drumVol);
+	$('#drums').ready(function() {
+	  drumController.render();
+	  drumController.selectDrum('bass');
+	  drumController.start('drum-status');
+	  drumController.listen('#tempo', '.drum-button', '.drum-type', '#drum-status', '.drum-volume');
+	});
 
 
 /***/ },
@@ -9291,7 +9329,8 @@
 	  window.mozAudioContext ||
 	  window.oAudioContext ||
 	  window.msAudioContext);
-	  if (contextClass) {
+	  if (contextClass && contextClass.state === "running") {
+	  } else if (contextClass) {
 	    return new contextClass();
 	  } else {
 	    $(document).append('<div class="errors">Sorry, your browser is not supported.</div>');
@@ -9300,6 +9339,7 @@
 	}());
 
 	module.exports = context;
+
 
 /***/ },
 /* 5 */
@@ -9464,6 +9504,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var context = __webpack_require__(4);
+	var oscillator = __webpack_require__(7);
 
 	function oscillatorController(options) {
 	  this.oscillators = options['oscillators'] || [];
@@ -9527,115 +9568,160 @@
 
 	module.exports = oscillatorCtrl;
 
+
 /***/ },
 /* 7 */
+/***/ function(module, exports) {
+
+	function oscillator(context, frequency, volume) {
+	  var osc1, osc2, osc3, gainNode1, gainNode2, gainNode3;
+	  osc1 = context.createOscillator();
+	  osc2 = context.createOscillator();
+	  osc3 = context.createOscillator();
+
+	  gainNode1 = context.createGain();
+	  gainNode2 = context.createGain();
+	  gainNode3 = context.createGain();
+
+	  function connect() {
+	    this.gainNode1.connect(this.context.destination);
+	    this.gainNode1.gain.value = this.volume;
+	    this.osc1.connect(this.gainNode1);
+	    this.osc1.type = "sine";
+	    this.osc1.frequency.value = this.frequency;
+	    this.osc1.start(0);
+
+	    this.gainNode2.connect(this.context.destination);
+	    this.gainNode2.gain.value = this.volume;
+	    this.osc2.connect(this.gainNode2);
+	    this.osc2.type = "sine";
+	    this.osc2.frequency.value = this.frequency / 2;
+	    this.osc2.start(0);
+
+	    this.gainNode3.connect(this.context.destination);
+	    this.gainNode3.gain.value = this.volume * 0.8;
+	    this.osc3.connect(this.gainNode3);
+	    this.osc3.type = "triangle";
+	    this.osc3.frequency.value = this.frequency / 2;
+	    this.osc3.start(0);
+	  }
+
+	  function disconnect() {
+	    this.osc1.disconnect();
+	    this.osc2.disconnect();
+	    this.osc3.disconnect();
+	  }
+
+	  function updateVolume(value) {
+	    this.volume = value;
+	    this.gainNode1.gain.value = value;
+	    this.gainNode2.gain.value = value;
+	    this.gainNode3.gain.value = value * 0.8;
+	  }
+
+	  function updateNote(value) {
+	    this.osc1.frequency.value = (value);
+	    this.osc2.frequency.value = (value) / 2;
+	    this.osc3.frequency.value = (value) / 2;
+	  }
+
+	  function updateWave(id, newWave) {
+	    if (id === 1) {
+	      this.osc1.type = newWave;
+	    } else if (id === 2) {
+	      this.osc2.type = newWave;
+	    } else if (id === 3) {
+	      this.osc3.type = newWave;
+	    }
+	  }
+
+	  return {
+	    context: context,
+	    osc1: osc1,
+	    osc2: osc2,
+	    osc3: osc3,
+	    gainNode1: gainNode1,
+	    gainNode2: gainNode2,
+	    gainNode3: gainNode3,
+	    frequency: frequency,
+	    volume: volume,
+	    connect: connect,
+	    disconnect: disconnect,
+	    updateVolume: updateVolume,
+	    updateNote: updateNote,
+	    updateWave: updateWave
+	  };
+	}
+
+	module.exports = oscillator;
+
+
+/***/ },
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var context = __webpack_require__(4);
 
-	function drumMachine(options) {
-	  var context, frequency, wave, gainVal, sustain;
-	  context = options['context'];
-	  frequency = options['frequency'];
-	  wave = options['wave'];
-	  gainVal = options['gainVal'];
-	  sustain = options['sustain'];
-
-	  var hit = function () {
-	    var drum1 = this.context.createOscillator(),
-	      node1 = this.context.createGain(),
-	      drum2 = this.context.createOscillator(),
-	      node2 = this.context.createGain(),
-	      sustain = this.sustain;
-
-	    node1.gain.value = this.gainVal;
-	    node1.connect(this.context.destination);
-	    drum1.connect(node1);
-	    drum1.frequency.value = this.frequency;
-	    drum1.type = this.wave;
-	    drum1.start(0);
-
-	    setInterval(function () {
-	      if (node1.gain.value > 0) {
-	        node1.gain.value -= sustain;
-	      } else {
-	        drum1.stop();
-	      }
-	    }, 5);
-
-	    node2.gain.value = this.gainVal * 0.8;
-	    node2.connect(this.context.destination);
-	    drum2.connect(node2);
-	    drum2.frequency.value = this.frequency;
-	    drum2.type = this.wave;
-	    drum2.start(0);
-
-	    setInterval(function () {
-	      if (node2.gain.value > 0) {
-	        node2.gain.value -= sustain * 2;
-	      } else {
-	        drum2.stop();
-	      }
-	    }, 5);
-	  };
-
-	  return {
-	    hit: hit,
-	    context: context,
-	    frequency: frequency,
-	    gainVal: gainVal,
-	    wave: wave,
-	    sustain: sustain
-	  }
-	}
-
 	function DrumController(drums, containerId, tempo, volume) {
-	  var container = $(containerId);
-	  function render() {
-	    var that = this;
-	    var typeContainer = $('<div class="drum-container"></div>');
+	  var container = document.getElementById(containerId);
 
-	    typeContainer.attr('id', 'drum-types');
-	    $.each(that.drums, function (key, drum) {
+	  function render() {
+	    var container = document.getElementById(containerId);
+	    var typeContainer = document.createElement('div');
+	    typeContainer.setAttribute('class', 'drum-container');
+	    typeContainer.setAttribute('id', 'drum-types');
+	    container.appendChild(typeContainer);
+	    drums.forEach(function (drum, key) {
 	      drum.beats = [];
-	      var buttonContainer = $('<div class="drum-container"></div>');
-	      buttonContainer.attr('id', 'drum-' + key);
+	      var buttonContainer = document.createElement('div');
+	      buttonContainer.setAttribute('class', 'drum-container');
+	      buttonContainer.setAttribute('id', 'drum-' + key);
 	      for (var i = 0; i < 16; i++) {
-	        var beatEl = $('<div class="drum-button">' + (i + 1) + '</div>');
+	        var beatEl = document.createElement('div');
+	        beatEl.setAttribute('class', 'drum-button');
+	        beatEl.textContent = i + 1;
 
 	        drum.beats.push({
 	          selected: false,
 	          el: beatEl
 	        });
-	        buttonContainer.append(beatEl);
+
+	        buttonContainer.appendChild(beatEl);
 	        if (i === 7) {
-	          buttonContainer.append('<br>');
+	          buttonContainer.appendChild(document.createElement('br'));
 	        }
 	      }
-	      that.container.append(buttonContainer);
+	      container.appendChild(buttonContainer);
 
-	      var typeButton = $('<div class="drum-type">' + key + '</div>');
-	      typeButton.attr('id', key);
-	      typeContainer.append(typeButton);
-
+	      var typeButton = document.createElement('div');
+	      typeButton.setAttribute('class', 'drum-type');
+	      typeButton.setAttribute('id', drum.identifier);
+	      typeButton.textContent = drum.identifier;
+	      typeContainer.appendChild(typeButton);
 	    });
-	    that.container.append(typeContainer);
 	  }
 
 	  function parseTempo(tempo) {
 	    return (60 * 1000) / tempo;
 	  }
 
-	  function start(statusButton) {
-	    var that = this,
-	      node = 0;
+	  function start(statusButtonId) {
+	    var that = this
+	    var node = 0;
 
 	    clearInterval(this.interval);
 	    this.interval = setInterval(function () {
-	      that.container.find('.drum-button-active').removeClass('drum-button-active');
-	      $.each(that.drums, function (key, drum) {
-	        drum.beats[node].el.addClass('drum-button-active');
-	        if (drum.beats[node].selected === true) {
+	      var container = document.getElementById(containerId);
+	      var activeDrumNodes = document.getElementsByClassName('drum-button-active');
+	      if (activeDrumNodes.length > 0) {
+	        for (var i = 0; i < activeDrumNodes.length; i++) {
+	            activeDrumNodes[i].classList.remove("drum-button-active");
+	        }
+	      }
+
+	      drums.forEach(function (drum, key) {
+	        drum.beats[node].el.setAttribute('class', 'drum-button-active');
+	        if (drum.beats[node].el.getAttribute('selected') === true) {
 	          drum.machine.hit();
 	        }
 	      });
@@ -9648,11 +9734,14 @@
 
 	    }, parseTempo(that.tempo));
 
-	    var $statusButton = $(statusButton),
-	      $statusDiv = $('<div id="pause"></div>');
-	    $statusButton.addClass('active');
-	    $statusButton.children().remove();
-	    $statusButton.append($statusDiv);
+	    var statusButton = document.getElementById(statusButtonId);
+	    var statusDiv = document.createElement('div');
+	    statusDiv.setAttribute('id', 'pause');
+	    statusButton.setAttribute('active', true);
+	    while (statusButton.firstChild) {
+	      statusButton.removeChild(element.firstChild);
+	    };
+	    statusButton.appendChild(statusDiv);
 	  }
 
 	  function selectBeat(button) {
@@ -9669,23 +9758,26 @@
 	  }
 
 	  function selectDrum(button) {
-	    var that = this,
-	      $button = $(button),
-	      id = $button.attr('id');
+	    var container = document.getElementById(containerId);
+	    var $button = document.getElementById(button);
+	    var id = $button.getAttribute('id');
 
-	    $button.parent().find('.drum-type').removeClass('drum-button-selected');
-	    $button.addClass('drum-button-selected');
+	    var drumTypes = document.getElementsByClassName('drum-type');
+	    for (var i = 0; i < drumTypes.length; i++) {
+	        drumTypes[i].classList.remove('drum-button-selected');
+	    }
 
-	    $.each(that.drums, function (key, drum) {
+	    drums.forEach(function (drum, key) {
 	      if (key === id) {
-	        that.container.find('#drum-' + key).css('visibility', 'visible');
-	        that.container.find('#drum-' + key).css('height', '');
+	        var drum = document.getElementById('drum-'+key);
+	        drum.setAttribute('visibility', 'visible');
+	        drum.setAttribute('height', '');
 	      } else {
-	        that.container.find('#drum-' + key).css('visibility', 'hidden');
-	        that.container.find('#drum-' + key).css('height', '0');
+	        var drum = document.getElementById('drum-'+key);
+	        drum.setAttribute('visibility', 'hidden');
+	        drum.setAttribute('height', '0');
 	      }
 	    });
-
 	  }
 
 	  function setTempo(newTempo) {
@@ -9757,26 +9849,71 @@
 	  }
 	}
 
-	var drumVol = 1.3;
-	var drums = {
-	  'bass': {
-	    'machine': drumMachine({context: context, frequency: 47, wave: 'sine', gainVal: drumVol, sustain: 0.03})
-	  },
-	  'tom1': {
-	    'machine': drumMachine({context: context, frequency: 64, wave: 'sine', gainVal: drumVol, sustain: 0.05})
-	  },
-	  'tom2': {
-	    'machine': drumMachine({context: context, frequency: 160, wave: 'sine', gainVal: drumVol, sustain: 0.05})
-	  },
-	  'snare': {
-	    'machine': drumMachine({context: context, frequency: 188, wave: 'sine', gainVal: drumVol, sustain: 0.07})
-	  },
-	  'pad': {
-	    'machine': drumMachine({context: context, frequency: 261.63, wave: 'triangle', gainVal: drumVol, sustain: 0.02})
-	  }
-	};
+	module.exports = DrumController;
 
-	module.exports = DrumController(drums, '#drums', 180, drumVol);;
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	function drumMachine(options) {
+	  var context, frequency, wave, gainVal, sustain;
+	  context = options['context'];
+	  frequency = options['frequency'];
+	  wave = options['wave'];
+	  gainVal = options['gainVal'];
+	  sustain = options['sustain'];
+
+	  hit = function () {
+	    var drum1 = this.context.createOscillator(),
+	      node1 = this.context.createGain(),
+	      drum2 = this.context.createOscillator(),
+	      node2 = this.context.createGain(),
+	      sustain = this.sustain;
+
+	    node1.gain.value = this.gainVal;
+	    node1.connect(this.context.destination);
+	    drum1.connect(node1);
+	    drum1.frequency.value = this.frequency;
+	    drum1.type = this.wave;
+	    drum1.start(0);
+
+	    setInterval(function () {
+	      if (node1.gain.value > 0) {
+	        node1.gain.value -= sustain;
+	      } else {
+	        drum1.stop();
+	      }
+	    }, 5);
+
+	    node2.gain.value = this.gainVal * 0.8;
+	    node2.connect(this.context.destination);
+	    drum2.connect(node2);
+	    drum2.frequency.value = this.frequency;
+	    drum2.type = this.wave;
+	    drum2.start(0);
+
+	    setInterval(function () {
+	      if (node2.gain.value > 0) {
+	        node2.gain.value -= sustain * 2;
+	      } else {
+	        drum2.stop();
+	      }
+	    }, 5);
+	  };
+
+	  return {
+	    hit: hit,
+	    context: context,
+	    frequency: frequency,
+	    gainVal: gainVal,
+	    wave: wave,
+	    sustain: sustain
+	  }
+	}
+
+	module.exports = drumMachine;
+
 
 /***/ }
 /******/ ]);
