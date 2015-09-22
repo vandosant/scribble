@@ -9706,6 +9706,7 @@
 	  }
 
 	  function start(statusButtonId) {
+	    var that = this;
 	    var node = 0;
 
 	    clearInterval(this.interval);
@@ -9739,18 +9740,16 @@
 	    while (statusButton.firstChild) {
 	      statusButton.removeChild(element.firstChild);
 	    }
-	    ;
 	    statusButton.appendChild(statusDiv);
 	  }
 
 	  function selectBeat(button) {
-	    var that = this;
 	    var $button = $(button);
 	    $button.toggleClass('drum-button-selected');
 	    var index = $button.text() - 1;
 	    var type = $button.parent().attr('id').split('-')[1];
-	    if (that.drums[type].beats[index].selected) {
-	      that.drums[type].beats[index].selected = false;
+	    if (!drums[type].beats[index].selected) {
+	      drums[type].beats[index].selected = true;
 	    }
 	  }
 
@@ -9782,7 +9781,6 @@
 	  }
 
 	  function stop(statusButton) {
-	    var that = this;
 	    var $statusButton = $(statusButton),
 	      $statusDiv = $('<div id="play"></div>');
 	    clearInterval(this.interval);
@@ -9790,7 +9788,7 @@
 	    $statusButton.addClass('inactive');
 	    $statusButton.children().remove();
 	    $statusButton.append($statusDiv);
-	    that.container.find('.drum-button-active').removeClass('drum-button-active');
+	    this.container.find('.drum-button-active').removeClass('drum-button-active');
 	  }
 
 	  function setVolume(volumeModifier) {
@@ -9802,29 +9800,29 @@
 
 	  function listen(tempoSelector, beatSelector, drumSelector, statusSelector, drumVolumeSelector) {
 	    $(tempoSelector).change(function () {
-	      drumController.setTempo($(this).val());
+	      setTempo($(this).val());
 	    });
 
 	    $(beatSelector).click(function () {
-	      drumController.selectBeat(this);
+	      selectBeat(this);
 	    });
 
 	    $(drumSelector).click(function () {
-	      drumController.selectDrum(this);
+	      selectDrum(this);
 	    });
 
 	    $(statusSelector).click(function () {
 	      var $this = $(this);
 	      if ($this.hasClass('active') === true) {
-	        drumController.stop(statusSelector);
+	        stop(statusSelector);
 	      } else {
-	        drumController.start(statusSelector);
+	        start(statusSelector);
 	      }
 	    });
 
 	    $(drumVolumeSelector).change(function (e) {
 	      var volumeModifier = (this.value / 100);
-	      drumController.setVolume(volumeModifier);
+	      setVolume(volumeModifier);
 	    });
 	  }
 
