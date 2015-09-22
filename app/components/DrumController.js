@@ -44,12 +44,10 @@ function DrumController(drums, containerId, tempo, volume) {
   }
 
   function start(statusButtonId) {
-    var that = this
     var node = 0;
 
     clearInterval(this.interval);
     this.interval = setInterval(function () {
-      var container = document.getElementById(containerId);
       var activeDrumNodes = document.getElementsByClassName('drum-button-active');
       if (activeDrumNodes.length > 0) {
         for (var i = 0; i < activeDrumNodes.length; i++) {
@@ -58,7 +56,7 @@ function DrumController(drums, containerId, tempo, volume) {
       }
 
       drums.forEach(function (drum, key) {
-        drum.beats[node].el.setAttribute('class', 'drum-button-active');
+        drum.beats[node].el.classList.add('drum-button-active');
         if (drum.beats[node].el.getAttribute('selected') === true) {
           drum.machine.hit();
         }
