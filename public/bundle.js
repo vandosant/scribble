@@ -9713,11 +9713,11 @@
 	      var activeDrumNodes = document.getElementsByClassName('drum-button-active');
 	      if (activeDrumNodes.length > 0) {
 	        for (var i = 0; i < activeDrumNodes.length; i++) {
-	            activeDrumNodes[i].classList.remove("drum-button-active");
+	          activeDrumNodes[i].classList.remove("drum-button-active");
 	        }
 	      }
 
-	      drums.forEach(function (drum, key) {
+	      drums.forEach(function (drum) {
 	        drum.beats[node].el.classList.add('drum-button-active');
 	        if (drum.beats[node].el.getAttribute('selected') === true) {
 	          drum.machine.hit();
@@ -9738,7 +9738,8 @@
 	    statusButton.setAttribute('active', true);
 	    while (statusButton.firstChild) {
 	      statusButton.removeChild(element.firstChild);
-	    };
+	    }
+	    ;
 	    statusButton.appendChild(statusDiv);
 	  }
 
@@ -9750,28 +9751,25 @@
 	    var type = $button.parent().attr('id').split('-')[1];
 	    if (that.drums[type].beats[index].selected) {
 	      that.drums[type].beats[index].selected = false;
-	    } else {
-	      that.drums[type].beats[index].selected = true;
 	    }
 	  }
 
 	  function selectDrum(button) {
-	    var container = document.getElementById(containerId);
 	    var $button = document.getElementById(button);
 	    var id = $button.getAttribute('id');
 
 	    var drumTypes = document.getElementsByClassName('drum-type');
 	    for (var i = 0; i < drumTypes.length; i++) {
-	        drumTypes[i].classList.remove('drum-button-selected');
+	      drumTypes[i].classList.remove('drum-button-selected');
 	    }
 
 	    drums.forEach(function (drum, key) {
 	      if (key === id) {
-	        var drum = document.getElementById('drum-'+key);
+	        var drum = document.getElementById('drum-' + key);
 	        drum.setAttribute('visibility', 'visible');
 	        drum.setAttribute('height', '');
 	      } else {
-	        var drum = document.getElementById('drum-'+key);
+	        var drum = document.getElementById('drum-' + key);
 	        drum.setAttribute('visibility', 'hidden');
 	        drum.setAttribute('height', '0');
 	      }
