@@ -99,13 +99,15 @@ function DrumController(drums, containerId, tempo, volume) {
       drumTypes[i].classList.remove('drum-button-selected');
     }
 
-    drums.forEach(function (drum, key) {
+    drums.forEach(function (_, key) {
       var drumEl = document.getElementById('drum-' + key);
       if (key === id) {
         drumEl.setAttribute('visibility', 'visible');
         drumEl.setAttribute('height', '');
+        drumEl.hidden = false;
       } else {
         drumEl.setAttribute('visibility', 'hidden');
+        drumEl.hidden = true;
         drumEl.setAttribute('height', '0');
       }
     });
