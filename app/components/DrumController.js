@@ -100,14 +100,13 @@ function DrumController(drums, containerId, tempo, volume) {
     }
 
     drums.forEach(function (drum, key) {
+      var drumEl = document.getElementById('drum-' + key);
       if (key === id) {
-        var drum = document.getElementById('drum-' + key);
-        drum.setAttribute('visibility', 'visible');
-        drum.setAttribute('height', '');
+        drumEl.setAttribute('visibility', 'visible');
+        drumEl.setAttribute('height', '');
       } else {
-        var drum = document.getElementById('drum-' + key);
-        drum.setAttribute('visibility', 'hidden');
-        drum.setAttribute('height', '0');
+        drumEl.setAttribute('visibility', 'hidden');
+        drumEl.setAttribute('height', '0');
       }
     });
   }
