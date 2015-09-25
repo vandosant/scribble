@@ -99,9 +99,9 @@ function DrumController(drums, containerId, tempo, volume) {
       drumTypes[i].classList.remove('drum-button-selected');
     }
 
-    drums.forEach(function (_, key) {
+    drums.forEach(function (drum, key) {
       var drumEl = document.getElementById('drum-' + key);
-      if (key === id) {
+      if (drum.identifier === id) {
         drumEl.setAttribute('visibility', 'visible');
         drumEl.setAttribute('height', '');
         drumEl.hidden = false;
