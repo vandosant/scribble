@@ -13,15 +13,6 @@ var modes = {
   game: ['square', 'sine', 'triangle']
 };
 
-$('.oscillator-mode').change(function () {
-  var mode = $(this).val();
-  oscillatorCtrl.update(modes[mode]);
-
-  $('.oscillator-wave').each(function (oscSelector) {
-    $(this).val(modes[mode][oscSelector])
-  });
-});
-
 var drumVol = 1.3;
 var drums = [
   {
@@ -62,3 +53,13 @@ $('#drums').ready(function() {
   drumController.start('drum-status');
   drumController.listen('#tempo', '.drum-button', '.drum-type', '#drum-status', '.drum-volume');
 });
+
+$('.oscillator-container').ready(function() {
+  $('.oscillator-mode').change(function () {
+    var mode = $(this).val();
+    oscillatorCtrl.update(modes[mode]);
+    $('.oscillator-wave').each(function (oscSelector) {
+      $(this).val(modes[mode][oscSelector])
+    });
+  });
+})
