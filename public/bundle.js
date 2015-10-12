@@ -47,7 +47,7 @@
 	__webpack_require__(1);
 	var context = __webpack_require__(4);
 	var keyboard = __webpack_require__(5);
-	var oscillatorCtrl = __webpack_require__(6);
+	var oscillatorController = __webpack_require__(6);
 	var DrumController = __webpack_require__(8);
 	var drumMachine = __webpack_require__(9);
 	var oscillator = __webpack_require__(7);
@@ -91,6 +91,14 @@
 	  drumController.start('drum-status');
 	  drumController.listen('#tempo', '.drum-button', '.drum-type', '#drum-status', '.drum-volume');
 	});
+
+	var oscillatorCtrl = oscillatorController({
+	  oscillators: [],
+	  initialVolume: 0,
+	  initialFrequency: 261.63,
+	  oscillatorSelector: '.oscillator-wave'
+	});
+	oscillatorCtrl.initialize();
 
 	$('.oscillator-container').ready(function() {
 	  $('.oscillator-mode').change(function () {
@@ -9486,7 +9494,7 @@
 	      that.updateVolume(this.value);
 	    });
 
-	    muteIfHidden()
+	    muteIfHidden();
 	  };
 
 	  return {
@@ -9503,6 +9511,7 @@
 	keyboard.initialize();
 
 	module.exports = keyboard;
+
 
 /***/ },
 /* 6 */
@@ -9559,15 +9568,7 @@
 	  };
 	}
 
-	var oscillatorCtrl = oscillatorController({
-	  oscillators: [],
-	  initialVolume: 0,
-	  initialFrequency: 261.63,
-	  oscillatorSelector: '.oscillator-wave'
-	});
-	oscillatorCtrl.initialize();
-
-	module.exports = oscillatorCtrl;
+	module.exports = oscillatorController;
 
 
 /***/ },

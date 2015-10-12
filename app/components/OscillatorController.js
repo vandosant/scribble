@@ -49,12 +49,4 @@ function oscillatorController(options) {
   };
 }
 
-var oscillatorCtrl = oscillatorController({
-  oscillators: [],
-  initialVolume: 0,
-  initialFrequency: 261.63,
-  oscillatorSelector: '.oscillator-wave'
-});
-oscillatorCtrl.initialize();
-
-module.exports = oscillatorCtrl;
+module.exports = oscillatorController;

@@ -134,7 +134,7 @@ function keyboardModel(obj) {
       that.updateVolume(this.value);
     });
 
-    muteIfHidden()
+    muteIfHidden();
   };
 
   return {

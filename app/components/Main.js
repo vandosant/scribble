@@ -1,7 +1,7 @@
 require('expose?$!expose?jQuery!jquery');
 var context = require("./Context");
 var keyboard = require("./Keyboard");
-var oscillatorCtrl = require("./OscillatorController");
+var oscillatorController = require("./OscillatorController");
 var DrumController = require("./DrumController");
 var drumMachine = require("./DrumMachine");
 var oscillator = require("./Oscillator");
@@ -45,6 +45,14 @@ $('#drums').ready(function() {
   drumController.start('drum-status');
   drumController.listen('#tempo', '.drum-button', '.drum-type', '#drum-status', '.drum-volume');
 });
+
+var oscillatorCtrl = oscillatorController({
+  oscillators: [],
+  initialVolume: 0,
+  initialFrequency: 261.63,
+  oscillatorSelector: '.oscillator-wave'
+});
+oscillatorCtrl.initialize();
 
 $('.oscillator-container').ready(function() {
   $('.oscillator-mode').change(function () {

@@ -17,7 +17,7 @@ function keyboardController() {
     initialize: initialize
   };
 
-  return api
+  return api;
 }
 
 module.exports = keyboardController;
