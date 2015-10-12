@@ -51,14 +51,6 @@
 	var DrumController = __webpack_require__(8);
 	var drumMachine = __webpack_require__(9);
 	var oscillator = __webpack_require__(7);
-
-	var modes = {
-	  standard: ['sine', 'sine', 'triangle'],
-	  raspy: ['sine', 'square', 'sawtooth'],
-	  organ: ['sine', 'sine', 'sine'],
-	  game: ['square', 'sine', 'triangle']
-	};
-
 	var drumVol = 1.3;
 	var drums = [
 	  {
@@ -102,11 +94,22 @@
 
 	$('.oscillator-container').ready(function() {
 	  $('.oscillator-mode').change(function () {
+	    var modes = {
+	      standard: ['sine', 'sine', 'triangle'],
+	      raspy: ['sine', 'square', 'sawtooth'],
+	      organ: ['sine', 'sine', 'sine'],
+	      game: ['square', 'sine', 'triangle']
+	    };
 	    var mode = $(this).val();
 	    oscillatorCtrl.update(modes[mode]);
 	    $('.oscillator-wave').each(function (oscSelector) {
 	      $(this).val(modes[mode][oscSelector])
 	    });
+	  });
+	  $('.oscillator-wave').change(function () {
+	    var id = Number(this.id);
+	    var wave = $(this).val();
+	    oscillatorCtrl.updateWave(id, wave);
 	  });
 	})
 
@@ -9527,20 +9530,15 @@
 	    });
 	  };
 
-	  var watchOscillatorWaves = function () {
-	    $(oscillatorSelector).change(function () {
-	      var wave = $(this).val();
-	      var id = Number(this.id);
-	      oscillators.forEach(function (osc) {
-	        osc.updateWave(id, wave);
-	      });
+	  var updateWave = function (id, wave) {
+	    oscillators.forEach(function (osc) {
+	      osc.updateWave(id, wave);
 	    });
 	  };
 
 	  var initialize = function () {
 	    createOscillators();
 	    connectOscillators();
-	    watchOscillatorWaves();
 	  };
 
 	  var update = function (options) {
@@ -9556,6 +9554,7 @@
 	  return {
 	    initialize: initialize,
 	    update: update,
+	    updateWave: updateWave,
 	    oscillators: oscillators
 	  };
 	}

@@ -20,20 +20,15 @@ function oscillatorController(options) {
     });
   };
 
-  var watchOscillatorWaves = function () {
-    $(oscillatorSelector).change(function () {
-      var wave = $(this).val();
-      var id = Number(this.id);
-      oscillators.forEach(function (osc) {
-        osc.updateWave(id, wave);
-      });
+  var updateWave = function (id, wave) {
+    oscillators.forEach(function (osc) {
+      osc.updateWave(id, wave);
     });
   };
 
   var initialize = function () {
     createOscillators();
     connectOscillators();
-    watchOscillatorWaves();
   };
 
   var update = function (options) {
@@ -49,6 +44,7 @@ function oscillatorController(options) {
   return {
     initialize: initialize,
     update: update,
+    updateWave: updateWave,
     oscillators: oscillators
   };
 }

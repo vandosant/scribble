@@ -5,14 +5,6 @@ var oscillatorCtrl = require("./OscillatorController");
 var DrumController = require("./DrumController");
 var drumMachine = require("./DrumMachine");
 var oscillator = require("./Oscillator");
-
-var modes = {
-  standard: ['sine', 'sine', 'triangle'],
-  raspy: ['sine', 'square', 'sawtooth'],
-  organ: ['sine', 'sine', 'sine'],
-  game: ['square', 'sine', 'triangle']
-};
-
 var drumVol = 1.3;
 var drums = [
   {
@@ -56,10 +48,21 @@ $('#drums').ready(function() {
 
 $('.oscillator-container').ready(function() {
   $('.oscillator-mode').change(function () {
+    var modes = {
+      standard: ['sine', 'sine', 'triangle'],
+      raspy: ['sine', 'square', 'sawtooth'],
+      organ: ['sine', 'sine', 'sine'],
+      game: ['square', 'sine', 'triangle']
+    };
     var mode = $(this).val();
     oscillatorCtrl.update(modes[mode]);
     $('.oscillator-wave').each(function (oscSelector) {
       $(this).val(modes[mode][oscSelector])
     });
+  });
+  $('.oscillator-wave').change(function () {
+    var id = Number(this.id);
+    var wave = $(this).val();
+    oscillatorCtrl.updateWave(id, wave);
   });
 })
