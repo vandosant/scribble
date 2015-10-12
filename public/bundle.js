@@ -9710,8 +9710,8 @@
 	  function start(statusButtonId) {
 	    var node = 0;
 
-	    clearInterval(this.interval);
-	    this.interval = setInterval(function () {
+	    clearInterval(DrumController.interval);
+	    DrumController.interval = setInterval(function () {
 	      var activeDrumNodes = document.getElementsByClassName('drum-button-active');
 	      if (activeDrumNodes.length > 0) {
 	        for (var i = 0; i < activeDrumNodes.length; i++) {
@@ -9795,12 +9795,13 @@
 	  function stop(statusButton) {
 	    var $statusButton = $(statusButton),
 	      $statusDiv = $('<div id="play"></div>');
-	    clearInterval(this.interval);
+	    clearInterval(DrumController.interval);
 	    $statusButton.removeClass('active');
 	    $statusButton.addClass('inactive');
 	    $statusButton.children().remove();
 	    $statusButton.append($statusDiv);
-	    this.container.find('.drum-button-active').removeClass('drum-button-active');
+	    var container = document.getElementById(containerId);
+	    $(container).find('.drum-button-active').removeClass('drum-button-active');
 	  }
 
 	  function setVolume(volumeModifier) {
@@ -9824,8 +9825,9 @@
 	    });
 
 	    $(statusSelector).click(function () {
-	      var $this = $(this);
-	      if ($this.hasClass('active') === true) {
+	      var el = this;
+	      if (el.getAttribute('active') === 'true') {
+	        el.setAttribute('active', true)
 	        stop(statusSelector);
 	      } else {
 	        start(statusSelector);
