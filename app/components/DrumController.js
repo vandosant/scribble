@@ -57,8 +57,8 @@ function DrumController(drums, containerId, tempo, volume) {
 
       drums.forEach(function (drum) {
         drum.beats[node].el.classList.add('drum-button-active');
-        if (drum.beats[node].el.getAttribute('selected') === true) {
-          drum.machine.hit();
+        if (drum.beats[node].selected === true) {
+          drum[drum.identifier].machine.hit();
         }
       });
 

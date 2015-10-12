@@ -9329,6 +9329,7 @@
 	  window.mozAudioContext ||
 	  window.oAudioContext ||
 	  window.msAudioContext);
+
 	  if (contextClass && contextClass.state === "running") {
 	  } else if (contextClass) {
 	    return new contextClass();
@@ -9706,7 +9707,6 @@
 	  }
 
 	  function start(statusButtonId) {
-	    var that = this;
 	    var node = 0;
 
 	    clearInterval(this.interval);
@@ -9720,8 +9720,8 @@
 
 	      drums.forEach(function (drum) {
 	        drum.beats[node].el.classList.add('drum-button-active');
-	        if (drum.beats[node].el.getAttribute('selected') === true) {
-	          drum.machine.hit();
+	        if (drum.beats[node].selected === true) {
+	          drum[drum.identifier].machine.hit();
 	        }
 	      });
 
@@ -9731,7 +9731,7 @@
 	        node++;
 	      }
 
-	    }, parseTempo(that.tempo));
+	    }, parseTempo(tempo));
 
 	    var statusButton = document.getElementById(statusButtonId);
 	    var statusDiv = document.createElement('div');
@@ -9755,22 +9755,33 @@
 
 	  function selectDrum(button) {
 	    var $button = document.getElementById(button);
-	    var id = $button.getAttribute('id');
+	    var id = null;
+	    if ($button !== null) {
+	      id = $button.getAttribute('id');
+	    } else {
+	      id = button.id;
+	    }
 
 	    var drumTypes = document.getElementsByClassName('drum-type');
 	    for (var i = 0; i < drumTypes.length; i++) {
 	      drumTypes[i].classList.remove('drum-button-selected');
 	    }
+	    if (button.classList) {
+	      button.classList.add('drum-button-selected');
+	    } else if ($button.classList) {
+	      $button.classList.add('drum-button-selected');
+	    }
 
 	    drums.forEach(function (drum, key) {
-	      if (key === id) {
-	        var drum = document.getElementById('drum-' + key);
-	        drum.setAttribute('visibility', 'visible');
-	        drum.setAttribute('height', '');
+	      var drumEl = document.getElementById('drum-' + key);
+	      if (drum.identifier === id) {
+	        drumEl.setAttribute('visibility', 'visible');
+	        drumEl.setAttribute('height', '');
+	        drumEl.hidden = false;
 	      } else {
-	        var drum = document.getElementById('drum-' + key);
-	        drum.setAttribute('visibility', 'hidden');
-	        drum.setAttribute('height', '0');
+	        drumEl.setAttribute('visibility', 'hidden');
+	        drumEl.hidden = true;
+	        drumEl.setAttribute('height', '0');
 	      }
 	    });
 	  }
@@ -9851,14 +9862,13 @@
 /***/ function(module, exports) {
 
 	function drumMachine(options) {
-	  var context, frequency, wave, gainVal, sustain;
-	  context = options['context'];
-	  frequency = options['frequency'];
-	  wave = options['wave'];
-	  gainVal = options['gainVal'];
-	  sustain = options['sustain'];
+	  var context = options['context'];
+	  var frequency = options['frequency'];
+	  var wave = options['wave'];
+	  var gainVal = options['gainVal'];
+	  var sustain = options['sustain'];
 
-	  hit = function () {
+	  var hit = function () {
 	    var drum1 = this.context.createOscillator(),
 	      node1 = this.context.createGain(),
 	      drum2 = this.context.createOscillator(),

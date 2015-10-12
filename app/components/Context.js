@@ -4,6 +4,7 @@ var context = (function () {
   window.mozAudioContext ||
   window.oAudioContext ||
   window.msAudioContext);
+
   if (contextClass && contextClass.state === "running") {
   } else if (contextClass) {
     return new contextClass();
