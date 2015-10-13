@@ -89,7 +89,7 @@
 	  drumController.render();
 	  drumController.selectDrum('bass');
 	  drumController.start('drum-status');
-	  drumController.listen('#tempo', '.drum-button', '.drum-type', '#drum-status', '.drum-volume');
+	  drumController.listen('#tempo', '.drum-button', '.drum-type', 'drum-status', '.drum-volume');
 	});
 
 	var oscillatorCtrl = oscillatorController({
@@ -9731,7 +9731,6 @@
 	      } else {
 	        node++;
 	      }
-
 	    }, parseTempo(tempo));
 
 	    var statusButton = document.getElementById(statusButtonId);
@@ -9739,9 +9738,24 @@
 	    statusDiv.setAttribute('id', 'pause');
 	    statusButton.setAttribute('active', true);
 	    while (statusButton.firstChild) {
-	      statusButton.removeChild(element.firstChild);
+	      statusButton.removeChild(statusButton.firstChild);
 	    }
 	    statusButton.appendChild(statusDiv);
+	  }
+
+	  function stop(statusButtonId) {
+	    clearInterval(DrumController.interval);
+	    var statusButton = document.getElementById(statusButtonId);
+	    var statusDiv = document.createElement("div")
+	    statusDiv.id = "play"
+	    statusButton.classList.remove('active')
+	    statusButton.classList.add('inactive');
+	    while (statusButton.firstChild) {
+	      statusButton.removeChild(statusButton.firstChild);
+	    }
+	    statusButton.appendChild(statusDiv);
+	    var container = document.getElementById(containerId);
+	    $(container).find('.drum-button-active').removeClass('drum-button-active');
 	  }
 
 	  function selectBeat(button) {
@@ -9792,18 +9806,6 @@
 	    this.start();
 	  }
 
-	  function stop(statusButton) {
-	    var $statusButton = $(statusButton),
-	      $statusDiv = $('<div id="play"></div>');
-	    clearInterval(DrumController.interval);
-	    $statusButton.removeClass('active');
-	    $statusButton.addClass('inactive');
-	    $statusButton.children().remove();
-	    $statusButton.append($statusDiv);
-	    var container = document.getElementById(containerId);
-	    $(container).find('.drum-button-active').removeClass('drum-button-active');
-	  }
-
 	  function setVolume(volumeModifier) {
 	    var that = this;
 	    $.each(that.drums, function (key, drum) {
@@ -9823,11 +9825,11 @@
 	    $(drumSelector).click(function () {
 	      selectDrum(this);
 	    });
-
-	    $(statusSelector).click(function () {
+	    var statusButton = document.getElementById(statusSelector);
+	    statusButton.addEventListener('click', function() {
 	      var el = this;
 	      if (el.getAttribute('active') === 'true') {
-	        el.setAttribute('active', true)
+	        el.setAttribute('active', false)
 	        stop(statusSelector);
 	      } else {
 	        start(statusSelector);

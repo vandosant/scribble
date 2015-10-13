@@ -43,7 +43,7 @@ $('#drums').ready(function() {
   drumController.render();
   drumController.selectDrum('bass');
   drumController.start('drum-status');
-  drumController.listen('#tempo', '.drum-button', '.drum-type', '#drum-status', '.drum-volume');
+  drumController.listen('#tempo', '.drum-button', '.drum-type', 'drum-status', '.drum-volume');
 });
 
 var oscillatorCtrl = oscillatorController({
