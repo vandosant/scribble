@@ -89,7 +89,7 @@
 	  drumController.render();
 	  drumController.selectDrum('bass');
 	  drumController.start('drum-status');
-	  drumController.listen('#tempo', '.drum-button', 'drum-type', 'drum-status', '.drum-volume');
+	  drumController.listen('#tempo', 'drum-button', 'drum-type', 'drum-status', '.drum-volume');
 	});
 
 	var oscillatorCtrl = oscillatorController({
@@ -9813,14 +9813,17 @@
 	    });
 	  }
 
-	  function listen(tempoSelector, beatSelector, drumTypeClass, statusSelectorId, drumVolumeSelector) {
+	  function listen(tempoSelector, drumBeatClass, drumTypeClass, statusSelectorId, drumVolumeSelector) {
 	    $(tempoSelector).change(function () {
 	      setTempo($(this).val());
 	    });
 
-	    $(beatSelector).click(function () {
-	      selectBeat(this);
-	    });
+	    var drumBeats = document.getElementsByClassName(drumBeatClass);
+	    for (var i = 0; i < drumBeats.length; i++) {
+	      drumBeats[i].addEventListener('click', function() {
+	        selectBeat(this);
+	      });
+	    }
 
 	    var drumTypes = document.getElementsByClassName(drumTypeClass);
 	    for (var i = 0; i < drumTypes.length; i++) {
