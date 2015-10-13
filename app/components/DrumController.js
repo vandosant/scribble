@@ -45,6 +45,7 @@ function DrumController(drums, containerId, tempo, volume) {
 
   function start(statusButtonId) {
     var node = 0;
+
     clearInterval(DrumController.interval);
     DrumController.interval = setInterval(function () {
       var activeDrumNodes = document.getElementsByClassName('drum-button-active');
@@ -178,7 +179,8 @@ function DrumController(drums, containerId, tempo, volume) {
         el.setAttribute('active', false)
         stop(statusSelectorId);
       } else {
-        start(statusSelectorId);
+        var boundStart = start.bind(self);
+        boundStart(statusSelectorId);
       }
     });
 
