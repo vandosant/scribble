@@ -67,7 +67,7 @@ function DrumController(drums, containerId, tempo, volume) {
         node++;
       }
     }, parseTempo(this.tempo));
-    debugger
+
     var statusButton = document.getElementById(statusButtonId);
     var statusDiv = document.createElement('div');
     statusDiv.setAttribute('id', 'pause');
