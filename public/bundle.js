@@ -9813,7 +9813,7 @@
 	    });
 	  }
 
-	  function listen(tempoSelector, beatSelector, drumSelector, statusSelectorId, drumVolumeSelector) {
+	  function listen(tempoSelector, beatSelector, drumTypeClass, statusSelectorId, drumVolumeSelector) {
 	    $(tempoSelector).change(function () {
 	      setTempo($(this).val());
 	    });
@@ -9822,9 +9822,13 @@
 	      selectBeat(this);
 	    });
 
-	    $(drumSelector).click(function () {
-	      selectDrum(this);
-	    });
+	    var drumTypes = document.getElementsByClassName(drumTypeClass);
+	    for (var i = 0; i < drumTypes.length; i++) {
+	      drumTypes[i].addEventListener('click', function() {
+	        selectDrum(this);
+	      });
+	    }
+
 	    var statusButton = document.getElementById(statusSelectorId);
 	    statusButton.addEventListener('click', function() {
 	      var el = this;
