@@ -89,7 +89,7 @@
 	  drumController.render();
 	  drumController.selectDrum('bass');
 	  drumController.start('drum-status');
-	  drumController.listen('#tempo', 'drum-button', 'drum-type', 'drum-status', '.drum-volume');
+	  drumController.listen('tempo', 'drum-button', 'drum-type', 'drum-status', '.drum-volume');
 	});
 
 	var oscillatorCtrl = oscillatorController({
@@ -9709,7 +9709,6 @@
 
 	  function start(statusButtonId) {
 	    var node = 0;
-
 	    clearInterval(DrumController.interval);
 	    DrumController.interval = setInterval(function () {
 	      var activeDrumNodes = document.getElementsByClassName('drum-button-active');
@@ -9731,8 +9730,8 @@
 	      } else {
 	        node++;
 	      }
-	    }, parseTempo(tempo));
-
+	    }, parseTempo(this.tempo));
+	    debugger
 	    var statusButton = document.getElementById(statusButtonId);
 	    var statusDiv = document.createElement('div');
 	    statusDiv.setAttribute('id', 'pause');
@@ -9803,7 +9802,7 @@
 
 	  function setTempo(newTempo) {
 	    this.tempo = newTempo;
-	    this.start();
+	    this.start('drum-status');
 	  }
 
 	  function setVolume(volumeModifier) {
@@ -9813,9 +9812,12 @@
 	    });
 	  }
 
-	  function listen(tempoSelector, drumBeatClass, drumTypeClass, statusSelectorId, drumVolumeSelector) {
-	    $(tempoSelector).change(function () {
-	      setTempo($(this).val());
+	  function listen(tempoId, drumBeatClass, drumTypeClass, statusSelectorId, drumVolumeSelector) {
+	    var self = this;
+	    var tempoEl = document.getElementById(tempoId);
+	    tempoEl.addEventListener('change', function() {
+	      var callee = setTempo.bind(self);
+	      callee(parseInt(this.value));
 	    });
 
 	    var drumBeats = document.getElementsByClassName(drumBeatClass);
