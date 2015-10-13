@@ -9816,8 +9816,8 @@
 	    var self = this;
 	    var tempoEl = document.getElementById(tempoId);
 	    tempoEl.addEventListener('change', function() {
-	      var callee = setTempo.bind(self);
-	      callee(parseInt(this.value));
+	      var boundSetTempo = setTempo.bind(self);
+	      boundSetTempo(parseInt(this.value));
 	    });
 
 	    var drumBeats = document.getElementsByClassName(drumBeatClass);
