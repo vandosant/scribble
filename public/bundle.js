@@ -9802,7 +9802,8 @@
 
 	  function setTempo(newTempo) {
 	    this.tempo = newTempo;
-	    this.start('drum-status');
+	    var boundStart = this.start.bind(this)
+	    boundStart('drum-status');
 	  }
 
 	  function setVolume(volumeModifier) {
