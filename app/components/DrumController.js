@@ -137,10 +137,13 @@ function DrumController(drums, containerId, tempo, volume) {
     });
   }
 
-  function setTempo(newTempo) {
+  function setTempo(newTempo, statusSelectorId) {
     this.tempo = newTempo;
-    var boundStart = this.start.bind(this)
-    boundStart('drum-status');
+    var statusButton = document.getElementById(statusSelectorId);
+    if (statusButton.getAttribute('active') === 'true') {
+      var boundStart = start.bind(this);
+      boundStart('drum-status');
+    }
   }
 
   function setVolume(volumeModifier) {
@@ -155,7 +158,7 @@ function DrumController(drums, containerId, tempo, volume) {
     var tempoEl = document.getElementById(tempoId);
     tempoEl.addEventListener('change', function() {
       var boundSetTempo = setTempo.bind(self);
-      boundSetTempo(parseInt(this.value));
+      boundSetTempo(parseInt(this.value), statusSelectorId);
     });
 
     var drumBeats = document.getElementsByClassName(drumBeatClass);
