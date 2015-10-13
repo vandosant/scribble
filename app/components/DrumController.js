@@ -149,7 +149,7 @@ function DrumController(drums, containerId, tempo, volume) {
     });
   }
 
-  function listen(tempoSelector, beatSelector, drumSelector, statusSelector, drumVolumeSelector) {
+  function listen(tempoSelector, beatSelector, drumSelector, statusSelectorId, drumVolumeSelector) {
     $(tempoSelector).change(function () {
       setTempo($(this).val());
     });
@@ -161,14 +161,14 @@ function DrumController(drums, containerId, tempo, volume) {
     $(drumSelector).click(function () {
       selectDrum(this);
     });
-    var statusButton = document.getElementById(statusSelector);
+    var statusButton = document.getElementById(statusSelectorId);
     statusButton.addEventListener('click', function() {
       var el = this;
       if (el.getAttribute('active') === 'true') {
         el.setAttribute('active', false)
-        stop(statusSelector);
+        stop(statusSelectorId);
       } else {
-        start(statusSelector);
+        start(statusSelectorId);
       }
     });
 
