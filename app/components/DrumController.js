@@ -105,23 +105,12 @@ function DrumController(drums, containerId, tempo, volume) {
   }
 
   function selectDrum(button) {
-    var $button = document.getElementById(button);
-    var id = null;
-    if ($button !== null) {
-      id = $button.getAttribute('id');
-    } else {
-      id = button.id;
-    }
-
+    var id = button.id;
     var drumTypes = document.getElementsByClassName('drum-type');
     for (var i = 0; i < drumTypes.length; i++) {
       drumTypes[i].classList.remove('drum-button-selected');
     }
-    if (button.classList) {
-      button.classList.add('drum-button-selected');
-    } else if ($button.classList) {
-      $button.classList.add('drum-button-selected');
-    }
+    button.classList.add('drum-button-selected');
 
     drums.forEach(function (drum, key) {
       var drumEl = document.getElementById('drum-' + key);

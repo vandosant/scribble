@@ -41,7 +41,8 @@ var drums = [
 var drumController = DrumController(drums, 'drums', 180, drumVol);
 $('#drums').ready(function() {
   drumController.render();
-  drumController.selectDrum('bass');
+  var bassElement = document.getElementById('bass')
+  drumController.selectDrum(bassElement);
   drumController.start('drum-status');
   drumController.listen('tempo', 'drum-button', 'drum-type', 'drum-status', '.drum-volume');
 });

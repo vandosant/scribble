@@ -87,7 +87,8 @@
 	var drumController = DrumController(drums, 'drums', 180, drumVol);
 	$('#drums').ready(function() {
 	  drumController.render();
-	  drumController.selectDrum('bass');
+	  var bassElement = document.getElementById('bass')
+	  drumController.selectDrum(bassElement);
 	  drumController.start('drum-status');
 	  drumController.listen('tempo', 'drum-button', 'drum-type', 'drum-status', '.drum-volume');
 	});
@@ -9769,23 +9770,12 @@
 	  }
 
 	  function selectDrum(button) {
-	    var $button = document.getElementById(button);
-	    var id = null;
-	    if ($button !== null) {
-	      id = $button.getAttribute('id');
-	    } else {
-	      id = button.id;
-	    }
-
+	    var id = button.id;
 	    var drumTypes = document.getElementsByClassName('drum-type');
 	    for (var i = 0; i < drumTypes.length; i++) {
 	      drumTypes[i].classList.remove('drum-button-selected');
 	    }
-	    if (button.classList) {
-	      button.classList.add('drum-button-selected');
-	    } else if ($button.classList) {
-	      $button.classList.add('drum-button-selected');
-	    }
+	    button.classList.add('drum-button-selected');
 
 	    drums.forEach(function (drum, key) {
 	      var drumEl = document.getElementById('drum-' + key);
