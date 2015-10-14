@@ -9760,10 +9760,10 @@
 	  }
 
 	  function selectBeat(button) {
-	    var $button = $(button);
-	    $button.toggleClass('drum-button-selected');
-	    var index = $button.text() - 1;
-	    var type = $button.parent().attr('id').split('-')[1];
+	    button.classList.add('drum-button-selected');
+	    var index = parseInt(button.innerText) - 1;
+	    var id = button.parentNode.getAttribute('id');
+	    var type = id.split('-')[1]
 	    if (!drums[type].beats[index].selected) {
 	      drums[type].beats[index].selected = true;
 	    }
