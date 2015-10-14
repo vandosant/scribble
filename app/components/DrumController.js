@@ -90,8 +90,6 @@ function DrumController(drums, containerId, tempo, volume) {
       statusButton.removeChild(statusButton.firstChild);
     }
     statusButton.appendChild(statusDiv);
-    var container = document.getElementById(containerId);
-    $(container).find('.drum-button-active').removeClass('drum-button-active');
   }
 
   function selectBeat(button) {
