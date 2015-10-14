@@ -137,9 +137,9 @@ function DrumController(drums, containerId, tempo, volume) {
 
   function setVolume(volumeModifier) {
     var that = this;
-    $.each(that.drums, function (key, drum) {
-      drum.machine.gainVal = that.startVolume * volumeModifier;
-    });
+    for (var i = 0; i < this.drums.length; i++) {
+      that.drums[i][drums[i].identifier].machine.gainVal = that.startVolume * volumeModifier;
+    }
   }
 
   function listen(tempoId, drumBeatClass, drumTypeClass, statusSelectorId, drumVolumeSelector) {
@@ -178,7 +178,8 @@ function DrumController(drums, containerId, tempo, volume) {
 
     $(drumVolumeSelector).change(function (e) {
       var volumeModifier = (this.value / 100);
-      setVolume(volumeModifier);
+      var boundSetVolume = setVolume.bind(self);
+      boundSetVolume(volumeModifier);
     });
   }
 
