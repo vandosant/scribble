@@ -9712,7 +9712,7 @@
 
 	  function start(statusButtonId) {
 	    var node = 0;
-
+	    var maxNodes = 15;
 	    clearInterval(DrumController.interval);
 	    DrumController.interval = setInterval(function () {
 	      var activeDrumNodes = document.getElementsByClassName('drum-button-active');
@@ -9721,15 +9721,19 @@
 	          activeDrumNodes[i].classList.remove("drum-button-active");
 	        }
 	      }
-
 	      drums.forEach(function (drum) {
+	        if (node === 0) {
+	          drum.beats[maxNodes].el.classList.remove('drum-button-active');
+	        } else {
+	          drum.beats[node - 1].el.classList.remove('drum-button-active');
+	        }
 	        drum.beats[node].el.classList.add('drum-button-active');
 	        if (drum.beats[node].selected === true) {
 	          drum[drum.identifier].machine.hit();
 	        }
 	      });
 
-	      if (node === 15) {
+	      if (node === maxNodes) {
 	        node = 0;
 	      } else {
 	        node++;
