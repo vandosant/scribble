@@ -176,8 +176,9 @@ function DrumController(drums, containerId, tempo, volume) {
       }
     });
 
-    $(drumVolumeSelector).change(function (e) {
-      var volumeModifier = (this.value / 100);
+    var drumVolumeEl = document.getElementById(drumVolumeSelector);
+    drumVolumeEl.addEventListener('change', function() {
+      var volumeModifier = this.value / 100;
       var boundSetVolume = setVolume.bind(self);
       boundSetVolume(volumeModifier);
     });

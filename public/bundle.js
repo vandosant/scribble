@@ -90,7 +90,7 @@
 	  var bassElement = document.getElementById('bass')
 	  drumController.selectDrum(bassElement);
 	  drumController.start('drum-status');
-	  drumController.listen('tempo', 'drum-button', 'drum-type', 'drum-status', '.drum-volume');
+	  drumController.listen('tempo', 'drum-button', 'drum-type', 'drum-status', 'drum-volume');
 	});
 
 	var oscillatorCtrl = oscillatorController({
@@ -9841,8 +9841,9 @@
 	      }
 	    });
 
-	    $(drumVolumeSelector).change(function (e) {
-	      var volumeModifier = (this.value / 100);
+	    var drumVolumeEl = document.getElementById(drumVolumeSelector);
+	    drumVolumeEl.addEventListener('change', function() {
+	      var volumeModifier = this.value / 100;
 	      var boundSetVolume = setVolume.bind(self);
 	      boundSetVolume(volumeModifier);
 	    });
