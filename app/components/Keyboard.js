@@ -129,8 +129,8 @@ function keyboardModel(obj) {
     $(document).keyup(function (e) {
       that.keyup(e);
     });
-
-    $(that.volumeSelector).change(function () {
+    var volumeElement = document.getElementById(volumeSelector);
+    volumeElement.addEventListener('change', function() {
       that.updateVolume(this.value);
     });
 
@@ -147,7 +147,4 @@ function keyboardModel(obj) {
   }
 }
 
-var keyboard = keyboardModel({volumeSelector: ".keyboard-volume"});
-keyboard.initialize();
-
-module.exports = keyboard;
+module.exports = keyboardModel;

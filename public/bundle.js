@@ -46,7 +46,7 @@
 
 	__webpack_require__(1);
 	var context = __webpack_require__(4);
-	var keyboard = __webpack_require__(5);
+	var keyboardModel = __webpack_require__(5);
 	var oscillatorController = __webpack_require__(6);
 	var DrumController = __webpack_require__(8);
 	var drumMachine = __webpack_require__(9);
@@ -120,6 +120,11 @@
 	    var wave = $(this).val();
 	    oscillatorCtrl.updateWave(id, wave);
 	  });
+	})
+
+	$(document).ready(function() {
+	  var keyboard = keyboardModel({volumeSelector: "keyboard-volume"});
+	  keyboard.initialize();
 	})
 
 
@@ -9490,8 +9495,8 @@
 	    $(document).keyup(function (e) {
 	      that.keyup(e);
 	    });
-
-	    $(that.volumeSelector).change(function () {
+	    var volumeElement = document.getElementById(volumeSelector);
+	    volumeElement.addEventListener('change', function() {
 	      that.updateVolume(this.value);
 	    });
 
@@ -9508,10 +9513,7 @@
 	  }
 	}
 
-	var keyboard = keyboardModel({volumeSelector: ".keyboard-volume"});
-	keyboard.initialize();
-
-	module.exports = keyboard;
+	module.exports = keyboardModel;
 
 
 /***/ },

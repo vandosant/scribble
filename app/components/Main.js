@@ -1,6 +1,6 @@
 require('expose?$!expose?jQuery!jquery');
 var context = require("./Context");
-var keyboard = require("./Keyboard");
+var keyboardModel = require("./Keyboard");
 var oscillatorController = require("./OscillatorController");
 var DrumController = require("./DrumController");
 var drumMachine = require("./DrumMachine");
@@ -74,4 +74,9 @@ $('.oscillator-container').ready(function() {
     var wave = $(this).val();
     oscillatorCtrl.updateWave(id, wave);
   });
+})
+
+$(document).ready(function() {
+  var keyboard = keyboardModel({volumeSelector: "keyboard-volume"});
+  keyboard.initialize();
 })
