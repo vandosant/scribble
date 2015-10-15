@@ -1,5 +1,5 @@
-var context = require("./Context");
-var oscillator = require("./Oscillator");
+import context from "./Context";
+import oscillator from "./Oscillator";
 
 function oscillatorController(options) {
   var oscillators = options['oscillators'] || [];
@@ -49,4 +49,4 @@ function oscillatorController(options) {
   };
 }
 
-module.exports = oscillatorController;
+export default oscillatorController;

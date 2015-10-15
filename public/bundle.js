@@ -1798,8 +1798,19 @@
 
 	"use strict";
 
-	var context = __webpack_require__(4);
-	var oscillator = __webpack_require__(7);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	var _Context = __webpack_require__(4);
+
+	var _Context2 = _interopRequireDefault(_Context);
+
+	var _Oscillator = __webpack_require__(7);
+
+	var _Oscillator2 = _interopRequireDefault(_Oscillator);
 
 	function oscillatorController(options) {
 	  var oscillators = options['oscillators'] || [];
@@ -1809,7 +1820,7 @@
 
 	  var createOscillators = function createOscillators() {
 	    for (var i = 0; i < 13; i++) {
-	      var osc = oscillator(context, initialFrequency, initialVolume);
+	      var osc = (0, _Oscillator2["default"])(_Context2["default"], initialFrequency, initialVolume);
 	      oscillators.push(osc);
 	    }
 	  };
@@ -1849,7 +1860,8 @@
 	  };
 	}
 
-	module.exports = oscillatorController;
+	exports["default"] = oscillatorController;
+	module.exports = exports["default"];
 
 /***/ },
 /* 7 */
