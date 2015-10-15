@@ -14,4 +14,4 @@ var context = (function () {
   }
 }());
 
-module.exports = context;
+export default context;

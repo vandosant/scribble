@@ -1620,6 +1620,9 @@
 
 	"use strict";
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	var context = (function () {
 	  var contextClass = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.oAudioContext || window.msAudioContext;
 
@@ -1631,7 +1634,8 @@
 	  }
 	})();
 
-	module.exports = context;
+	exports["default"] = context;
+	module.exports = exports["default"];
 
 /***/ },
 /* 5 */
