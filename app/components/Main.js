@@ -1,10 +1,10 @@
 require('expose?$!expose?jQuery!jquery');
-var context = require("./Context");
-var keyboardModel = require("./Keyboard");
-var oscillatorController = require("./OscillatorController");
-var DrumController = require("./DrumController");
-var drumMachine = require("./DrumMachine");
-var oscillator = require("./Oscillator");
+import context from "./Context";
+import keyboardModel from "./Keyboard";
+import oscillatorController from "./OscillatorController";
+import DrumController from "./DrumController";
+import drumMachine from "./DrumMachine";
+import oscillator from "./Oscillator";
 var drumVol = 1.3;
 var drums = [
   {
