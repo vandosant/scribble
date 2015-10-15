@@ -1,5 +1,5 @@
 function keyboardModel(obj) {
-  var volumeSelector, volume, keysDown, keys;
+  var volumeSelector, volume, keysDown, keys, oscillators;
 
   keysDown = [];
   if (obj && obj.volume) {
@@ -11,6 +11,8 @@ function keyboardModel(obj) {
   if (obj && obj.volumeSelector) {
     volumeSelector = obj.volumeSelector;
   }
+
+  oscillators = obj.oscillators
   keys = {
     'A': {
       key: 65,

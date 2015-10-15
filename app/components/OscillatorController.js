@@ -2,10 +2,10 @@ var context = require("./Context");
 var oscillator = require("./Oscillator");
 
 function oscillatorController(options) {
-  this.oscillators = options['oscillators'] || [];
+  var oscillators = options['oscillators'] || [];
+  var oscillatorSelector = options['oscillatorSelector'] || '.oscillator-wave';
   var initialFrequency = options['initialFrequency'] || 261.63;
   var initialVolume = options['initialVolume'] || 0;
-  this.oscillatorSelector = options['oscillatorSelector'] || '.oscillator-wave';
 
   var createOscillators = function () {
     for (var i = 0; i < 13; i++) {

@@ -77,6 +77,6 @@ $('.oscillator-container').ready(function() {
 })
 
 $(document).ready(function() {
-  var keyboard = keyboardModel({volumeSelector: "keyboard-volume"});
+  var keyboard = keyboardModel({volumeSelector: "keyboard-volume", oscillators: oscillatorCtrl.oscillators});
   keyboard.initialize();
 })
