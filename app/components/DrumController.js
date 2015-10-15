@@ -1,4 +1,4 @@
-var context = require("./Context");
+import context from "./Context";
 
 function DrumController(drums, containerId, tempo, volume) {
   var container = document.getElementById(containerId);
@@ -203,4 +203,4 @@ function DrumController(drums, containerId, tempo, volume) {
   }
 }
 
-module.exports = DrumController;
+export default DrumController;

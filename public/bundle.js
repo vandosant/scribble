@@ -1962,7 +1962,15 @@
 
 	'use strict';
 
-	var context = __webpack_require__(4);
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _Context = __webpack_require__(4);
+
+	var _Context2 = _interopRequireDefault(_Context);
 
 	function DrumController(drums, containerId, tempo, volume) {
 	  var container = document.getElementById(containerId);
@@ -2167,7 +2175,8 @@
 	  };
 	}
 
-	module.exports = DrumController;
+	exports['default'] = DrumController;
+	module.exports = exports['default'];
 
 /***/ },
 /* 9 */
@@ -2175,6 +2184,9 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
 	function drumMachine(options) {
 	  var context = options['context'];
 	  var frequency = options['frequency'];
@@ -2230,7 +2242,8 @@
 	  };
 	}
 
-	module.exports = drumMachine;
+	exports['default'] = drumMachine;
+	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);

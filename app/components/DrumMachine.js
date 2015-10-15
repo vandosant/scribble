@@ -53,4 +53,4 @@ function drumMachine(options) {
   }
 }
 
-module.exports = drumMachine;
+export default drumMachine;
