@@ -13,6 +13,7 @@ function keyboardModel(obj) {
   }
 
   oscillators = obj.oscillators
+
   keys = {
     'A': {
       key: 65,
@@ -149,4 +150,4 @@ function keyboardModel(obj) {
   }
 }
 
-module.exports = keyboardModel;
+export default keyboardModel;

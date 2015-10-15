@@ -1,4 +1,4 @@
-var keyboard = require("./Keyboard");
+import keyboard from "./Keyboard";
 
 function keyboardController() {
   function initialize(options) {
@@ -20,4 +20,4 @@ function keyboardController() {
   return api;
 }
 
-module.exports = keyboardController;
+export default keyboardController;

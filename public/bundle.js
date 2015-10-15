@@ -1639,6 +1639,9 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
 	function keyboardModel(obj) {
 	  var volumeSelector, volume, keysDown, keys, oscillators;
 
@@ -1654,6 +1657,7 @@
 	  }
 
 	  oscillators = obj.oscillators;
+
 	  keys = {
 	    'A': {
 	      key: 65,
@@ -1790,7 +1794,8 @@
 	  };
 	}
 
-	module.exports = keyboardModel;
+	exports['default'] = keyboardModel;
+	module.exports = exports['default'];
 
 /***/ },
 /* 6 */
