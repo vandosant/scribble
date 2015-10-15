@@ -1874,6 +1874,9 @@
 
 	"use strict";
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	function oscillator(context, frequency, volume) {
 	  var osc1, osc2, osc3, gainNode1, gainNode2, gainNode3;
 	  osc1 = context.createOscillator();
@@ -1954,7 +1957,8 @@
 	  };
 	}
 
-	module.exports = oscillator;
+	exports["default"] = oscillator;
+	module.exports = exports["default"];
 
 /***/ },
 /* 8 */

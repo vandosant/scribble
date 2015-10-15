@@ -78,4 +78,4 @@ function oscillator(context, frequency, volume) {
   };
 }
 
-module.exports = oscillator;
+export default oscillator;
