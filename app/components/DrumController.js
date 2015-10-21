@@ -145,10 +145,10 @@ function DrumController(drums, containerId, tempo, volume) {
   }
 
   function listen(tempoId, drumBeatClass, drumTypeClass, statusSelectorId, drumVolumeSelector) {
-    var self = this;
+    var context = this;
     var tempoEl = document.getElementById(tempoId);
     tempoEl.addEventListener('change', function() {
-      var boundSetTempo = setTempo.bind(self);
+      var boundSetTempo = setTempo.bind(context);
       boundSetTempo(parseInt(this.value), statusSelectorId);
     });
 
@@ -173,7 +173,7 @@ function DrumController(drums, containerId, tempo, volume) {
         el.setAttribute('active', false)
         stop(statusSelectorId);
       } else {
-        var boundStart = start.bind(self);
+        var boundStart = start.bind(context);
         boundStart(statusSelectorId);
       }
     });
@@ -181,7 +181,7 @@ function DrumController(drums, containerId, tempo, volume) {
     var drumVolumeEl = document.getElementById(drumVolumeSelector);
     drumVolumeEl.addEventListener('change', function() {
       var volumeModifier = this.value / 100;
-      var boundSetVolume = setVolume.bind(self);
+      var boundSetVolume = setVolume.bind(context);
       boundSetVolume(volumeModifier);
     });
   }
