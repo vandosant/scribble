@@ -142,6 +142,7 @@ function keyboardModel(obj) {
 
   return {
     initialize: initialize,
+    keys: keys,
     keydown: keydown,
     keyup: keyup,
     updateVolume: updateVolume,

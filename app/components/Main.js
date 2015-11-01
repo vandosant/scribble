@@ -1,6 +1,7 @@
 require('expose?$!expose?jQuery!jquery');
 import context from "./Context";
 import keyboardModel from "./Keyboard";
+import keyboardController from "./keyboardController";
 import oscillatorController from "./OscillatorController";
 import DrumController from "./DrumController";
 import drumMachine from "./DrumMachine";
@@ -79,4 +80,7 @@ $('.oscillator-container').ready(function() {
 $(document).ready(function() {
   var keyboard = keyboardModel({volumeSelector: "keyboard-volume", oscillators: oscillatorCtrl.oscillators});
   keyboard.initialize();
+
+  var keyboardCtrl = keyboardController(keyboard);
+  keyboardCtrl.octaves.listen({octaveUpId: "octave-up", octaveDownId: "octave-down"});
 })

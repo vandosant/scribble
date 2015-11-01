@@ -48,31 +48,35 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var _Context = __webpack_require__(4);
+	var _Context = __webpack_require__(1);
 
 	var _Context2 = _interopRequireDefault(_Context);
 
-	var _Keyboard = __webpack_require__(5);
+	var _Keyboard = __webpack_require__(2);
 
 	var _Keyboard2 = _interopRequireDefault(_Keyboard);
 
-	var _OscillatorController = __webpack_require__(6);
+	var _keyboardController = __webpack_require__(10);
+
+	var _keyboardController2 = _interopRequireDefault(_keyboardController);
+
+	var _OscillatorController = __webpack_require__(3);
 
 	var _OscillatorController2 = _interopRequireDefault(_OscillatorController);
 
-	var _DrumController = __webpack_require__(8);
+	var _DrumController = __webpack_require__(5);
 
 	var _DrumController2 = _interopRequireDefault(_DrumController);
 
-	var _DrumMachine = __webpack_require__(9);
+	var _DrumMachine = __webpack_require__(6);
 
 	var _DrumMachine2 = _interopRequireDefault(_DrumMachine);
 
-	var _Oscillator = __webpack_require__(7);
+	var _Oscillator = __webpack_require__(4);
 
 	var _Oscillator2 = _interopRequireDefault(_Oscillator);
 
-	__webpack_require__(1);
+	__webpack_require__(7);
 
 	var drumVol = 1.3;
 	var drums = [{
@@ -142,24 +146,667 @@
 	$(document).ready(function () {
 	  var keyboard = (0, _Keyboard2["default"])({ volumeSelector: "keyboard-volume", oscillators: oscillatorCtrl.oscillators });
 	  keyboard.initialize();
+
+	  var keyboardCtrl = (0, _keyboardController2["default"])(keyboard);
+	  keyboardCtrl.octaves.listen({ octaveUpId: "octave-up", octaveDownId: "octave-down" });
 	});
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(2);
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var context = (function () {
+	  var contextClass = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.oAudioContext || window.msAudioContext;
+
+	  if (contextClass && contextClass.state === "running") {} else if (contextClass) {
+	    return new contextClass();
+	  } else {
+	    $(document).append('<div class="errors">Sorry, your browser is not supported.</div>');
+	    return undefined;
+	  }
+	})();
+
+	exports["default"] = context;
+	module.exports = exports["default"];
 
 /***/ },
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(3);
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	function keyboardModel(obj) {
+	  var volumeSelector, volume, keysDown, keys, oscillators;
+
+	  keysDown = [];
+	  if (obj && obj.volume) {
+	    volume = obj.volume;
+	  } else {
+	    volume = 0.25;
+	  }
+
+	  if (obj && obj.volumeSelector) {
+	    volumeSelector = obj.volumeSelector;
+	  }
+
+	  oscillators = obj.oscillators;
+
+	  keys = {
+	    'A': {
+	      key: 65,
+	      index: 0,
+	      freq: 261.63
+	    },
+	    'W': {
+	      key: 87,
+	      index: 1,
+	      freq: 277.18
+	    },
+	    'S': {
+	      key: 83,
+	      index: 2,
+	      freq: 293.66
+	    },
+	    'E': {
+	      key: 69,
+	      index: 3,
+	      freq: 311.13
+	    },
+	    'D': {
+	      key: 68,
+	      index: 4,
+	      freq: 329.63
+	    },
+	    'F': {
+	      key: 70,
+	      index: 5,
+	      freq: 349.23
+	    },
+	    'T': {
+	      key: 84,
+	      index: 6,
+	      freq: 369.99
+	    },
+	    'G': {
+	      key: 71,
+	      index: 7,
+	      freq: 392.00
+	    },
+	    'Y': {
+	      key: 89,
+	      index: 8,
+	      freq: 415.30
+	    },
+	    'H': {
+	      key: 72,
+	      index: 9,
+	      freq: 440.00
+	    },
+	    'U': {
+	      key: 85,
+	      index: 10,
+	      freq: 466.16
+	    },
+	    'J': {
+	      key: 74,
+	      index: 11,
+	      freq: 493.88
+	    },
+	    'K': {
+	      key: 75,
+	      index: 12,
+	      freq: 523.25
+	    }
+	  };
+
+	  var keydown = function keydown(keyChar) {
+	    var that = this;
+	    if (keysDown.indexOf(keyChar.which) === -1) {
+	      var char = String.fromCharCode(keyChar.which);
+	      var key = keys[char];
+	      if (key) {
+	        oscillators[key.index].updateNote(key.freq);
+	        oscillators[key.index].updateVolume(that.volume);
+	        keysDown.push(keyChar.which);
+	        $("#key-" + char).addClass("keyon");
+	      }
+	    }
+	  };
+
+	  var keyup = function keyup(keyChar) {
+	    var char = String.fromCharCode(keyChar.which);
+	    var key = keys[char];
+	    var keyIndex = keysDown.indexOf(keyChar.which);
+	    if (keyIndex >= 0) {
+	      oscillators[key.index].updateVolume(0);
+	      delete keysDown[keyIndex];
+	      $("#key-" + char).removeClass("keyon");
+	    }
+	  };
+
+	  var updateVolume = function updateVolume(rangeVal) {
+	    this.volume = rangeVal / 100 * 0.25;
+	  };
+
+	  var muteIfHidden = function muteIfHidden() {
+	    if (typeof document.addEventListener && typeof document.visibilityState) {
+	      document.addEventListener('visibilitychange', function () {
+	        if (document.hidden) {
+	          oscillators.forEach(function (o) {
+	            o.updateVolume(0);
+	          });
+	        }
+	      }, false);
+	    }
+	  };
+
+	  var initialize = function initialize() {
+	    var that = this;
+	    $(document).keydown(function (e) {
+	      that.keydown(e);
+	    });
+
+	    $(document).keyup(function (e) {
+	      that.keyup(e);
+	    });
+	    var volumeElement = document.getElementById(volumeSelector);
+	    volumeElement.addEventListener('change', function () {
+	      that.updateVolume(this.value);
+	    });
+
+	    muteIfHidden();
+	  };
+
+	  return {
+	    initialize: initialize,
+	    keys: keys,
+	    keydown: keydown,
+	    keyup: keyup,
+	    updateVolume: updateVolume,
+	    volume: volume,
+	    volumeSelector: volumeSelector
+	  };
+	}
+
+	exports['default'] = keyboardModel;
+	module.exports = exports['default'];
 
 /***/ },
 /* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	var _Context = __webpack_require__(1);
+
+	var _Context2 = _interopRequireDefault(_Context);
+
+	var _Oscillator = __webpack_require__(4);
+
+	var _Oscillator2 = _interopRequireDefault(_Oscillator);
+
+	function oscillatorController(options) {
+	  var oscillators = options['oscillators'] || [];
+	  var oscillatorSelector = options['oscillatorSelector'] || '.oscillator-wave';
+	  var initialFrequency = options['initialFrequency'] || 261.63;
+	  var initialVolume = options['initialVolume'] || 0;
+
+	  var createOscillators = function createOscillators() {
+	    for (var i = 0; i < 13; i++) {
+	      var osc = (0, _Oscillator2["default"])(_Context2["default"], initialFrequency, initialVolume);
+	      oscillators.push(osc);
+	    }
+	  };
+
+	  var connectOscillators = function connectOscillators() {
+	    oscillators.forEach(function (osc) {
+	      osc.connect();
+	    });
+	  };
+
+	  var updateWave = function updateWave(id, wave) {
+	    oscillators.forEach(function (osc) {
+	      osc.updateWave(id, wave);
+	    });
+	  };
+
+	  var initialize = function initialize() {
+	    createOscillators();
+	    connectOscillators();
+	  };
+
+	  var update = function update(options) {
+	    var id = 1;
+	    options.forEach(function (wave) {
+	      oscillators.forEach(function (osc) {
+	        osc.updateWave(id, wave);
+	      });
+	      id++;
+	    });
+	  };
+
+	  return {
+	    initialize: initialize,
+	    update: update,
+	    updateWave: updateWave,
+	    oscillators: oscillators
+	  };
+	}
+
+	exports["default"] = oscillatorController;
+	module.exports = exports["default"];
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	function oscillator(context, frequency, volume) {
+	  var osc1, osc2, osc3, gainNode1, gainNode2, gainNode3;
+	  osc1 = context.createOscillator();
+	  osc2 = context.createOscillator();
+	  osc3 = context.createOscillator();
+
+	  gainNode1 = context.createGain();
+	  gainNode2 = context.createGain();
+	  gainNode3 = context.createGain();
+
+	  function connect() {
+	    this.gainNode1.connect(this.context.destination);
+	    this.gainNode1.gain.value = this.volume;
+	    this.osc1.connect(this.gainNode1);
+	    this.osc1.type = "sine";
+	    this.osc1.frequency.value = this.frequency;
+	    this.osc1.start(0);
+
+	    this.gainNode2.connect(this.context.destination);
+	    this.gainNode2.gain.value = this.volume;
+	    this.osc2.connect(this.gainNode2);
+	    this.osc2.type = "sine";
+	    this.osc2.frequency.value = this.frequency / 2;
+	    this.osc2.start(0);
+
+	    this.gainNode3.connect(this.context.destination);
+	    this.gainNode3.gain.value = this.volume * 0.8;
+	    this.osc3.connect(this.gainNode3);
+	    this.osc3.type = "triangle";
+	    this.osc3.frequency.value = this.frequency / 2;
+	    this.osc3.start(0);
+	  }
+
+	  function disconnect() {
+	    this.osc1.disconnect();
+	    this.osc2.disconnect();
+	    this.osc3.disconnect();
+	  }
+
+	  function updateVolume(value) {
+	    this.volume = value;
+	    this.gainNode1.gain.value = value;
+	    this.gainNode2.gain.value = value;
+	    this.gainNode3.gain.value = value * 0.8;
+	  }
+
+	  function updateNote(value) {
+	    this.osc1.frequency.value = value;
+	    this.osc2.frequency.value = value / 2;
+	    this.osc3.frequency.value = value / 2;
+	  }
+
+	  function updateWave(id, newWave) {
+	    if (id === 1) {
+	      this.osc1.type = newWave;
+	    } else if (id === 2) {
+	      this.osc2.type = newWave;
+	    } else if (id === 3) {
+	      this.osc3.type = newWave;
+	    }
+	  }
+
+	  return {
+	    context: context,
+	    osc1: osc1,
+	    osc2: osc2,
+	    osc3: osc3,
+	    gainNode1: gainNode1,
+	    gainNode2: gainNode2,
+	    gainNode3: gainNode3,
+	    frequency: frequency,
+	    volume: volume,
+	    connect: connect,
+	    disconnect: disconnect,
+	    updateVolume: updateVolume,
+	    updateNote: updateNote,
+	    updateWave: updateWave
+	  };
+	}
+
+	exports["default"] = oscillator;
+	module.exports = exports["default"];
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	var _Context = __webpack_require__(1);
+
+	var _Context2 = _interopRequireDefault(_Context);
+
+	function DrumController(drums, containerId, tempo, volume) {
+	  var container = document.getElementById(containerId);
+
+	  function render() {
+	    var container = document.getElementById(containerId);
+	    var typeContainer = document.createElement('div');
+	    typeContainer.setAttribute('class', 'drum-container');
+	    typeContainer.setAttribute('id', 'drum-types');
+	    container.appendChild(typeContainer);
+	    drums.forEach(function (drum, key) {
+	      drum.beats = [];
+	      var buttonContainer = document.createElement('div');
+	      buttonContainer.setAttribute('class', 'drum-container');
+	      buttonContainer.setAttribute('id', 'drum-' + key);
+	      for (var i = 0; i < 16; i++) {
+	        var beatEl = document.createElement('div');
+	        beatEl.setAttribute('class', 'drum-button');
+	        beatEl.textContent = i + 1;
+
+	        drum.beats.push({
+	          selected: false,
+	          el: beatEl
+	        });
+
+	        buttonContainer.appendChild(beatEl);
+	        if (i === 7) {
+	          buttonContainer.appendChild(document.createElement('br'));
+	        }
+	      }
+	      container.appendChild(buttonContainer);
+
+	      var typeButton = document.createElement('div');
+	      typeButton.setAttribute('class', 'drum-type');
+	      typeButton.setAttribute('id', drum.identifier);
+	      typeButton.textContent = drum.identifier;
+	      typeContainer.appendChild(typeButton);
+	    });
+	  }
+
+	  function parseTempo(tempo) {
+	    return 60 * 1000 / tempo;
+	  }
+
+	  function start(statusButtonId) {
+	    var node = 0;
+	    var maxNodes = 15;
+	    clearInterval(DrumController.interval);
+	    DrumController.interval = setInterval(function () {
+	      var activeDrumNodes = document.getElementsByClassName('drum-button-active');
+	      if (activeDrumNodes.length > 0) {
+	        for (var i = 0; i < activeDrumNodes.length; i++) {
+	          activeDrumNodes[i].classList.remove("drum-button-active");
+	        }
+	      }
+	      drums.forEach(function (drum) {
+	        if (node === 0) {
+	          drum.beats[maxNodes].el.classList.remove('drum-button-active');
+	        } else {
+	          drum.beats[node - 1].el.classList.remove('drum-button-active');
+	        }
+	        drum.beats[node].el.classList.add('drum-button-active');
+	        if (drum.beats[node].selected === true) {
+	          drum[drum.identifier].machine.hit();
+	        }
+	      });
+
+	      if (node === maxNodes) {
+	        node = 0;
+	      } else {
+	        node++;
+	      }
+	    }, parseTempo(this.tempo));
+
+	    var statusButton = document.getElementById(statusButtonId);
+	    var statusDiv = document.createElement('div');
+	    statusDiv.setAttribute('id', 'pause');
+	    statusButton.setAttribute('active', true);
+	    while (statusButton.firstChild) {
+	      statusButton.removeChild(statusButton.firstChild);
+	    }
+	    statusButton.appendChild(statusDiv);
+	  }
+
+	  function stop(statusButtonId) {
+	    clearInterval(DrumController.interval);
+	    var statusButton = document.getElementById(statusButtonId);
+	    var statusDiv = document.createElement("div");
+	    statusDiv.id = "play";
+	    statusButton.classList.remove('active');
+	    statusButton.classList.add('inactive');
+	    while (statusButton.firstChild) {
+	      statusButton.removeChild(statusButton.firstChild);
+	    }
+	    statusButton.appendChild(statusDiv);
+	  }
+
+	  function selectBeat(button) {
+	    button.classList.add('drum-button-selected');
+	    var index = parseInt(button.innerText) - 1;
+	    var id = button.parentNode.getAttribute('id');
+	    var type = id.split('-')[1];
+	    if (!drums[type].beats[index].selected) {
+	      drums[type].beats[index].selected = true;
+	    }
+	  }
+
+	  function selectDrum(button) {
+	    var id = button.id;
+	    var drumTypes = document.getElementsByClassName('drum-type');
+	    for (var i = 0; i < drumTypes.length; i++) {
+	      drumTypes[i].classList.remove('drum-button-selected');
+	    }
+	    button.classList.add('drum-button-selected');
+
+	    drums.forEach(function (drum, key) {
+	      var drumEl = document.getElementById('drum-' + key);
+	      if (drum.identifier === id) {
+	        drumEl.setAttribute('visibility', 'visible');
+	        drumEl.setAttribute('height', '');
+	        drumEl.hidden = false;
+	      } else {
+	        drumEl.setAttribute('visibility', 'hidden');
+	        drumEl.hidden = true;
+	        drumEl.setAttribute('height', '0');
+	      }
+	    });
+	  }
+
+	  function setTempo(newTempo, statusSelectorId) {
+	    this.tempo = newTempo;
+	    var statusButton = document.getElementById(statusSelectorId);
+	    if (statusButton.getAttribute('active') === 'true') {
+	      var boundStart = start.bind(this);
+	      boundStart('drum-status');
+	    }
+	  }
+
+	  function setVolume(volumeModifier) {
+	    var that = this;
+	    for (var i = 0; i < this.drums.length; i++) {
+	      that.drums[i][drums[i].identifier].machine.gainVal = that.startVolume * volumeModifier;
+	    }
+	  }
+
+	  function listen(tempoId, drumBeatClass, drumTypeClass, statusSelectorId, drumVolumeSelector) {
+	    var context = this;
+	    var tempoEl = document.getElementById(tempoId);
+	    tempoEl.addEventListener('change', function () {
+	      var boundSetTempo = setTempo.bind(context);
+	      boundSetTempo(parseInt(this.value), statusSelectorId);
+	    });
+
+	    var drumBeats = document.getElementsByClassName(drumBeatClass);
+	    for (var i = 0; i < drumBeats.length; i++) {
+	      drumBeats[i].addEventListener('click', function () {
+	        selectBeat(this);
+	      });
+	    }
+
+	    var drumTypes = document.getElementsByClassName(drumTypeClass);
+	    for (var i = 0; i < drumTypes.length; i++) {
+	      drumTypes[i].addEventListener('click', function () {
+	        selectDrum(this);
+	      });
+	    }
+
+	    var statusButton = document.getElementById(statusSelectorId);
+	    statusButton.addEventListener('click', function () {
+	      var el = this;
+	      if (el.getAttribute('active') === 'true') {
+	        el.setAttribute('active', false);
+	        stop(statusSelectorId);
+	      } else {
+	        var boundStart = start.bind(context);
+	        boundStart(statusSelectorId);
+	      }
+	    });
+
+	    var drumVolumeEl = document.getElementById(drumVolumeSelector);
+	    drumVolumeEl.addEventListener('change', function () {
+	      var volumeModifier = this.value / 100;
+	      var boundSetVolume = setVolume.bind(context);
+	      boundSetVolume(volumeModifier);
+	    });
+	  }
+
+	  return {
+	    drums: drums,
+	    container: container,
+	    tempo: tempo,
+	    startVolume: volume,
+	    render: render,
+	    parseTempo: parseTempo,
+	    start: start,
+	    stop: stop,
+	    selectBeat: selectBeat,
+	    selectDrum: selectDrum,
+	    setTempo: setTempo,
+	    setVolume: setVolume,
+	    listen: listen
+	  };
+	}
+
+	exports['default'] = DrumController;
+	module.exports = exports['default'];
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	function drumMachine(options) {
+	  var context = options['context'];
+	  var frequency = options['frequency'];
+	  var wave = options['wave'];
+	  var gainVal = options['gainVal'];
+	  var sustain = options['sustain'];
+
+	  var hit = function hit() {
+	    var drum1 = this.context.createOscillator(),
+	        node1 = this.context.createGain(),
+	        drum2 = this.context.createOscillator(),
+	        node2 = this.context.createGain(),
+	        sustain = this.sustain;
+
+	    node1.gain.value = this.gainVal;
+	    node1.connect(this.context.destination);
+	    drum1.connect(node1);
+	    drum1.frequency.value = this.frequency;
+	    drum1.type = this.wave;
+	    drum1.start(0);
+
+	    setInterval(function () {
+	      if (node1.gain.value > 0) {
+	        node1.gain.value -= sustain;
+	      } else {
+	        drum1.stop();
+	      }
+	    }, 5);
+
+	    node2.gain.value = this.gainVal * 0.8;
+	    node2.connect(this.context.destination);
+	    drum2.connect(node2);
+	    drum2.frequency.value = this.frequency;
+	    drum2.type = this.wave;
+	    drum2.start(0);
+
+	    setInterval(function () {
+	      if (node2.gain.value > 0) {
+	        node2.gain.value -= sustain * 2;
+	      } else {
+	        drum2.stop();
+	      }
+	    }, 5);
+	  };
+
+	  return {
+	    hit: hit,
+	    context: context,
+	    frequency: frequency,
+	    gainVal: gainVal,
+	    wave: wave,
+	    sustain: sustain
+	  };
+	}
+
+	exports['default'] = drumMachine;
+	module.exports = exports['default'];
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(8);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(9);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -1615,194 +2262,7 @@
 	if(typeof noGlobal === strundefined){window.jQuery = window.$ = jQuery;}return jQuery;}); // Otherwise append directly
 
 /***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var context = (function () {
-	  var contextClass = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.oAudioContext || window.msAudioContext;
-
-	  if (contextClass && contextClass.state === "running") {} else if (contextClass) {
-	    return new contextClass();
-	  } else {
-	    $(document).append('<div class="errors">Sorry, your browser is not supported.</div>');
-	    return undefined;
-	  }
-	})();
-
-	exports["default"] = context;
-	module.exports = exports["default"];
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	function keyboardModel(obj) {
-	  var volumeSelector, volume, keysDown, keys, oscillators;
-
-	  keysDown = [];
-	  if (obj && obj.volume) {
-	    volume = obj.volume;
-	  } else {
-	    volume = 0.25;
-	  }
-
-	  if (obj && obj.volumeSelector) {
-	    volumeSelector = obj.volumeSelector;
-	  }
-
-	  oscillators = obj.oscillators;
-
-	  keys = {
-	    'A': {
-	      key: 65,
-	      index: 0,
-	      freq: 261.63
-	    },
-	    'W': {
-	      key: 87,
-	      index: 1,
-	      freq: 277.18
-	    },
-	    'S': {
-	      key: 83,
-	      index: 2,
-	      freq: 293.66
-	    },
-	    'E': {
-	      key: 69,
-	      index: 3,
-	      freq: 311.13
-	    },
-	    'D': {
-	      key: 68,
-	      index: 4,
-	      freq: 329.63
-	    },
-	    'F': {
-	      key: 70,
-	      index: 5,
-	      freq: 349.23
-	    },
-	    'T': {
-	      key: 84,
-	      index: 6,
-	      freq: 369.99
-	    },
-	    'G': {
-	      key: 71,
-	      index: 7,
-	      freq: 392.00
-	    },
-	    'Y': {
-	      key: 89,
-	      index: 8,
-	      freq: 415.30
-	    },
-	    'H': {
-	      key: 72,
-	      index: 9,
-	      freq: 440.00
-	    },
-	    'U': {
-	      key: 85,
-	      index: 10,
-	      freq: 466.16
-	    },
-	    'J': {
-	      key: 74,
-	      index: 11,
-	      freq: 493.88
-	    },
-	    'K': {
-	      key: 75,
-	      index: 12,
-	      freq: 523.25
-	    }
-	  };
-
-	  var keydown = function keydown(keyChar) {
-	    var that = this;
-	    if (keysDown.indexOf(keyChar.which) === -1) {
-	      var char = String.fromCharCode(keyChar.which);
-	      var key = keys[char];
-	      if (key) {
-	        oscillators[key.index].updateNote(key.freq);
-	        oscillators[key.index].updateVolume(that.volume);
-	        keysDown.push(keyChar.which);
-	        $("#key-" + char).addClass("keyon");
-	      }
-	    }
-	  };
-
-	  var keyup = function keyup(keyChar) {
-	    var char = String.fromCharCode(keyChar.which);
-	    var key = keys[char];
-	    var keyIndex = keysDown.indexOf(keyChar.which);
-	    if (keyIndex >= 0) {
-	      oscillators[key.index].updateVolume(0);
-	      delete keysDown[keyIndex];
-	      $("#key-" + char).removeClass("keyon");
-	    }
-	  };
-
-	  var updateVolume = function updateVolume(rangeVal) {
-	    this.volume = rangeVal / 100 * 0.25;
-	  };
-
-	  var muteIfHidden = function muteIfHidden() {
-	    if (typeof document.addEventListener && typeof document.visibilityState) {
-	      document.addEventListener('visibilitychange', function () {
-	        if (document.hidden) {
-	          oscillators.forEach(function (o) {
-	            o.updateVolume(0);
-	          });
-	        }
-	      }, false);
-	    }
-	  };
-
-	  var initialize = function initialize() {
-	    var that = this;
-	    $(document).keydown(function (e) {
-	      that.keydown(e);
-	    });
-
-	    $(document).keyup(function (e) {
-	      that.keyup(e);
-	    });
-	    var volumeElement = document.getElementById(volumeSelector);
-	    volumeElement.addEventListener('change', function () {
-	      that.updateVolume(this.value);
-	    });
-
-	    muteIfHidden();
-	  };
-
-	  return {
-	    initialize: initialize,
-	    keydown: keydown,
-	    keyup: keyup,
-	    updateVolume: updateVolume,
-	    volume: volume,
-	    volumeSelector: volumeSelector
-	  };
-	}
-
-	exports['default'] = keyboardModel;
-	module.exports = exports['default'];
-
-/***/ },
-/* 6 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1813,445 +2273,38 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var _Context = __webpack_require__(4);
+	var _Keyboard = __webpack_require__(2);
 
-	var _Context2 = _interopRequireDefault(_Context);
+	var _Keyboard2 = _interopRequireDefault(_Keyboard);
 
-	var _Oscillator = __webpack_require__(7);
-
-	var _Oscillator2 = _interopRequireDefault(_Oscillator);
-
-	function oscillatorController(options) {
-	  var oscillators = options['oscillators'] || [];
-	  var oscillatorSelector = options['oscillatorSelector'] || '.oscillator-wave';
-	  var initialFrequency = options['initialFrequency'] || 261.63;
-	  var initialVolume = options['initialVolume'] || 0;
-
-	  var createOscillators = function createOscillators() {
-	    for (var i = 0; i < 13; i++) {
-	      var osc = (0, _Oscillator2["default"])(_Context2["default"], initialFrequency, initialVolume);
-	      oscillators.push(osc);
+	function keyboardController(keyboard) {
+	  var changeOctave = function changeOctave(up) {
+	    var multiplier = 0.5;
+	    if (up) {
+	      multiplier = 2.0;
 	    }
+	    return function () {
+	      for (var key in keyboard.keys) {
+	        keyboard.keys[key].freq = keyboard.keys[key].freq * multiplier;
+	      }
+	    };
 	  };
 
-	  var connectOscillators = function connectOscillators() {
-	    oscillators.forEach(function (osc) {
-	      osc.connect();
-	    });
+	  var octaves = Object.create(null);
+	  octaves.listen = function (configObject) {
+	    document.getElementById(configObject.octaveUpId).addEventListener("click", changeOctave(true));
+	    document.getElementById(configObject.octaveDownId).addEventListener("click", changeOctave(false));
 	  };
 
-	  var updateWave = function updateWave(id, wave) {
-	    oscillators.forEach(function (osc) {
-	      osc.updateWave(id, wave);
-	    });
+	  var api = {
+	    octaves: octaves
 	  };
 
-	  var initialize = function initialize() {
-	    createOscillators();
-	    connectOscillators();
-	  };
-
-	  var update = function update(options) {
-	    var id = 1;
-	    options.forEach(function (wave) {
-	      oscillators.forEach(function (osc) {
-	        osc.updateWave(id, wave);
-	      });
-	      id++;
-	    });
-	  };
-
-	  return {
-	    initialize: initialize,
-	    update: update,
-	    updateWave: updateWave,
-	    oscillators: oscillators
-	  };
+	  return api;
 	}
 
-	exports["default"] = oscillatorController;
+	exports["default"] = keyboardController;
 	module.exports = exports["default"];
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	function oscillator(context, frequency, volume) {
-	  var osc1, osc2, osc3, gainNode1, gainNode2, gainNode3;
-	  osc1 = context.createOscillator();
-	  osc2 = context.createOscillator();
-	  osc3 = context.createOscillator();
-
-	  gainNode1 = context.createGain();
-	  gainNode2 = context.createGain();
-	  gainNode3 = context.createGain();
-
-	  function connect() {
-	    this.gainNode1.connect(this.context.destination);
-	    this.gainNode1.gain.value = this.volume;
-	    this.osc1.connect(this.gainNode1);
-	    this.osc1.type = "sine";
-	    this.osc1.frequency.value = this.frequency;
-	    this.osc1.start(0);
-
-	    this.gainNode2.connect(this.context.destination);
-	    this.gainNode2.gain.value = this.volume;
-	    this.osc2.connect(this.gainNode2);
-	    this.osc2.type = "sine";
-	    this.osc2.frequency.value = this.frequency / 2;
-	    this.osc2.start(0);
-
-	    this.gainNode3.connect(this.context.destination);
-	    this.gainNode3.gain.value = this.volume * 0.8;
-	    this.osc3.connect(this.gainNode3);
-	    this.osc3.type = "triangle";
-	    this.osc3.frequency.value = this.frequency / 2;
-	    this.osc3.start(0);
-	  }
-
-	  function disconnect() {
-	    this.osc1.disconnect();
-	    this.osc2.disconnect();
-	    this.osc3.disconnect();
-	  }
-
-	  function updateVolume(value) {
-	    this.volume = value;
-	    this.gainNode1.gain.value = value;
-	    this.gainNode2.gain.value = value;
-	    this.gainNode3.gain.value = value * 0.8;
-	  }
-
-	  function updateNote(value) {
-	    this.osc1.frequency.value = value;
-	    this.osc2.frequency.value = value / 2;
-	    this.osc3.frequency.value = value / 2;
-	  }
-
-	  function updateWave(id, newWave) {
-	    if (id === 1) {
-	      this.osc1.type = newWave;
-	    } else if (id === 2) {
-	      this.osc2.type = newWave;
-	    } else if (id === 3) {
-	      this.osc3.type = newWave;
-	    }
-	  }
-
-	  return {
-	    context: context,
-	    osc1: osc1,
-	    osc2: osc2,
-	    osc3: osc3,
-	    gainNode1: gainNode1,
-	    gainNode2: gainNode2,
-	    gainNode3: gainNode3,
-	    frequency: frequency,
-	    volume: volume,
-	    connect: connect,
-	    disconnect: disconnect,
-	    updateVolume: updateVolume,
-	    updateNote: updateNote,
-	    updateWave: updateWave
-	  };
-	}
-
-	exports["default"] = oscillator;
-	module.exports = exports["default"];
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _Context = __webpack_require__(4);
-
-	var _Context2 = _interopRequireDefault(_Context);
-
-	function DrumController(drums, containerId, tempo, volume) {
-	  var container = document.getElementById(containerId);
-
-	  function render() {
-	    var container = document.getElementById(containerId);
-	    var typeContainer = document.createElement('div');
-	    typeContainer.setAttribute('class', 'drum-container');
-	    typeContainer.setAttribute('id', 'drum-types');
-	    container.appendChild(typeContainer);
-	    drums.forEach(function (drum, key) {
-	      drum.beats = [];
-	      var buttonContainer = document.createElement('div');
-	      buttonContainer.setAttribute('class', 'drum-container');
-	      buttonContainer.setAttribute('id', 'drum-' + key);
-	      for (var i = 0; i < 16; i++) {
-	        var beatEl = document.createElement('div');
-	        beatEl.setAttribute('class', 'drum-button');
-	        beatEl.textContent = i + 1;
-
-	        drum.beats.push({
-	          selected: false,
-	          el: beatEl
-	        });
-
-	        buttonContainer.appendChild(beatEl);
-	        if (i === 7) {
-	          buttonContainer.appendChild(document.createElement('br'));
-	        }
-	      }
-	      container.appendChild(buttonContainer);
-
-	      var typeButton = document.createElement('div');
-	      typeButton.setAttribute('class', 'drum-type');
-	      typeButton.setAttribute('id', drum.identifier);
-	      typeButton.textContent = drum.identifier;
-	      typeContainer.appendChild(typeButton);
-	    });
-	  }
-
-	  function parseTempo(tempo) {
-	    return 60 * 1000 / tempo;
-	  }
-
-	  function start(statusButtonId) {
-	    var node = 0;
-	    var maxNodes = 15;
-	    clearInterval(DrumController.interval);
-	    DrumController.interval = setInterval(function () {
-	      var activeDrumNodes = document.getElementsByClassName('drum-button-active');
-	      if (activeDrumNodes.length > 0) {
-	        for (var i = 0; i < activeDrumNodes.length; i++) {
-	          activeDrumNodes[i].classList.remove("drum-button-active");
-	        }
-	      }
-	      drums.forEach(function (drum) {
-	        if (node === 0) {
-	          drum.beats[maxNodes].el.classList.remove('drum-button-active');
-	        } else {
-	          drum.beats[node - 1].el.classList.remove('drum-button-active');
-	        }
-	        drum.beats[node].el.classList.add('drum-button-active');
-	        if (drum.beats[node].selected === true) {
-	          drum[drum.identifier].machine.hit();
-	        }
-	      });
-
-	      if (node === maxNodes) {
-	        node = 0;
-	      } else {
-	        node++;
-	      }
-	    }, parseTempo(this.tempo));
-
-	    var statusButton = document.getElementById(statusButtonId);
-	    var statusDiv = document.createElement('div');
-	    statusDiv.setAttribute('id', 'pause');
-	    statusButton.setAttribute('active', true);
-	    while (statusButton.firstChild) {
-	      statusButton.removeChild(statusButton.firstChild);
-	    }
-	    statusButton.appendChild(statusDiv);
-	  }
-
-	  function stop(statusButtonId) {
-	    clearInterval(DrumController.interval);
-	    var statusButton = document.getElementById(statusButtonId);
-	    var statusDiv = document.createElement("div");
-	    statusDiv.id = "play";
-	    statusButton.classList.remove('active');
-	    statusButton.classList.add('inactive');
-	    while (statusButton.firstChild) {
-	      statusButton.removeChild(statusButton.firstChild);
-	    }
-	    statusButton.appendChild(statusDiv);
-	  }
-
-	  function selectBeat(button) {
-	    button.classList.add('drum-button-selected');
-	    var index = parseInt(button.innerText) - 1;
-	    var id = button.parentNode.getAttribute('id');
-	    var type = id.split('-')[1];
-	    if (!drums[type].beats[index].selected) {
-	      drums[type].beats[index].selected = true;
-	    }
-	  }
-
-	  function selectDrum(button) {
-	    var id = button.id;
-	    var drumTypes = document.getElementsByClassName('drum-type');
-	    for (var i = 0; i < drumTypes.length; i++) {
-	      drumTypes[i].classList.remove('drum-button-selected');
-	    }
-	    button.classList.add('drum-button-selected');
-
-	    drums.forEach(function (drum, key) {
-	      var drumEl = document.getElementById('drum-' + key);
-	      if (drum.identifier === id) {
-	        drumEl.setAttribute('visibility', 'visible');
-	        drumEl.setAttribute('height', '');
-	        drumEl.hidden = false;
-	      } else {
-	        drumEl.setAttribute('visibility', 'hidden');
-	        drumEl.hidden = true;
-	        drumEl.setAttribute('height', '0');
-	      }
-	    });
-	  }
-
-	  function setTempo(newTempo, statusSelectorId) {
-	    this.tempo = newTempo;
-	    var statusButton = document.getElementById(statusSelectorId);
-	    if (statusButton.getAttribute('active') === 'true') {
-	      var boundStart = start.bind(this);
-	      boundStart('drum-status');
-	    }
-	  }
-
-	  function setVolume(volumeModifier) {
-	    var that = this;
-	    for (var i = 0; i < this.drums.length; i++) {
-	      that.drums[i][drums[i].identifier].machine.gainVal = that.startVolume * volumeModifier;
-	    }
-	  }
-
-	  function listen(tempoId, drumBeatClass, drumTypeClass, statusSelectorId, drumVolumeSelector) {
-	    var self = this;
-	    var tempoEl = document.getElementById(tempoId);
-	    tempoEl.addEventListener('change', function () {
-	      var boundSetTempo = setTempo.bind(self);
-	      boundSetTempo(parseInt(this.value), statusSelectorId);
-	    });
-
-	    var drumBeats = document.getElementsByClassName(drumBeatClass);
-	    for (var i = 0; i < drumBeats.length; i++) {
-	      drumBeats[i].addEventListener('click', function () {
-	        selectBeat(this);
-	      });
-	    }
-
-	    var drumTypes = document.getElementsByClassName(drumTypeClass);
-	    for (var i = 0; i < drumTypes.length; i++) {
-	      drumTypes[i].addEventListener('click', function () {
-	        selectDrum(this);
-	      });
-	    }
-
-	    var statusButton = document.getElementById(statusSelectorId);
-	    statusButton.addEventListener('click', function () {
-	      var el = this;
-	      if (el.getAttribute('active') === 'true') {
-	        el.setAttribute('active', false);
-	        stop(statusSelectorId);
-	      } else {
-	        var boundStart = start.bind(self);
-	        boundStart(statusSelectorId);
-	      }
-	    });
-
-	    var drumVolumeEl = document.getElementById(drumVolumeSelector);
-	    drumVolumeEl.addEventListener('change', function () {
-	      var volumeModifier = this.value / 100;
-	      var boundSetVolume = setVolume.bind(self);
-	      boundSetVolume(volumeModifier);
-	    });
-	  }
-
-	  return {
-	    drums: drums,
-	    container: container,
-	    tempo: tempo,
-	    startVolume: volume,
-	    render: render,
-	    parseTempo: parseTempo,
-	    start: start,
-	    stop: stop,
-	    selectBeat: selectBeat,
-	    selectDrum: selectDrum,
-	    setTempo: setTempo,
-	    setVolume: setVolume,
-	    listen: listen
-	  };
-	}
-
-	exports['default'] = DrumController;
-	module.exports = exports['default'];
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	function drumMachine(options) {
-	  var context = options['context'];
-	  var frequency = options['frequency'];
-	  var wave = options['wave'];
-	  var gainVal = options['gainVal'];
-	  var sustain = options['sustain'];
-
-	  var hit = function hit() {
-	    var drum1 = this.context.createOscillator(),
-	        node1 = this.context.createGain(),
-	        drum2 = this.context.createOscillator(),
-	        node2 = this.context.createGain(),
-	        sustain = this.sustain;
-
-	    node1.gain.value = this.gainVal;
-	    node1.connect(this.context.destination);
-	    drum1.connect(node1);
-	    drum1.frequency.value = this.frequency;
-	    drum1.type = this.wave;
-	    drum1.start(0);
-
-	    setInterval(function () {
-	      if (node1.gain.value > 0) {
-	        node1.gain.value -= sustain;
-	      } else {
-	        drum1.stop();
-	      }
-	    }, 5);
-
-	    node2.gain.value = this.gainVal * 0.8;
-	    node2.connect(this.context.destination);
-	    drum2.connect(node2);
-	    drum2.frequency.value = this.frequency;
-	    drum2.type = this.wave;
-	    drum2.start(0);
-
-	    setInterval(function () {
-	      if (node2.gain.value > 0) {
-	        node2.gain.value -= sustain * 2;
-	      } else {
-	        drum2.stop();
-	      }
-	    }, 5);
-	  };
-
-	  return {
-	    hit: hit,
-	    context: context,
-	    frequency: frequency,
-	    gainVal: gainVal,
-	    wave: wave,
-	    sustain: sustain
-	  };
-	}
-
-	exports['default'] = drumMachine;
-	module.exports = exports['default'];
 
 /***/ }
 /******/ ]);

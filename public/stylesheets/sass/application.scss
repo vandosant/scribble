@@ -68,15 +68,15 @@ input[type="range"]::-webkit-slider-thumb {
   width: 18em;
 }
 
-.keyboard:before,
-.keyboard:after {
+.keyboard-container:before,
+.keyboard-container:after {
   overflow: hidden;
   display: block;
   zoom: 1;
   content: ' ';
 }
 
-.keyboard:after {
+.keyboard-container:after {
   clear: both;
 }
 
@@ -88,7 +88,7 @@ input[type="range"]::-webkit-slider-thumb {
   height: 10em;
   width: 2em;
   border: .3em solid black;
-  background: #fff
+  background: #fff;
 }
 
 .key + .key {
@@ -111,6 +111,34 @@ input[type="range"]::-webkit-slider-thumb {
 
 .keyon {
   background: $third-color;
+}
+
+.octave {
+  margin: 0 auto;
+  width: 32.1%;
+  font-size: 2em;
+  #octave-down {
+    line-height: 4.5;
+    float: left;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 5em;
+    width: 1em;
+    border: .15em solid black;
+    background: #fff;
+  }
+  #octave-up {
+    line-height: 4.5;
+    float: right;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 5em;
+    width: 1em;
+    border: .15em solid black;
+    background: #fff;
+  }
 }
 
 .drum-machine {
