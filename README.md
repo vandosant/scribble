@@ -6,7 +6,7 @@ More info about the Web Audio API [here](http://webaudio.github.io/web-audio-api
 
 [Live Demo](http://scribble.scottskender.com)  
 
-Local setup:
+Local setup:  
 - Note--This will only work in Chrome.
 - Fork and clone this repo.
 - Run `bundle install`
@@ -17,10 +17,10 @@ Local setup:
 - Click on drum buttons to activate sound for that beat.
 - Change the drum type by clicking on bass, snare, etc.
 - You can pause and resume the drum track.
-- Speed up or slow down the drum tempo by entering a BPM.
+- Speed up or slow down the drum tempo by entering a BPM.  
 Testing:  
-- Run specs with `./node_modules/karma/bin/karma start`
-Development:
+- Run specs with `./node_modules/karma/bin/karma start`  
+Development:  
 - Run `webpack -w`
 - Make some changes to the code.
 
