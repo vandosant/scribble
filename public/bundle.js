@@ -56,27 +56,27 @@
 
 	var _Keyboard2 = _interopRequireDefault(_Keyboard);
 
-	var _keyboardController = __webpack_require__(10);
+	var _keyboardController = __webpack_require__(3);
 
 	var _keyboardController2 = _interopRequireDefault(_keyboardController);
 
-	var _OscillatorController = __webpack_require__(3);
+	var _OscillatorController = __webpack_require__(4);
 
 	var _OscillatorController2 = _interopRequireDefault(_OscillatorController);
 
-	var _DrumController = __webpack_require__(5);
+	var _DrumController = __webpack_require__(6);
 
 	var _DrumController2 = _interopRequireDefault(_DrumController);
 
-	var _DrumMachine = __webpack_require__(6);
+	var _DrumMachine = __webpack_require__(7);
 
 	var _DrumMachine2 = _interopRequireDefault(_DrumMachine);
 
-	var _Oscillator = __webpack_require__(4);
+	var _Oscillator = __webpack_require__(5);
 
 	var _Oscillator2 = _interopRequireDefault(_Oscillator);
 
-	__webpack_require__(7);
+	__webpack_require__(8);
 
 	var drumVol = 1.3;
 	var drums = [{
@@ -351,11 +351,56 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
+	var _Keyboard = __webpack_require__(2);
+
+	var _Keyboard2 = _interopRequireDefault(_Keyboard);
+
+	function keyboardController(keyboard) {
+	  var changeOctave = function changeOctave(up) {
+	    var multiplier = 0.5;
+	    if (up) {
+	      multiplier = 2.0;
+	    }
+	    return function () {
+	      for (var key in keyboard.keys) {
+	        keyboard.keys[key].freq = keyboard.keys[key].freq * multiplier;
+	      }
+	    };
+	  };
+
+	  var octaves = Object.create(null);
+	  octaves.listen = function (configObject) {
+	    document.getElementById(configObject.octaveUpId).addEventListener("click", changeOctave(true));
+	    document.getElementById(configObject.octaveDownId).addEventListener("click", changeOctave(false));
+	  };
+
+	  var api = {
+	    octaves: octaves
+	  };
+
+	  return api;
+	}
+
+	exports["default"] = keyboardController;
+	module.exports = exports["default"];
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
 	var _Context = __webpack_require__(1);
 
 	var _Context2 = _interopRequireDefault(_Context);
 
-	var _Oscillator = __webpack_require__(4);
+	var _Oscillator = __webpack_require__(5);
 
 	var _Oscillator2 = _interopRequireDefault(_Oscillator);
 
@@ -411,7 +456,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -503,7 +548,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -725,7 +770,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -792,21 +837,21 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(8);
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(9);
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(9);
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(10);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -2260,51 +2305,6 @@
 	// AMD (#7102#comment:10, https://github.com/jquery/jquery/pull/557)
 	// and CommonJS for browser emulators (#13566)
 	if(typeof noGlobal === strundefined){window.jQuery = window.$ = jQuery;}return jQuery;}); // Otherwise append directly
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-	var _Keyboard = __webpack_require__(2);
-
-	var _Keyboard2 = _interopRequireDefault(_Keyboard);
-
-	function keyboardController(keyboard) {
-	  var changeOctave = function changeOctave(up) {
-	    var multiplier = 0.5;
-	    if (up) {
-	      multiplier = 2.0;
-	    }
-	    return function () {
-	      for (var key in keyboard.keys) {
-	        keyboard.keys[key].freq = keyboard.keys[key].freq * multiplier;
-	      }
-	    };
-	  };
-
-	  var octaves = Object.create(null);
-	  octaves.listen = function (configObject) {
-	    document.getElementById(configObject.octaveUpId).addEventListener("click", changeOctave(true));
-	    document.getElementById(configObject.octaveDownId).addEventListener("click", changeOctave(false));
-	  };
-
-	  var api = {
-	    octaves: octaves
-	  };
-
-	  return api;
-	}
-
-	exports["default"] = keyboardController;
-	module.exports = exports["default"];
 
 /***/ }
 /******/ ]);
