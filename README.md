@@ -17,9 +17,11 @@ Local setup:
 - Click on drum buttons to activate sound for that beat.
 - Change the drum type by clicking on bass, snare, etc.
 - You can pause and resume the drum track.
-- Speed up or slow down the drum tempo by entering a BPM.  
+- Speed up or slow down the drum tempo by entering a BPM.
+
 Testing:  
 - Run specs with `./node_modules/karma/bin/karma start`  
+
 Development:  
 - Run `webpack -w`
 - Make some changes to the code.
