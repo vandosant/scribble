@@ -17,7 +17,7 @@ function DrumController(drums, containerId, tempo, volume) {
       for (var i = 0; i < 16; i++) {
         var beatEl = document.createElement('div');
         beatEl.setAttribute('class', 'drum-button');
-        beatEl.textContent = i + 1;
+        beatEl.textContent = (i + 1).toString();
 
         drum.beats.push({
           selected: false,
@@ -76,7 +76,7 @@ function DrumController(drums, containerId, tempo, volume) {
     var statusButton = document.getElementById(statusButtonId);
     var statusDiv = document.createElement('div');
     statusDiv.setAttribute('id', 'pause');
-    statusButton.setAttribute('active', true);
+    statusButton.setAttribute('active', 'true');
     while (statusButton.firstChild) {
       statusButton.removeChild(statusButton.firstChild);
     }
@@ -86,9 +86,9 @@ function DrumController(drums, containerId, tempo, volume) {
   function stop(statusButtonId) {
     clearInterval(DrumController.interval);
     var statusButton = document.getElementById(statusButtonId);
-    var statusDiv = document.createElement("div")
-    statusDiv.id = "play"
-    statusButton.classList.remove('active')
+    var statusDiv = document.createElement("div");
+    statusDiv.id = "play";
+    statusButton.classList.remove('active');
     statusButton.classList.add('inactive');
     while (statusButton.firstChild) {
       statusButton.removeChild(statusButton.firstChild);
@@ -100,7 +100,7 @@ function DrumController(drums, containerId, tempo, volume) {
     button.classList.add('drum-button-selected');
     var index = parseInt(button.innerText) - 1;
     var id = button.parentNode.getAttribute('id');
-    var type = id.split('-')[1]
+    var type = id.split('-')[1];
     if (!drums[type].beats[index].selected) {
       drums[type].beats[index].selected = true;
     }
@@ -139,7 +139,7 @@ function DrumController(drums, containerId, tempo, volume) {
 
   function setVolume(volumeModifier) {
     var that = this;
-    for (var i = 0; i < this.drums.length; i++) {
+    for (var i = 0; i < drums.length; i++) {
       that.drums[i][drums[i].identifier].machine.gainVal = that.startVolume * volumeModifier;
     }
   }
@@ -160,8 +160,8 @@ function DrumController(drums, containerId, tempo, volume) {
     }
 
     var drumTypes = document.getElementsByClassName(drumTypeClass);
-    for (var i = 0; i < drumTypes.length; i++) {
-      drumTypes[i].addEventListener('click', function() {
+    for (var j = 0; j < drumTypes.length; j++) {
+      drumTypes[j].addEventListener('click', function() {
         selectDrum(this);
       });
     }
@@ -170,7 +170,7 @@ function DrumController(drums, containerId, tempo, volume) {
     statusButton.addEventListener('click', function() {
       var el = this;
       if (el.getAttribute('active') === 'true') {
-        el.setAttribute('active', false)
+        el.setAttribute('active', 'false');
         stop(statusSelectorId);
       } else {
         var boundStart = start.bind(context);
