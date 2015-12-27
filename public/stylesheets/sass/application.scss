@@ -116,28 +116,31 @@ input[type="range"]::-webkit-slider-thumb {
 .octave {
   margin: 0 auto;
   width: 32.1%;
-  font-size: 2em;
+  cursor: pointer;
+  text-transform: capitalize;
   #octave-down {
-    line-height: 4.5;
     float: left;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    height: 5em;
-    width: 1em;
-    border: .15em solid black;
+    height: 10em;
+    width: 2em;
+    border: .3em solid black;
     background: #fff;
   }
   #octave-up {
-    line-height: 4.5;
     float: right;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    height: 5em;
-    width: 1em;
-    border: .15em solid black;
+    height: 10em;
+    width: 2em;
+    border: .3em solid black;
     background: #fff;
+  }
+  .octave-text {
+    font-size: .9em;
+    margin-top: 200%;
   }
 }
 
