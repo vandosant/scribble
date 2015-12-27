@@ -2,7 +2,7 @@ import keyboard from "./Keyboard";
 
 function keyboardController(keyboard) {
   var changeOctave = function(up) {
-    var multiplier = 0.5
+    var multiplier = 0.5;
     if (up) {
       multiplier = 2.0
     }
@@ -19,11 +19,9 @@ function keyboardController(keyboard) {
     document.getElementById(configObject.octaveDownId).addEventListener("click", changeOctave(false));
   };
 
-  var api = {
+  return {
     octaves: octaves
   };
-
-  return api;
 }
 
 export default keyboardController;

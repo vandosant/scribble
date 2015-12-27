@@ -374,11 +374,9 @@
 	    document.getElementById(configObject.octaveDownId).addEventListener("click", changeOctave(false));
 	  };
 
-	  var api = {
+	  return {
 	    octaves: octaves
 	  };
-
-	  return api;
 	}
 
 	exports["default"] = keyboardController;
