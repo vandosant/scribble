@@ -6,6 +6,8 @@ import oscillatorController from "./OscillatorController";
 import DrumController from "./DrumController";
 import drumMachine from "./DrumMachine";
 import oscillator from "./Oscillator";
+import visualizer from "./Visualizer";
+
 var drumVol = 1.3;
 var drums = [
   {
@@ -83,4 +85,6 @@ $(document).ready(function() {
 
   var keyboardCtrl = keyboardController(keyboard);
   keyboardCtrl.octaves.listen({octaveUpId: "octave-up", octaveDownId: "octave-down"});
-})
+
+  visualizer('top', oscillatorCtrl.oscillators)
+});

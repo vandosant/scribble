@@ -76,6 +76,10 @@
 
 	var _Oscillator2 = _interopRequireDefault(_Oscillator);
 
+	var _Visualizer = __webpack_require__(11);
+
+	var _Visualizer2 = _interopRequireDefault(_Visualizer);
+
 	__webpack_require__(8);
 
 	var drumVol = 1.3;
@@ -149,6 +153,8 @@
 
 	  var keyboardCtrl = (0, _keyboardController2["default"])(keyboard);
 	  keyboardCtrl.octaves.listen({ octaveUpId: "octave-up", octaveDownId: "octave-down" });
+
+	  (0, _Visualizer2["default"])('top', oscillatorCtrl.oscillators);
 	});
 
 /***/ },
@@ -2303,6 +2309,94 @@
 	// AMD (#7102#comment:10, https://github.com/jquery/jquery/pull/557)
 	// and CommonJS for browser emulators (#13566)
 	if(typeof noGlobal === strundefined){window.jQuery = window.$ = jQuery;}return jQuery;}); // Otherwise append directly
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+	var _Context = __webpack_require__(1);
+
+	var _Context2 = _interopRequireDefault(_Context);
+
+	var drawVisual;
+	var analyser = _Context2["default"].createAnalyser();
+
+	function visualize(stream, nodes) {
+	  var dest = _Context2["default"].createMediaStreamDestination();
+	  nodes[0].gainNode1.connect(dest);
+	  var source = _Context2["default"].createMediaStreamSource(dest.stream);
+	  source.connect(analyser);
+	  var canvas = document.getElementById(stream);
+	  var canvasCtx = canvas.getContext("2d");
+	  var WIDTH = canvas.width;
+	  var HEIGHT = canvas.height;
+
+	  var visualSetting = 'sinewave';
+
+	  if (visualSetting == "sinewave") {
+	    var bufferLength;
+	    var dataArray;
+
+	    (function () {
+	      var draw = function draw() {
+	        drawVisual = requestAnimationFrame(draw);
+
+	        analyser.getByteTimeDomainData(dataArray); // get waveform data and put it into the array created above
+
+	        canvasCtx.fillStyle = 'rgb(200, 200, 200)'; // draw wave with canvas
+	        canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+	        canvasCtx.lineWidth = 2;
+	        canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+
+	        canvasCtx.beginPath();
+	        var sliceWidth = WIDTH * 1.0 / bufferLength;
+	        var x = 0;
+
+	        for (var i = 0; i < bufferLength; i++) {
+	          var v = dataArray[i] / 128.0;
+	          var y = v * HEIGHT / 2;
+
+	          if (i === 0) {
+	            canvasCtx.moveTo(x, y);
+	          } else {
+	            canvasCtx.lineTo(x, y);
+	          }
+
+	          x += sliceWidth;
+	        }
+
+	        canvasCtx.lineTo(canvas.width, canvas.height / 2);
+	        canvasCtx.stroke();
+	      };
+
+	      analyser.fftSize = 2048;
+	      bufferLength = analyser.frequencyBinCount;
+	      // half the FFT value
+	      dataArray = new Uint8Array(bufferLength);
+	      // create an array to store the data
+
+	      canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+
+	      draw();
+	    })();
+	  } else if (visualSetting == "off") {
+	    canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+	    canvasCtx.fillStyle = "red";
+	    canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+	  }
+	}
+
+	exports["default"] = visualize;
+	module.exports = exports["default"];
 
 /***/ }
 /******/ ]);
