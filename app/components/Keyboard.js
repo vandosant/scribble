@@ -133,7 +133,7 @@ function keyboardModel(obj) {
       that.keyup(e);
     });
     var volumeElement = document.getElementById(volumeSelector);
-    volumeElement.addEventListener('change', function() {
+    volumeElement.addEventListener('change', function () {
       that.updateVolume(this.value);
     });
 

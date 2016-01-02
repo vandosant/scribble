@@ -147,27 +147,27 @@ function DrumController(drums, containerId, tempo, volume) {
   function listen(tempoId, drumBeatClass, drumTypeClass, statusSelectorId, drumVolumeSelector) {
     var context = this;
     var tempoEl = document.getElementById(tempoId);
-    tempoEl.addEventListener('change', function() {
+    tempoEl.addEventListener('change', function () {
       var boundSetTempo = setTempo.bind(context);
       boundSetTempo(parseInt(this.value), statusSelectorId);
     });
 
     var drumBeats = document.getElementsByClassName(drumBeatClass);
     for (var i = 0; i < drumBeats.length; i++) {
-      drumBeats[i].addEventListener('click', function() {
+      drumBeats[i].addEventListener('click', function () {
         selectBeat(this);
       });
     }
 
     var drumTypes = document.getElementsByClassName(drumTypeClass);
     for (var j = 0; j < drumTypes.length; j++) {
-      drumTypes[j].addEventListener('click', function() {
+      drumTypes[j].addEventListener('click', function () {
         selectDrum(this);
       });
     }
 
     var statusButton = document.getElementById(statusSelectorId);
-    statusButton.addEventListener('click', function() {
+    statusButton.addEventListener('click', function () {
       var el = this;
       if (el.getAttribute('active') === 'true') {
         el.setAttribute('active', 'false');
@@ -179,7 +179,7 @@ function DrumController(drums, containerId, tempo, volume) {
     });
 
     var drumVolumeEl = document.getElementById(drumVolumeSelector);
-    drumVolumeEl.addEventListener('change', function() {
+    drumVolumeEl.addEventListener('change', function () {
       var volumeModifier = this.value / 100;
       var boundSetVolume = setVolume.bind(context);
       boundSetVolume(volumeModifier);

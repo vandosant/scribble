@@ -13,36 +13,36 @@ var drums = [
   {
     identifier: 'bass',
     'bass': {
-    'machine': drumMachine({context: context, frequency: 47, wave: 'sine', gainVal: drumVol, sustain: 0.03})
+      'machine': drumMachine({context: context, frequency: 47, wave: 'sine', gainVal: drumVol, sustain: 0.03})
     }
   },
   {
     identifier: 'tom1',
     'tom1': {
-    'machine': drumMachine({context: context, frequency: 64, wave: 'sine', gainVal: drumVol, sustain: 0.05})
+      'machine': drumMachine({context: context, frequency: 64, wave: 'sine', gainVal: drumVol, sustain: 0.05})
     }
   },
   {
     identifier: 'tom2',
     'tom2': {
-    'machine': drumMachine({context: context, frequency: 160, wave: 'sine', gainVal: drumVol, sustain: 0.05})
+      'machine': drumMachine({context: context, frequency: 160, wave: 'sine', gainVal: drumVol, sustain: 0.05})
     }
   },
   {
     identifier: 'snare',
     'snare': {
-    'machine': drumMachine({context: context, frequency: 188, wave: 'sine', gainVal: drumVol, sustain: 0.07})
+      'machine': drumMachine({context: context, frequency: 188, wave: 'sine', gainVal: drumVol, sustain: 0.07})
     }
   },
   {
     identifier: 'pad',
     'pad': {
-    'machine': drumMachine({context: context, frequency: 261.63, wave: 'triangle', gainVal: drumVol, sustain: 0.02})
+      'machine': drumMachine({context: context, frequency: 261.63, wave: 'triangle', gainVal: drumVol, sustain: 0.02})
     }
   }
 ];
 var drumController = DrumController(drums, 'drums', 180, drumVol);
-$('#drums').ready(function() {
+$('#drums').ready(function () {
   drumController.render();
   var bassElement = document.getElementById('bass');
   drumController.selectDrum(bassElement);
@@ -58,7 +58,7 @@ var oscillatorCtrl = oscillatorController({
 });
 oscillatorCtrl.initialize();
 
-$('.oscillator-container').ready(function() {
+$('.oscillator-container').ready(function () {
   $('.oscillator-mode').change(function () {
     var modes = {
       standard: ['sine', 'sine', 'triangle'],
@@ -79,7 +79,7 @@ $('.oscillator-container').ready(function() {
   });
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
   var keyboard = keyboardModel({volumeSelector: "keyboard-volume", oscillators: oscillatorCtrl.oscillators});
   keyboard.initialize();
 
