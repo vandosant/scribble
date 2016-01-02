@@ -3,19 +3,19 @@ import context from "./Context";
 var drawVisual;
 var analyser = context.createAnalyser();
 
-function visualize(stream, nodes) {
+function visualize(containerId, nodes) {
+  var canvas = document.getElementById(containerId);
   var dest = context.createMediaStreamDestination();
-  nodes[0].gainNode1.connect(dest);
   var source = context.createMediaStreamSource(dest.stream);
-  source.connect(analyser);
-  var canvas = document.getElementById(stream);
   var canvasCtx = canvas.getContext("2d");
   var WIDTH = canvas.width;
   var HEIGHT = canvas.height;
-
   var visualSetting = 'sinewave';
 
-  if(visualSetting == "sinewave") {
+  nodes[0].gainNode1.connect(dest);
+  source.connect(analyser);
+
+  if (visualSetting == "sinewave") {
     analyser.fftSize = 2048;
     var bufferLength = analyser.frequencyBinCount; // half the FFT value
     var dataArray = new Uint8Array(bufferLength); // create an array to store the data
@@ -37,11 +37,11 @@ function visualize(stream, nodes) {
       var sliceWidth = WIDTH * 1.0 / bufferLength;
       var x = 0;
 
-      for(var i = 0; i < bufferLength; i++) {
+      for (var i = 0; i < bufferLength; i++) {
         var v = dataArray[i] / 128.0;
-        var y = v * HEIGHT/2;
+        var y = v * HEIGHT / 2;
 
-        if(i === 0) {
+        if (i === 0) {
           canvasCtx.moveTo(x, y);
         } else {
           canvasCtx.lineTo(x, y);
@@ -50,13 +50,13 @@ function visualize(stream, nodes) {
         x += sliceWidth;
       }
 
-      canvasCtx.lineTo(canvas.width, canvas.height/2);
+      canvasCtx.lineTo(canvas.width, canvas.height / 2);
       canvasCtx.stroke();
     }
 
     draw();
 
-  } else if(visualSetting == "off") {
+  } else if (visualSetting == "off") {
     canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
     canvasCtx.fillStyle = "red";
     canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
