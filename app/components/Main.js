@@ -9,35 +9,57 @@ import oscillator from "./Oscillator";
 import visualizer from "./Visualizer";
 
 var drumVol = 1.3;
+var viz = visualizer();
 var drums = [
   {
     identifier: 'bass',
     'bass': {
-      'machine': drumMachine({context: context, frequency: 47, wave: 'sine', gainVal: drumVol, sustain: 0.03})
+      'machine': drumMachine({context: context, frequency: 47, wave: 'sine', gainVal: drumVol, sustain: 0.03, viz: viz})
     }
   },
   {
     identifier: 'tom1',
     'tom1': {
-      'machine': drumMachine({context: context, frequency: 64, wave: 'sine', gainVal: drumVol, sustain: 0.05})
+      'machine': drumMachine({context: context, frequency: 64, wave: 'sine', gainVal: drumVol, sustain: 0.05, viz: viz})
     }
   },
   {
     identifier: 'tom2',
     'tom2': {
-      'machine': drumMachine({context: context, frequency: 160, wave: 'sine', gainVal: drumVol, sustain: 0.05})
+      'machine': drumMachine({
+        context: context,
+        frequency: 160,
+        wave: 'sine',
+        gainVal: drumVol,
+        sustain: 0.05,
+        viz: viz
+      })
     }
   },
   {
     identifier: 'snare',
     'snare': {
-      'machine': drumMachine({context: context, frequency: 188, wave: 'sine', gainVal: drumVol, sustain: 0.07})
+      'machine': drumMachine({
+        context: context,
+        frequency: 188,
+        wave: 'sine',
+        gainVal: drumVol,
+        sustain: 0.07,
+        viz: viz
+      })
     }
   },
   {
     identifier: 'pad',
     'pad': {
-      'machine': drumMachine({context: context, frequency: 261.63, wave: 'triangle', gainVal: drumVol, sustain: 0.02})
+      'machine': drumMachine({
+        context: context,
+        frequency: 261.63,
+        wave: 'triangle',
+        gainVal: drumVol,
+        sustain: 0.02,
+        viz: viz
+      })
     }
   }
 ];
@@ -90,5 +112,5 @@ $(document).ready(function () {
   for (var i = 0; i < oscillatorCtrl.oscillators.length; i++) {
     nodes.push(oscillatorCtrl.oscillators[i].gainNode1)
   }
-  visualizer('top', nodes)
+  viz.init("top", nodes);
 });

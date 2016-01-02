@@ -4,6 +4,7 @@ function drumMachine(options) {
   var wave = options['wave'];
   var gainVal = options['gainVal'];
   var sustain = options['sustain'];
+  var viz = options['viz'];
 
   var hit = function () {
     var drum1 = this.context.createOscillator(),
@@ -12,6 +13,7 @@ function drumMachine(options) {
       node2 = this.context.createGain(),
       sustain = this.sustain;
 
+    viz.connect(node2);
     node1.gain.value = this.gainVal;
     node1.connect(this.context.destination);
     drum1.connect(node1);

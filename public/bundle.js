@@ -83,30 +83,52 @@
 	__webpack_require__(9);
 
 	var drumVol = 1.3;
+	var viz = (0, _Visualizer2["default"])();
 	var drums = [{
 	  identifier: 'bass',
 	  'bass': {
-	    'machine': (0, _DrumMachine2["default"])({ context: _Context2["default"], frequency: 47, wave: 'sine', gainVal: drumVol, sustain: 0.03 })
+	    'machine': (0, _DrumMachine2["default"])({ context: _Context2["default"], frequency: 47, wave: 'sine', gainVal: drumVol, sustain: 0.03, viz: viz })
 	  }
 	}, {
 	  identifier: 'tom1',
 	  'tom1': {
-	    'machine': (0, _DrumMachine2["default"])({ context: _Context2["default"], frequency: 64, wave: 'sine', gainVal: drumVol, sustain: 0.05 })
+	    'machine': (0, _DrumMachine2["default"])({ context: _Context2["default"], frequency: 64, wave: 'sine', gainVal: drumVol, sustain: 0.05, viz: viz })
 	  }
 	}, {
 	  identifier: 'tom2',
 	  'tom2': {
-	    'machine': (0, _DrumMachine2["default"])({ context: _Context2["default"], frequency: 160, wave: 'sine', gainVal: drumVol, sustain: 0.05 })
+	    'machine': (0, _DrumMachine2["default"])({
+	      context: _Context2["default"],
+	      frequency: 160,
+	      wave: 'sine',
+	      gainVal: drumVol,
+	      sustain: 0.05,
+	      viz: viz
+	    })
 	  }
 	}, {
 	  identifier: 'snare',
 	  'snare': {
-	    'machine': (0, _DrumMachine2["default"])({ context: _Context2["default"], frequency: 188, wave: 'sine', gainVal: drumVol, sustain: 0.07 })
+	    'machine': (0, _DrumMachine2["default"])({
+	      context: _Context2["default"],
+	      frequency: 188,
+	      wave: 'sine',
+	      gainVal: drumVol,
+	      sustain: 0.07,
+	      viz: viz
+	    })
 	  }
 	}, {
 	  identifier: 'pad',
 	  'pad': {
-	    'machine': (0, _DrumMachine2["default"])({ context: _Context2["default"], frequency: 261.63, wave: 'triangle', gainVal: drumVol, sustain: 0.02 })
+	    'machine': (0, _DrumMachine2["default"])({
+	      context: _Context2["default"],
+	      frequency: 261.63,
+	      wave: 'triangle',
+	      gainVal: drumVol,
+	      sustain: 0.02,
+	      viz: viz
+	    })
 	  }
 	}];
 	var drumController = (0, _DrumController2["default"])(drums, 'drums', 180, drumVol);
@@ -158,7 +180,7 @@
 	  for (var i = 0; i < oscillatorCtrl.oscillators.length; i++) {
 	    nodes.push(oscillatorCtrl.oscillators[i].gainNode1);
 	  }
-	  (0, _Visualizer2["default"])('top', nodes);
+	  viz.init("top", nodes);
 	});
 
 /***/ },
@@ -792,6 +814,7 @@
 	  var wave = options['wave'];
 	  var gainVal = options['gainVal'];
 	  var sustain = options['sustain'];
+	  var viz = options['viz'];
 
 	  var hit = function hit() {
 	    var drum1 = this.context.createOscillator(),
@@ -800,6 +823,7 @@
 	        node2 = this.context.createGain(),
 	        sustain = this.sustain;
 
+	    viz.connect(node2);
 	    node1.gain.value = this.gainVal;
 	    node1.connect(this.context.destination);
 	    drum1.connect(node1);
@@ -863,72 +887,86 @@
 	var drawVisual;
 	var analyser = _Context2["default"].createAnalyser();
 
-	function visualize(containerId, nodes) {
-	  var canvas = document.getElementById(containerId);
-	  var dest = _Context2["default"].createMediaStreamDestination();
-	  var source = _Context2["default"].createMediaStreamSource(dest.stream);
-	  var canvasCtx = canvas.getContext("2d");
-	  var WIDTH = canvas.width;
-	  var HEIGHT = canvas.height;
-	  var visualSetting = 'sinewave';
+	function visualize() {
+	  var canvas;
+	  var dest;
 
-	  source.connect(analyser);
-	  for (var i = 0; i < nodes.length; i++) {
-	    nodes[i].connect(dest);
-	  }
+	  function init(containerId, nodes) {
+	    canvas = document.getElementById(containerId);
+	    dest = _Context2["default"].createMediaStreamDestination();
+	    var source = _Context2["default"].createMediaStreamSource(dest.stream);
+	    var canvasCtx = canvas.getContext("2d");
+	    var WIDTH = canvas.width;
+	    var HEIGHT = canvas.height;
+	    var visualSetting = 'sinewave';
 
-	  if (visualSetting == "sinewave") {
-	    var bufferLength;
-	    var dataArray;
+	    source.connect(analyser);
+	    for (var i = 0; i < nodes.length; i++) {
+	      nodes[i].connect(dest);
+	    }
 
-	    (function () {
-	      var draw = function draw() {
-	        drawVisual = requestAnimationFrame(draw);
+	    if (visualSetting == "sinewave") {
+	      var bufferLength;
+	      var dataArray;
 
-	        analyser.getByteTimeDomainData(dataArray); // get waveform data and put it into the array created above
+	      (function () {
+	        var draw = function draw() {
+	          drawVisual = requestAnimationFrame(draw);
 
-	        canvasCtx.fillStyle = 'rgb(200, 200, 200)'; // draw wave with canvas
-	        canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+	          analyser.getByteTimeDomainData(dataArray); // get waveform data and put it into the array created above
 
-	        canvasCtx.lineWidth = 2;
-	        canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+	          canvasCtx.fillStyle = 'rgb(200, 200, 200)'; // draw wave with canvas
+	          canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
 
-	        canvasCtx.beginPath();
-	        var sliceWidth = WIDTH * 1.0 / bufferLength;
-	        var x = 0;
+	          canvasCtx.lineWidth = 2;
+	          canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
 
-	        for (var i = 0; i < bufferLength; i++) {
-	          var v = dataArray[i] / 128.0;
-	          var y = v * HEIGHT / 2;
+	          canvasCtx.beginPath();
+	          var sliceWidth = WIDTH * 1.0 / bufferLength;
+	          var x = 0;
 
-	          if (i === 0) {
-	            canvasCtx.moveTo(x, y);
-	          } else {
-	            canvasCtx.lineTo(x, y);
+	          for (var i = 0; i < bufferLength; i++) {
+	            var v = dataArray[i] / 128.0;
+	            var y = v * HEIGHT / 2;
+
+	            if (i === 0) {
+	              canvasCtx.moveTo(x, y);
+	            } else {
+	              canvasCtx.lineTo(x, y);
+	            }
+
+	            x += sliceWidth;
 	          }
 
-	          x += sliceWidth;
-	        }
+	          canvasCtx.lineTo(canvas.width, canvas.height / 2);
+	          canvasCtx.stroke();
+	        };
 
-	        canvasCtx.lineTo(canvas.width, canvas.height / 2);
-	        canvasCtx.stroke();
-	      };
+	        analyser.fftSize = 2048;
+	        bufferLength = analyser.frequencyBinCount;
+	        // half the FFT value
+	        dataArray = new Uint8Array(bufferLength);
+	        // create an array to store the data
 
-	      analyser.fftSize = 2048;
-	      bufferLength = analyser.frequencyBinCount;
-	      // half the FFT value
-	      dataArray = new Uint8Array(bufferLength);
-	      // create an array to store the data
+	        canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
 
+	        draw();
+	      })();
+	    } else if (visualSetting == "off") {
 	      canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-
-	      draw();
-	    })();
-	  } else if (visualSetting == "off") {
-	    canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-	    canvasCtx.fillStyle = "red";
-	    canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+	      canvasCtx.fillStyle = "red";
+	      canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+	    }
 	  }
+
+	  function connect(node) {
+	    node.connect(dest);
+	  }
+
+	  return {
+	    init: init,
+	    connect: connect
+	  };
 	}
 
 	exports["default"] = visualize;
