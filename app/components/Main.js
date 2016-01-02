@@ -44,7 +44,7 @@ var drums = [
 var drumController = DrumController(drums, 'drums', 180, drumVol);
 $('#drums').ready(function() {
   drumController.render();
-  var bassElement = document.getElementById('bass')
+  var bassElement = document.getElementById('bass');
   drumController.selectDrum(bassElement);
   drumController.start('drum-status');
   drumController.listen('tempo', 'drum-button', 'drum-type', 'drum-status', 'drum-volume');
@@ -77,7 +77,7 @@ $('.oscillator-container').ready(function() {
     var wave = $(this).val();
     oscillatorCtrl.updateWave(id, wave);
   });
-})
+});
 
 $(document).ready(function() {
   var keyboard = keyboardModel({volumeSelector: "keyboard-volume", oscillators: oscillatorCtrl.oscillators});
