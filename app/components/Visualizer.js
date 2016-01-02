@@ -12,10 +12,10 @@ function visualize(containerId, nodes) {
   var HEIGHT = canvas.height;
   var visualSetting = 'sinewave';
 
-  for (var i = 0; i < nodes.length; i++) {
-    nodes[i].gainNode1.connect(dest);
-  }
   source.connect(analyser);
+  for (var i = 0; i < nodes.length; i++) {
+    nodes[i].connect(dest);
+  }
 
   if (visualSetting == "sinewave") {
     analyser.fftSize = 2048;

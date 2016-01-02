@@ -86,5 +86,9 @@ $(document).ready(function() {
   var keyboardCtrl = keyboardController(keyboard);
   keyboardCtrl.octaves.listen({octaveUpId: "octave-up", octaveDownId: "octave-down"});
 
-  visualizer('top', oscillatorCtrl.oscillators)
+  var nodes = [];
+  for (var i = 0; i < oscillatorCtrl.oscillators.length; i++) {
+    nodes.push(oscillatorCtrl.oscillators[i].gainNode1)
+  }
+  visualizer('top', nodes)
 });

@@ -154,7 +154,11 @@
 	  var keyboardCtrl = (0, _keyboardController2["default"])(keyboard);
 	  keyboardCtrl.octaves.listen({ octaveUpId: "octave-up", octaveDownId: "octave-down" });
 
-	  (0, _Visualizer2["default"])('top', oscillatorCtrl.oscillators);
+	  var nodes = [];
+	  for (var i = 0; i < oscillatorCtrl.oscillators.length; i++) {
+	    nodes.push(oscillatorCtrl.oscillators[i].gainNode1);
+	  }
+	  (0, _Visualizer2["default"])('top', nodes);
 	});
 
 /***/ },
@@ -868,10 +872,10 @@
 	  var HEIGHT = canvas.height;
 	  var visualSetting = 'sinewave';
 
-	  for (var i = 0; i < nodes.length; i++) {
-	    nodes[i].gainNode1.connect(dest);
-	  }
 	  source.connect(analyser);
+	  for (var i = 0; i < nodes.length; i++) {
+	    nodes[i].connect(dest);
+	  }
 
 	  if (visualSetting == "sinewave") {
 	    var bufferLength;
