@@ -868,7 +868,9 @@
 	  var HEIGHT = canvas.height;
 	  var visualSetting = 'sinewave';
 
-	  nodes[0].gainNode1.connect(dest);
+	  for (var i = 0; i < nodes.length; i++) {
+	    nodes[i].gainNode1.connect(dest);
+	  }
 	  source.connect(analyser);
 
 	  if (visualSetting == "sinewave") {
