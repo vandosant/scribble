@@ -17,10 +17,14 @@ body {
 .container {
   width: 30%;
   margin: .6em auto;
-  padding: .6em .6em 1.2em .6em;
   background-color: #eeeeee;
   border: .4em solid $primary-color;
   text-align: center;
+}
+
+.padded-container {
+  @extend .container;
+  padding: .6em;
 }
 
 .oscillator-container {
@@ -271,4 +275,8 @@ input[type="range"]::-webkit-slider-thumb {
 
 #tempo {
   width: 4em;
+}
+
+#top {
+  width: 100%;
 }
