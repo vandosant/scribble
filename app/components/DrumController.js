@@ -138,9 +138,9 @@ function DrumController(drums, containerId, tempo, volume) {
   }
 
   function setVolume(volumeModifier) {
-    var that = this;
+    var context = this;
     for (var i = 0; i < drums.length; i++) {
-      that.drums[i][drums[i].identifier].machine.gainVal = that.startVolume * volumeModifier;
+      context.drums[i][drums[i].identifier].machine.gainVal = context.startVolume * volumeModifier;
     }
   }
 
