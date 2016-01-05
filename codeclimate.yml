@@ -4,3 +4,6 @@ languages:
 exclude_paths:
 - "public/vendors/javascripts/jquery.2.1.1.js"
 - "public/bundle.js"
+engines:
+  esnext:
+    enabled: true
