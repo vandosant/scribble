@@ -1,5 +1,5 @@
 // Karma configuration
-// Generated on Fri Apr 24 2015 15:54:43 GMT-0600 (MDT)
+// Generated on Wed Jan 06 2016 22:02:08 GMT-0700 (MST)
 
 module.exports = function(config) {
   config.set({
@@ -15,11 +15,8 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'spec/javascripts/features/*.js',
-      'spec/javascripts/helpers/*.js',
-      'public/javascripts/*.js',
-      'public/vendors/javascripts/*.js'
-
+      { pattern: 'test-context.js', watched: false },
+      'vendors/javascripts/jquery.js'
     ],
 
 
@@ -31,6 +28,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      'test-context.js': ['webpack']
     },
 
 
@@ -39,7 +37,17 @@ module.exports = function(config) {
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress'],
 
-
+    webpack: {
+      module: {
+        loaders: [
+          { test: /\.js/, exclude: /node_modules/, loader: 'babel-loader' }
+        ]
+      },
+      watch: true
+    },
+    webpackServer: {
+      noInfo: true
+    },
     // web server port
     port: 9876,
 
@@ -65,5 +73,5 @@ module.exports = function(config) {
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false
-  });
+  })
 };

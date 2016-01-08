@@ -350,9 +350,11 @@
 	      that.keyup(e);
 	    });
 	    var volumeElement = document.getElementById(volumeSelector);
-	    volumeElement.addEventListener('change', function () {
-	      that.updateVolume(this.value);
-	    });
+	    if (volumeElement) {
+	      volumeElement.addEventListener('change', function () {
+	        that.updateVolume(this.value);
+	      });
+	    }
 
 	    muteIfHidden();
 	  };

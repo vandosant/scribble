@@ -1,3 +1,5 @@
+import oscillatorController from '../../../app/components/OscillatorController.js';
+
 describe("OscillatorController", function () {
   it("should initialize", function() {
     var oscillatorCtrl = oscillatorController({oscillators: [], initialVolume: 0, initialFrequency: 261.63});
@@ -6,8 +8,6 @@ describe("OscillatorController", function () {
   });
 
   it("should create oscillators upon initialization", function() {
-    context = new AudioContext();
-
     var oscillators = [];
     var oscillatorCtrl = oscillatorController({oscillators: oscillators, initialVolume: 0, initialFrequency: 261.63});
 

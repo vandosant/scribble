@@ -1,3 +1,5 @@
+import keyboard from '../../../app/components/Keyboard.js';
+
 describe("keyboard", function () {
   var keyboardInstance;
 

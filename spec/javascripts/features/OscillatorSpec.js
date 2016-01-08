@@ -1,3 +1,6 @@
+import oscillator from '../../../app/components/Oscillator.js';
+import round from '../helpers/Helpers.js';
+
 describe("oscillator", function () {
   var contextClass = (window.AudioContext ||
     window.webkitAudioContext ||

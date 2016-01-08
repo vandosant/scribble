@@ -1,3 +1,6 @@
+import drumMachine from '../../../app/components/DrumMachine';
+import context from '../../../app/components/Context';
+
 describe("drumMachine", function () {
   var contextClass = (window.AudioContext ||
     window.webkitAudioContext ||
