@@ -3,10 +3,10 @@ import round from '../helpers/Helpers.js';
 
 describe("oscillator", function () {
   var contextClass = (window.AudioContext ||
-    window.webkitAudioContext ||
-    window.mozAudioContext ||
-    window.oAudioContext ||
-    window.msAudioContext);
+  window.webkitAudioContext ||
+  window.mozAudioContext ||
+  window.oAudioContext ||
+  window.msAudioContext);
   var context = new contextClass();
   var oscillatorInstance;
   var initialFrequency = 261.63;
