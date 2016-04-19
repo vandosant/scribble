@@ -7,7 +7,15 @@ import DrumController from "./DrumController";
 import drumMachine from "./DrumMachine";
 import oscillator from "./Oscillator";
 import visualizer from "./Visualizer";
+import recorder from "./Recorder";
 
+recorder({record: "#record", stop: "#stop", play: "#play"})
+.then(function(stream) {
+  console.log("stream available")
+})
+.catch(function(err) {
+  console.error('Error:', err);
+});
 var drumVol = 1.3;
 var viz = visualizer();
 var drums = [

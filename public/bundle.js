@@ -80,8 +80,17 @@
 
 	var _Visualizer2 = _interopRequireDefault(_Visualizer);
 
-	__webpack_require__(9);
+	var _Recorder = __webpack_require__(9);
 
+	var _Recorder2 = _interopRequireDefault(_Recorder);
+
+	__webpack_require__(10);
+
+	(0, _Recorder2["default"])({ record: "#record", stop: "#stop", play: "#play" }).then(function (stream) {
+	  console.log("stream available");
+	})["catch"](function (err) {
+	  console.error('Error:', err);
+	});
 	var drumVol = 1.3;
 	var viz = (0, _Visualizer2["default"])();
 	var drums = [{
@@ -976,20 +985,59 @@
 
 /***/ },
 /* 9 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(10);
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	function gUM() {
+	  return new Promise(function (res, rej) {
+	    if (!navigator.getUserMedia) {
+	      return rej('getUserMedia not supported');
+	    }
+	    navigator.getUserMedia({ audio: true }, res, rej);
+	  });
+	}
+
+	exports['default'] = function (options) {
+	  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
+	  return gUM().then(function (stream) {
+	    var mediaRecorder = new MediaRecorder(stream);
+	    document.querySelector(options['record']).onclick = function handleRecord() {
+	      mediaRecorder.start();
+	      console.log('now recordering');
+	    };
+	    document.querySelector(options['stop']).onclick = function handleStop() {
+	      mediaRecorder.stop();
+	      console.log('not recordering');
+	    };
+	  })['catch'](function (err) {
+	    console.error(err);
+	  });
+	};
+
+	;
+	module.exports = exports['default'];
 
 /***/ },
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(11);
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(11);
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(12);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
