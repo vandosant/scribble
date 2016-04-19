@@ -4,7 +4,7 @@
   "description": "[![Code Climate](https://codeclimate.com/github/vandosant/web-synthesizer/badges/gpa.svg)](https://codeclimate.com/github/vandosant/web-synthesizer)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "watch": "webpack -w"
   },
   "repository": {
     "type": "git",
