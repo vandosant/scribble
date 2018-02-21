@@ -1,17 +1,17 @@
-require('expose?$!expose?jQuery!jquery');
-import context from "./Context";
-import keyboardModel from "./Keyboard";
-import keyboardController from "./keyboardController";
-import oscillatorController from "./OscillatorController";
-import DrumController from "./DrumController";
-import drumMachine from "./DrumMachine";
-import oscillator from "./Oscillator";
-import visualizer from "./Visualizer";
-import recorder from "./Recorder";
+require('expose-loader?$!expose-loader?jQuery!jquery');
+import context from './Context';
+import keyboardModel from './Keyboard';
+import keyboardController from './keyboardController';
+import oscillatorController from './OscillatorController';
+import DrumController from './DrumController';
+import drumMachine from './DrumMachine';
+import oscillator from './Oscillator';
+import visualizer from './Visualizer';
+import recorder from './Recorder';
 
-recorder({record: "#record", stop: "#stop", play: "#play"})
+recorder({record: '#record', stop: '#stop', play: '#play'})
 .then(function(stream) {
-  console.log("stream available")
+  console.log('stream available')
 })
 .catch(function(err) {
   console.error('Error:', err);
@@ -72,7 +72,7 @@ var drums = [
   }
 ];
 var drumController = DrumController(drums, 'drums', 180, drumVol);
-$('#drums').ready(function () {
+document.addEventListener('DOMContentLoaded', function () {
   drumController.render();
   var bassElement = document.getElementById('bass');
   drumController.selectDrum(bassElement);
@@ -88,37 +88,44 @@ var oscillatorCtrl = oscillatorController({
 });
 oscillatorCtrl.initialize();
 
-$('.oscillator-container').ready(function () {
-  $('.oscillator-mode').change(function () {
+document.addEventListener('DOMContentLoaded', function () {
+  const oscillatorMode = document.querySelector('.oscillator-mode')
+  oscillatorMode.addEventListener('change', function (event) {
+    event.preventDefault();
     var modes = {
       standard: ['sine', 'sine', 'triangle'],
       raspy: ['sine', 'square', 'sawtooth'],
       organ: ['sine', 'sine', 'sine'],
       game: ['square', 'sine', 'triangle']
     };
-    var mode = $(this).val();
+    const mode = event.target.value;
     oscillatorCtrl.update(modes[mode]);
-    $('.oscillator-wave').each(function (oscSelector) {
-      $(this).val(modes[mode][oscSelector])
-    });
+    const oscillatorWaves = document.querySelector('.oscillator-wave');
+    for (let i = 0; i < oscillatorWaves.length; i++) {
+      oscillatorMode.value = modes[mode][oscillatorWaves[i]]
+    }
   });
-  $('.oscillator-wave').change(function () {
+  const oscillatorWaves = document.querySelector('.oscillator-wave');
+  oscillatorMode.addEventListener('change', function (event) {
+    debugger
+    event.preventDefault();
     var id = Number(this.id);
-    var wave = $(this).val();
+    var wave = event.element.value;
     oscillatorCtrl.updateWave(id, wave);
   });
 });
 
-$(document).ready(function () {
-  var keyboard = keyboardModel({volumeSelector: "keyboard-volume", oscillators: oscillatorCtrl.oscillators});
+document.addEventListener('DOMContentLoaded', function () {
+  var keyboard = keyboardModel({volumeSelector: 'keyboard-volume', oscillators: oscillatorCtrl.oscillators});
   keyboard.initialize();
 
   var keyboardCtrl = keyboardController(keyboard);
-  keyboardCtrl.octaves.listen({octaveUpId: "octave-up", octaveDownId: "octave-down"});
+  keyboardCtrl.octaves.listen({octaveUpId: 'octave-up', octaveDownId: 'octave-down'});
 
   var nodes = [];
   for (var i = 0; i < oscillatorCtrl.oscillators.length; i++) {
     nodes.push(oscillatorCtrl.oscillators[i].gainNode1)
   }
-  viz.init("top", nodes);
-});
+  viz.init('top', nodes);
+
+})
