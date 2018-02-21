@@ -18,10 +18,5 @@ module.exports = {
           options: '$'
       }]
     }]
-  },
-  resolve: {
-    alias: {
-      jquery: "../../vendors/javascripts/jquery"
-    }
   }
 };

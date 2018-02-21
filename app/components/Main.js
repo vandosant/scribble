@@ -90,7 +90,7 @@ oscillatorCtrl.initialize();
 
 document.addEventListener('DOMContentLoaded', function () {
   const oscillatorMode = document.querySelector('.oscillator-mode')
-  oscillatorMode.addEventListener('change', function (event) {
+  oscillatorMode.addEventListener('change', function _updatOscillatorMode(event) {
     event.preventDefault();
     var modes = {
       standard: ['sine', 'sine', 'triangle'],
@@ -99,19 +99,18 @@ document.addEventListener('DOMContentLoaded', function () {
       game: ['square', 'sine', 'triangle']
     };
     const mode = event.target.value;
-    oscillatorCtrl.update(modes[mode]);
-    const oscillatorWaves = document.querySelector('.oscillator-wave');
+    oscillatorCtrl.setMode(modes[mode]);
+    const oscillatorWaves = document.querySelectorAll('.oscillator-wave');
     for (let i = 0; i < oscillatorWaves.length; i++) {
-      oscillatorMode.value = modes[mode][oscillatorWaves[i]]
+      oscillatorWaves[i].value = modes[mode][i]
     }
   });
-  const oscillatorWaves = document.querySelector('.oscillator-wave');
-  oscillatorMode.addEventListener('change', function (event) {
-    debugger
+
+  const oscillatorWave = document.querySelector('.oscillator-wave');
+  oscillatorWave.addEventListener('change', function _updateOscillatorWave(event) {
     event.preventDefault();
     var id = Number(this.id);
-    var wave = event.element.value;
-    oscillatorCtrl.updateWave(id, wave);
+    oscillatorCtrl.updateWave(id, event.target.value);
   });
 });
 

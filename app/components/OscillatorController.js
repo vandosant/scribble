@@ -31,21 +31,20 @@ function oscillatorController(options) {
     connectOscillators();
   };
 
-  var update = function (options) {
+  var setMode = function (options = []) {
     var id = 1;
-    options.forEach(function (wave) {
-      oscillators.forEach(function (osc) {
-        osc.updateWave(id, wave);
-      });
-      id++;
-    });
+    for (let i = 0; i < options.length; i++) {
+      for(let j = 0; j < oscillators.length; j++) {
+        oscillators[j].updateWave(i+1, options[i])
+      }
+    }
   };
 
   return {
-    initialize: initialize,
-    update: update,
-    updateWave: updateWave,
-    oscillators: oscillators
+    initialize,
+    setMode,
+    updateWave,
+    oscillators
   };
 }
 
