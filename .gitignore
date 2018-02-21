@@ -1,4 +1,8 @@
 npm-debug.log
 .sass-cache/
 node_modules
-public/*
+public/bundle.js
+public/stylesheets/variables.css
+public/stylesheets/variables.css.map
+public/stylesheets/application.css
+public/stylesheets/application.css.map

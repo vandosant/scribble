@@ -1,0 +1,282 @@
+@import "variables";
+
+body {
+  width: 100%;
+  font-family: 'Geo', sans-serif;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.title {
+  font-family: 'Cedarville Cursive', cursive;
+  font-size: 1.8em;
+  color: $fourth-color
+}
+
+.container {
+  width: 30%;
+  margin: .6em auto;
+  background-color: #eeeeee;
+  border: .4em solid $primary-color;
+  text-align: center;
+}
+
+.padded-container {
+  @extend .container;
+  padding: .6em;
+}
+
+.oscillator-container {
+  width: 70%;
+  margin: .6em auto;
+  text-align: center;
+  border: none;
+  padding: 0;
+  background: none;
+  select {
+    background: white;
+    border-radius: 0px;
+    outline: none;
+  }
+}
+
+button {
+  font-size: 1em;
+  font-family: 'Geo', sans-serif;
+  background: #fff;
+  border: 2px solid $second-color;
+  outline: none;
+}
+
+input[type='range'] {
+  -webkit-appearance: none;
+  background-color: rgba(192, 192, 192, .7);
+  width: 200px;
+  height: 20px;
+  border-radius: 2em;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  background-color: $fifth-color;
+  border: 2px solid $fourth-color;
+  width: 2em;
+  height: 2em;
+  border-radius: 2em;
+}
+
+.keyboard {
+  margin: 0 auto;
+  width: 18em;
+}
+
+.keyboard-container:before,
+.keyboard-container:after {
+  overflow: hidden;
+  display: block;
+  zoom: 1;
+  content: ' ';
+}
+
+.keyboard-container:after {
+  clear: both;
+}
+
+.key {
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 10em;
+  width: 2em;
+  border: .3em solid black;
+  background: #fff;
+}
+
+.key + .key {
+  margin-left: .25em;
+}
+
+.black-key {
+  float: left;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  height: 7em;
+  width: 1.4em;
+  border: .3em solid black;
+  background: #000;
+  margin-left: -.6em;
+  margin-right: -.6em;
+}
+
+.keyon {
+  background: $third-color;
+}
+
+.octave {
+  margin: 0 auto;
+  width: 32.1%;
+  cursor: pointer;
+  text-transform: capitalize;
+  #octave-down {
+    float: left;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 10em;
+    width: 2em;
+    border: .3em solid black;
+    background: #fff;
+  }
+  #octave-up {
+    float: right;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 10em;
+    width: 2em;
+    border: .3em solid black;
+    background: #fff;
+  }
+  .octave-text {
+    font-size: .9em;
+    margin-top: 200%;
+  }
+}
+
+.drum-machine {
+  margin: .5em auto;
+  width: 80%;
+  text-align: center;
+}
+
+.drum-container > .drum-button {
+  margin-bottom: .2em;
+}
+
+.drum-button + .drum-button {
+  margin-left: .2em;
+}
+
+.drum-button {
+  width: 3em;
+  height: 1em;
+  border: .3em solid black;
+  cursor: pointer;
+  display: inline-block;
+  line-height: .9em;
+  &:hover {
+    display: inline-block;
+    background: $second-color;
+  }
+}
+
+.drum-button:hover {
+
+}
+
+.drum-button-active {
+  border: .3em solid $primary-color;
+}
+
+.drum-button-selected {
+  background: $second-color;
+}
+
+.drum-type {
+  @extend .drum-button;
+  line-height: 1em;
+  &:hover,
+  &.drum-button-selected {
+    background: $fifth-color;
+  }
+}
+
+#play, #pause, #fwd, #rew {
+  width: 80px;
+  height: 80px;
+  background: white;
+  position: relative;
+  display: block;
+  cursor: hand;
+}
+
+#play:before {
+  width: 0;
+  height: 0;
+  border-left: 15px solid $fourth-color;
+  border-right: 15px solid transparent;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  position: absolute;
+  content: "";
+  top: 2px;
+  left: 40px;
+}
+
+#pause:before {
+  width: 8px;
+  height: 25px;
+  background: $fourth-color;
+  position: absolute;
+  content: "";
+  top: 5px;
+  left: 35px;
+}
+
+#pause:after {
+  width: 8px;
+  height: 25px;
+  background: $fourth-color;
+  position: absolute;
+  content: "";
+  top: 5px;
+  right: 25px;
+}
+
+#drum-properties {
+  overflow: hidden;
+  width: 25%;
+  margin: 0 auto;
+  ul {
+    li {
+      float: left;
+      list-style-type: none;
+      padding-left: 1em;
+    }
+    input[type='range'] {
+      width: 100px;
+      height: 9px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      width: 1em;
+      height: 1em;
+    }
+  }
+}
+
+.oscillator {
+  display: inline-block;
+  height: 3em;
+  width: 6em;
+  padding-top: .3em;
+  background: $second-color;
+  border: .4em solid $fourth-color;
+}
+
+.oscillator-modes {
+  @extend .oscillator;
+  background: $third-color;
+}
+
+#tempo {
+  width: 4em;
+}
+
+#top {
+  width: 100%;
+}
