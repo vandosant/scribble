@@ -2,8 +2,7 @@ languages:
   Ruby: true
   JavaScript: true
 exclude_paths:
-- public/vendors/javascripts/jquery.2.1.1.js
-- public/bundle.js
+- public/**
 engines:
   esnext:
     enabled: true
