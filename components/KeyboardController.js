@@ -20,7 +20,7 @@ function keyboardController(keyboard) {
   };
 
   return {
-    octaves: octaves
+    octaves
   };
 }
 

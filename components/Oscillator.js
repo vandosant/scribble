@@ -61,20 +61,20 @@ function oscillator(context, frequency, volume) {
   }
 
   return {
-    context: context,
-    osc1: osc1,
-    osc2: osc2,
-    osc3: osc3,
-    gainNode1: gainNode1,
-    gainNode2: gainNode2,
-    gainNode3: gainNode3,
-    frequency: frequency,
-    volume: volume,
-    connect: connect,
-    disconnect: disconnect,
-    updateVolume: updateVolume,
-    updateNote: updateNote,
-    updateWave: updateWave
+    context,
+    osc1,
+    osc2,
+    osc3,
+    gainNode1,
+    gainNode2,
+    gainNode3,
+    frequency,
+    volume,
+    connect,
+    disconnect,
+    updateVolume,
+    updateNote,
+    updateWave
   };
 }
 

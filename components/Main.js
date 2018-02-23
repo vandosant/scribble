@@ -1,5 +1,5 @@
 require('expose-loader?$!expose-loader?jQuery!jquery');
-import context from './Context';
+import context, { init } from './Context';
 import keyboardModel from './Keyboard';
 import keyboardController from './keyboardController';
 import oscillatorController from './OscillatorController';
@@ -10,13 +10,17 @@ import visualizer from './Visualizer';
 import recorder from './Recorder';
 import '../styles/application.scss';
 
-recorder({record: '#record', stop: '#stop', play: '#play'})
-.then(function(stream) {
-  console.log('stream available')
+recorder({
+  record: '#record',
+  stop: '#stop',
+  play: '#play'
 })
-.catch(function(err) {
-  console.error('Error:', err);
-});
+  .then(function(stream) {
+    console.log('stream available')
+  })
+  .catch(function(err) {
+    console.error('Error:', err);
+  });
 var drumVol = 1.3;
 var viz = visualizer();
 var drums = [
@@ -73,12 +77,15 @@ var drums = [
   }
 ];
 var drumController = DrumController(drums, 'drums', 180, drumVol);
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
   drumController.render();
-  var bassElement = document.getElementById('bass');
-  drumController.selectDrum(bassElement);
+  drumController.selectDrum(document.getElementById('bass'));
   drumController.start('drum-status');
   drumController.listen('tempo', 'drum-button', 'drum-type', 'drum-status', 'drum-volume');
+});
+
+document.addEventListener('keydown', (event) => {
+  init();
 });
 
 var oscillatorCtrl = oscillatorController({

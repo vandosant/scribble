@@ -1,5 +1,7 @@
-var context = (function () {
-  var contextClass = (window.AudioContext ||
+let contextClass;
+
+const context = (function () {
+  contextClass = (window.AudioContext ||
   window.webkitAudioContext ||
   window.mozAudioContext ||
   window.oAudioContext ||
@@ -13,5 +15,11 @@ var context = (function () {
     return undefined;
   }
 }());
+
+export const init = () => {
+  if (context.state !== 'running') {
+    context.resume()
+  }
+}
 
 export default context;
