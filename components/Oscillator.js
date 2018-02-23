@@ -39,9 +39,9 @@ function oscillator(context, frequency, volume) {
 
   function updateVolume(value) {
     this.volume = value;
-    this.gainNode1.gain.value = value;
-    this.gainNode2.gain.value = value;
-    this.gainNode3.gain.value = value * 0.8;
+    this.gainNode1.gain.setTargetAtTime(value, context.currentTime + 0.00001, 0.3);
+    this.gainNode2.gain.setTargetAtTime(value, context.currentTime + 0.00001, 0.3);
+    this.gainNode3.gain.setTargetAtTime(value * 0.8, context.currentTime + 0.00001, 0.3);
   }
 
   function updateNote(value) {
