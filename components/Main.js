@@ -127,7 +127,8 @@ document.addEventListener('DOMContentLoaded', function () {
   keyboard.initialize();
 
   var keyboardCtrl = keyboardController(keyboard);
-  keyboardCtrl.octaves.listen({octaveUpId: 'octave-up', octaveDownId: 'octave-down'});
+  document.getElementById('octave-up').addEventListener("click", keyboardCtrl.handleOctaveIncreased);
+  document.getElementById('octave-down').addEventListener("click", keyboardCtrl.handleOctaveDecreased);
 
   var nodes = [];
   for (var i = 0; i < oscillatorCtrl.oscillators.length; i++) {

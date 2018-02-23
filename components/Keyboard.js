@@ -143,13 +143,13 @@ function keyboardModel(obj) {
   };
 
   return {
-    initialize: initialize,
-    keys: keys,
-    keydown: keydown,
-    keyup: keyup,
-    updateVolume: updateVolume,
-    volume: volume,
-    volumeSelector: volumeSelector
+    initialize,
+    keys,
+    keydown,
+    keyup,
+    updateVolume,
+    volume,
+    volumeSelector
   }
 }
 
