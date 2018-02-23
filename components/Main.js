@@ -8,6 +8,7 @@ import drumMachine from './DrumMachine';
 import oscillator from './Oscillator';
 import visualizer from './Visualizer';
 import recorder from './Recorder';
+import '../styles/application.scss';
 
 recorder({record: '#record', stop: '#stop', play: '#play'})
 .then(function(stream) {
