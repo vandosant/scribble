@@ -1,9 +1,10 @@
-function gUM() {
-  return new Promise(function (res, rej) {
+function getUserMedia () {
+  return new Promise(function (resolve, reject) {
     if (!navigator.getUserMedia) {
-      return rej('getUserMedia not supported');
+      console.error('getUserMedia not supported')
+      return reject(new Error('getUserMedia not supported'))
     }
-    navigator.getUserMedia({audio: true}, res, rej);
+    navigator.getUserMedia({ audio: true }, resolve, reject)
   })
 }
 
@@ -11,21 +12,36 @@ export default function (options) {
   navigator.getUserMedia = navigator.getUserMedia ||
   navigator.webkitGetUserMedia ||
   navigator.mozGetUserMedia ||
-  navigator.msGetUserMedia;
+  navigator.msGetUserMedia
+  let mediaRecorder
+  let chunks = []
 
-  return gUM()
+  return getUserMedia()
     .then(function (stream) {
-      var mediaRecorder = new MediaRecorder(stream);
-      document.querySelector(options['record']).onclick = function handleRecord() {
-        mediaRecorder.start();
-        console.log('now recordering');
+      mediaRecorder = new MediaRecorder(stream)
+
+      mediaRecorder.ondataavailable = function (e) {
+        console.log('new data')
+        chunks.push(e.data)
       }
-      document.querySelector(options['stop']).onclick = function handleStop() {
-        mediaRecorder.stop();
-        console.log('not recordering');
+
+      mediaRecorder.onstop = function(e) {
+        console.log("data available after MediaRecorder.stop() called.")
+        const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' })
+        chunks = []
+        var audioURL = URL.createObjectURL(blob)
+        console.log(audioURL)
+      }
+      return {
+        handleStop: function () {
+          mediaRecorder.stop()
+        },
+        handleStart: function () {
+          mediaRecorder.start()
+        }
       }
     })
     .catch(function (err) {
-      console.error(err);
-  })
+      console.error(err)
+    })
 };

@@ -1,4 +1,5 @@
-let contextClass;
+import $ from 'jquery'
+let contextClass
 
 const context = (function () {
   contextClass = (window.AudioContext ||
