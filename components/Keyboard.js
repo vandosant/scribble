@@ -1,3 +1,4 @@
+import $ from 'jquery'
 function keyboardModel(obj) {
   var volumeSelector, volume, keysDown, keys, oscillators;
 
