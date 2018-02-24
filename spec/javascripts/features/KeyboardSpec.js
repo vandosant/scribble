@@ -10,7 +10,7 @@ describe('keyboard', function () {
     keyboardInstance.initialize()
   })
 
-  it('should listen for keydown events', function () {
+  test('should listen for keydown events', function () {
     sinon.spy(keyboardInstance, 'keydown')
     var keyDownEvent = jQuery.Event('keydown')
     keyDownEvent.keyCode = 65
@@ -19,7 +19,7 @@ describe('keyboard', function () {
     assert(keyboardInstance.keydown.calledOnce)
   })
 
-  it('should listen for keyup events', function () {
+  test('should listen for keyup events', function () {
     spyOn(keyboardInstance, 'keyup')
     var keyUpEvent = jQuery.Event('keyup')
     keyUpEvent.keyCode = 65
@@ -28,21 +28,21 @@ describe('keyboard', function () {
     expect(keyboardInstance.keyup).toHaveBeenCalled()
   })
 
-  it('should set a default volume on creation', function () {
+  test('should set a default volume on creation', function () {
     expect(keyboardInstance.volume).toEqual(.25)
   })
 
-  it('should accept a volume on creation', function () {
+  test('should accept a volume on creation', function () {
     keyboardInstance = keyboard({volume: .25})
     expect(keyboardInstance.volume).toEqual(.25)
   })
 
-  it('should accept a volume selector on creation', function () {
+  test('should accept a volume selector on creation', function () {
     keyboardInstance = keyboard({volumeSelector: '.test-selector'})
     expect(keyboardInstance.volumeSelector).toEqual('.test-selector')
   })
 
-  it('should update the volume', function () {
+  test('should update the volume', function () {
     var firstVolume = keyboardInstance.volume
 
     keyboardInstance.updateVolume(65)
