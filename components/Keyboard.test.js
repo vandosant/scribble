@@ -11,24 +11,6 @@ describe('keyboard', function () {
     keyboardInstance.initialize()
   })
 
-  test('should listen for keydown events', function () {
-    sinon.spy(keyboardInstance, 'keydown')
-    let keyDownEvent = $.Event('keydown')
-    keyDownEvent.keyCode = 65
-    $(document).trigger(keyDownEvent)
-
-    assert(keyboardInstance.keydown.calledOnce)
-  })
-
-  test('should listen for keyup events', function () {
-    sinon.spy(keyboardInstance, 'keyup')
-    let keyUpEvent = $.Event('keyup')
-    keyUpEvent.keyCode = 65
-    $(document).trigger(keyUpEvent)
-
-    assert(keyboardInstance.keyup.calledOnce)
-  })
-
   test('should set a default volume on creation', function () {
     assert.equal(keyboardInstance.volume, 0.25)
   })
