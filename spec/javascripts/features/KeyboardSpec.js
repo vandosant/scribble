@@ -29,12 +29,12 @@ describe('keyboard', function () {
   })
 
   test('should set a default volume on creation', function () {
-    expect(keyboardInstance.volume).toEqual(.25)
+    expect(keyboardInstance.volume).toEqual(0.25)
   })
 
   test('should accept a volume on creation', function () {
-    keyboardInstance = keyboard({volume: .25})
-    expect(keyboardInstance.volume).toEqual(.25)
+    keyboardInstance = keyboard({volume: 0.25})
+    expect(keyboardInstance.volume).toEqual(0.25)
   })
 
   test('should accept a volume selector on creation', function () {

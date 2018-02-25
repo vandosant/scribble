@@ -1,82 +1,81 @@
-import context from "./Context";
+import context from './Context'
 
-var drawVisual;
-var analyser = context.createAnalyser();
+var drawVisual
+var analyser = context.createAnalyser()
 
-function visualize() {
-  var canvas;
-  var dest;
+function visualize () {
+  var canvas
+  var dest
 
-  function init(containerId, nodes) {
-    canvas = document.getElementById(containerId);
-    dest = context.createMediaStreamDestination();
-    var source = context.createMediaStreamSource(dest.stream);
-    var canvasCtx = canvas.getContext("2d");
-    var WIDTH = canvas.width;
-    var HEIGHT = canvas.height;
-    var visualSetting = 'sinewave';
+  function init (containerId, nodes) {
+    canvas = document.getElementById(containerId)
+    dest = context.createMediaStreamDestination()
+    var source = context.createMediaStreamSource(dest.stream)
+    var canvasCtx = canvas.getContext('2d')
+    var WIDTH = canvas.width
+    var HEIGHT = canvas.height
+    var visualSetting = 'sinewave'
 
-    source.connect(analyser);
+    source.connect(analyser)
     for (var i = 0; i < nodes.length; i++) {
-      nodes[i].connect(dest);
+      nodes[i].connect(dest)
     }
 
-    if (visualSetting == "sinewave") {
-      analyser.fftSize = 2048;
-      var bufferLength = analyser.frequencyBinCount; // half the FFT value
-      var dataArray = new Uint8Array(bufferLength); // create an array to store the data
+    if (visualSetting == 'sinewave') {
+      analyser.fftSize = 2048
+      var bufferLength = analyser.frequencyBinCount // half the FFT value
+      var dataArray = new Uint8Array(bufferLength) // create an array to store the data
 
-      canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+      canvasCtx.clearRect(0, 0, WIDTH, HEIGHT)
 
-      function draw() {
-        drawVisual = requestAnimationFrame(draw);
+      function draw () {
+        drawVisual = requestAnimationFrame(draw)
 
-        analyser.getByteTimeDomainData(dataArray); // get waveform data and put it into the array created above
+        analyser.getByteTimeDomainData(dataArray) // get waveform data and put it into the array created above
 
-        canvasCtx.fillStyle = 'rgb(200, 200, 200)'; // draw wave with canvas
-        canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+        canvasCtx.fillStyle = 'rgb(200, 200, 200)' // draw wave with canvas
+        canvasCtx.fillRect(0, 0, WIDTH, HEIGHT)
 
-        canvasCtx.lineWidth = 2;
-        canvasCtx.strokeStyle = 'rgb(0, 0, 0)';
+        canvasCtx.lineWidth = 2
+        canvasCtx.strokeStyle = 'rgb(0, 0, 0)'
 
-        canvasCtx.beginPath();
-        var sliceWidth = WIDTH * 1.0 / bufferLength;
-        var x = 0;
+        canvasCtx.beginPath()
+        var sliceWidth = WIDTH * 1.0 / bufferLength
+        var x = 0
 
         for (var i = 0; i < bufferLength; i++) {
-          var v = dataArray[i] / 128.0;
-          var y = v * HEIGHT / 2;
+          var v = dataArray[i] / 128.0
+          var y = v * HEIGHT / 2
 
           if (i === 0) {
-            canvasCtx.moveTo(x, y);
+            canvasCtx.moveTo(x, y)
           } else {
-            canvasCtx.lineTo(x, y);
+            canvasCtx.lineTo(x, y)
           }
 
-          x += sliceWidth;
+          x += sliceWidth
         }
 
-        canvasCtx.lineTo(canvas.width, canvas.height / 2);
-        canvasCtx.stroke();
+        canvasCtx.lineTo(canvas.width, canvas.height / 2)
+        canvasCtx.stroke()
       }
 
-      draw();
-
-    } else if (visualSetting == "off") {
-      canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-      canvasCtx.fillStyle = "red";
-      canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+      draw()
+    } else if (visualSetting == 'off') {
+      canvasCtx.clearRect(0, 0, WIDTH, HEIGHT)
+      canvasCtx.fillStyle = 'red'
+      canvasCtx.fillRect(0, 0, WIDTH, HEIGHT)
     }
   }
 
-  function connect(node) {
-    node.connect(dest);
+  function connect (node) {
+    node.connect(dest)
   }
 
   return {
     init: init,
     connect: connect
-  };
+  }
 }
 
-export default visualize;
+export default visualize

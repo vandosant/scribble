@@ -6,16 +6,16 @@ const context = (function () {
   window.webkitAudioContext ||
   window.mozAudioContext ||
   window.oAudioContext ||
-  window.msAudioContext);
+  window.msAudioContext)
 
-  if (contextClass && contextClass.state === "running") {
+  if (contextClass && contextClass.state === 'running') {
   } else if (contextClass) {
-    return new contextClass();
+    return new contextClass()
   } else {
-    $(document).append('<div class="errors">Sorry, your browser is not supported.</div>');
-    return undefined;
+    $(document).append('<div class="errors">Sorry, your browser is not supported.</div>')
+    return undefined
   }
-}());
+}())
 
 export const init = () => {
   if (context.state !== 'running') {
@@ -23,4 +23,4 @@ export const init = () => {
   }
 }
 
-export default context;
+export default context

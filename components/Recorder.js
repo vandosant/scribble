@@ -25,9 +25,9 @@ export default function (options) {
         chunks.push(e.data)
       }
 
-      mediaRecorder.onstop = function(e) {
-        console.log("data available after MediaRecorder.stop() called.")
-        const blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' })
+      mediaRecorder.onstop = function (e) {
+        console.log('data available after MediaRecorder.stop() called.')
+        const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' })
         chunks = []
         var audioURL = URL.createObjectURL(blob)
         console.log(audioURL)

@@ -1,16 +1,16 @@
 import $ from 'jquery'
-function keyboardModel(obj) {
-  var volumeSelector, volume, keysDown, keys, oscillators;
+function keyboardModel (obj) {
+  var volumeSelector, volume, keysDown, keys, oscillators
 
-  keysDown = [];
+  keysDown = []
   if (obj && obj.volume) {
-    volume = obj.volume;
+    volume = obj.volume
   } else {
-    volume = 0.25;
+    volume = 0.25
   }
 
   if (obj && obj.volumeSelector) {
-    volumeSelector = obj.volumeSelector;
+    volumeSelector = obj.volumeSelector
   }
 
   oscillators = obj.oscillators
@@ -81,36 +81,36 @@ function keyboardModel(obj) {
       index: 12,
       freq: 523.25
     }
-  };
+  }
 
-  var keydown = function keydown(keyChar) {
-    var that = this;
+  var keydown = function keydown (keyChar) {
+    var that = this
     if (keysDown.indexOf(keyChar.which) === -1) {
-      var char = String.fromCharCode(keyChar.which);
-      var key = keys[char];
+      var char = String.fromCharCode(keyChar.which)
+      var key = keys[char]
       if (key) {
-        oscillators[key.index].updateNote(key.freq);
-        oscillators[key.index].updateVolume(that.volume);
-        keysDown.push(keyChar.which);
-        $("#key-" + char).addClass("keyon");
+        oscillators[key.index].updateNote(key.freq)
+        oscillators[key.index].updateVolume(that.volume)
+        keysDown.push(keyChar.which)
+        $('#key-' + char).addClass('keyon')
       }
     }
-  };
+  }
 
   var keyup = function (keyChar) {
-    var char = String.fromCharCode(keyChar.which);
-    var key = keys[char];
-    var keyIndex = keysDown.indexOf(keyChar.which);
+    var char = String.fromCharCode(keyChar.which)
+    var key = keys[char]
+    var keyIndex = keysDown.indexOf(keyChar.which)
     if (keyIndex >= 0) {
-      oscillators[key.index].updateVolume(0);
-      delete keysDown[keyIndex];
-      $("#key-" + char).removeClass("keyon");
+      oscillators[key.index].updateVolume(0)
+      delete keysDown[keyIndex]
+      $('#key-' + char).removeClass('keyon')
     }
-  };
+  }
 
   var updateVolume = function (rangeVal) {
-    this.volume = (rangeVal / 100) * 0.25;
-  };
+    this.volume = (rangeVal / 100) * 0.25
+  }
 
   var muteIfHidden = function () {
     if (typeof document.addEventListener && typeof document.visibilityState) {
@@ -118,30 +118,30 @@ function keyboardModel(obj) {
         if (document.hidden) {
           oscillators.forEach(function (o) {
             o.updateVolume(0)
-          });
+          })
         }
       }, false)
     }
-  };
+  }
 
   var initialize = function () {
-    var that = this;
+    var that = this
     $(document).keydown(function (e) {
-      that.keydown(e);
-    });
+      that.keydown(e)
+    })
 
     $(document).keyup(function (e) {
-      that.keyup(e);
-    });
-    var volumeElement = document.getElementById(volumeSelector);
+      that.keyup(e)
+    })
+    var volumeElement = document.getElementById(volumeSelector)
     if (volumeElement) {
       volumeElement.addEventListener('change', function () {
-        that.updateVolume(this.value);
-      });
+        that.updateVolume(this.value)
+      })
     }
 
-    muteIfHidden();
-  };
+    muteIfHidden()
+  }
 
   return {
     initialize,
@@ -154,4 +154,4 @@ function keyboardModel(obj) {
   }
 }
 
-export default keyboardModel;
+export default keyboardModel

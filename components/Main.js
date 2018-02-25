@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
   })
 
   const oscillatorWave = document.querySelector('.oscillator-wave')
-  oscillatorWave.addEventListener('change', function _updateOscillatorWave(event) {
+  oscillatorWave.addEventListener('change', function _updateOscillatorWave (event) {
     event.preventDefault()
     var id = Number(this.id)
     oscillatorCtrl.updateWave(id, event.target.value)
@@ -137,5 +137,4 @@ document.addEventListener('DOMContentLoaded', function () {
     nodes.push(oscillatorCtrl.oscillators[i].gainNode1)
   }
   viz.init('top', nodes)
-
 })
