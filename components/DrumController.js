@@ -94,23 +94,26 @@ export default function DrumController (drums, containerId, tempo, volume) {
     statusButton.appendChild(statusDiv)
   }
 
-  function selectBeat (button) {
-    button.classList.add('drum-button-selected')
-    var index = parseInt(button.innerText) - 1
-    var id = button.parentNode.getAttribute('id')
-    var type = id.split('-')[1]
-    if (!drums[type].beats[index].selected) {
+  function toggleDrumBeat (e) {
+    const index = parseInt(e.target.innerText) - 1
+    const id = e.target.parentNode.getAttribute('id')
+    const type = id.split('-')[1]
+    if (!e.target.classList.contains('drum-button-selected')) {
+      e.target.classList.add('drum-button-selected')
       drums[type].beats[index].selected = true
+    } else {
+      e.target.classList.remove('drum-button-selected')
+      drums[type].beats[index].selected = false
     }
   }
 
-  function selectDrum (button) {
-    var id = button.id
+  function selectDrum (e) {
+    var id = e.target.id
     var drumTypes = document.getElementsByClassName('drum-type')
     for (var i = 0; i < drumTypes.length; i++) {
       drumTypes[i].classList.remove('drum-button-selected')
     }
-    button.classList.add('drum-button-selected')
+    e.target.classList.add('drum-button-selected')
 
     drums.forEach(function (drum, key) {
       var drumEl = document.getElementById('drum-' + key)
@@ -157,16 +160,12 @@ export default function DrumController (drums, containerId, tempo, volume) {
 
     var drumBeats = document.getElementsByClassName(drumBeatClass)
     for (var i = 0; i < drumBeats.length; i++) {
-      drumBeats[i].addEventListener('click', function __handler__ () {
-        selectBeat(this)
-      })
+      drumBeats[i].addEventListener('click', toggleDrumBeat)
     }
 
     var drumTypes = document.getElementsByClassName(drumTypeClass)
     for (var j = 0; j < drumTypes.length; j++) {
-      drumTypes[j].addEventListener('click', function __handler__ () {
-        selectDrum(this)
-      })
+      drumTypes[j].addEventListener('click', selectDrum)
     }
 
     var statusButton = document.getElementById(statusSelectorId)
@@ -195,7 +194,6 @@ export default function DrumController (drums, containerId, tempo, volume) {
     parseTempo,
     start,
     stop,
-    selectBeat,
     selectDrum,
     setTempo,
     setVolume,

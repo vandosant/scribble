@@ -81,7 +81,7 @@ var drums = [
 const drumController = DrumController(drums, 'drums', 180, drumVol)
 document.addEventListener('DOMContentLoaded', () => {
   drumController.render()
-  drumController.selectDrum(document.getElementById('bass'))
+  drumController.selectDrum({ target: document.getElementById('bass') })
   drumController.start('drum-status')
   drumController.listen({
     tempoId: 'tempo',
