@@ -83,7 +83,13 @@ document.addEventListener('DOMContentLoaded', () => {
   drumController.render()
   drumController.selectDrum(document.getElementById('bass'))
   drumController.start('drum-status')
-  drumController.listen('tempo', 'drum-button', 'drum-type', 'drum-status', 'drum-volume')
+  drumController.listen({
+    tempoId: 'tempo',
+    drumBeatClass: 'drum-button',
+    drumTypeClass: 'drum-type',
+    statusSelectorId: 'drum-status',
+    drumVolumeSelector: 'drum-volume'
+  })
 })
 
 document.addEventListener('keydown', (event) => {

@@ -1,4 +1,4 @@
-function DrumController (drums, containerId, tempo, volume) {
+export default function DrumController (drums, containerId, tempo, volume) {
   var container = document.getElementById(containerId)
 
   function render () {
@@ -142,7 +142,13 @@ function DrumController (drums, containerId, tempo, volume) {
     }
   }
 
-  function listen (tempoId, drumBeatClass, drumTypeClass, statusSelectorId, drumVolumeSelector) {
+  function listen ({
+    tempoId,
+    drumBeatClass,
+    drumTypeClass,
+    statusSelectorId,
+    drumVolumeSelector
+  }) {
     var context = this
     var tempoEl = document.getElementById(tempoId)
     tempoEl.addEventListener('change', function __handler__ () {
@@ -200,5 +206,3 @@ function DrumController (drums, containerId, tempo, volume) {
     listen: listen
   }
 }
-
-export default DrumController
