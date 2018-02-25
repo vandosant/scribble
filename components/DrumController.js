@@ -152,8 +152,7 @@ export default function DrumController (drums, containerId, tempo, volume) {
     var context = this
     var tempoEl = document.getElementById(tempoId)
     tempoEl.addEventListener('change', function __handler__ () {
-      var boundSetTempo = setTempo.bind(context)
-      boundSetTempo(parseInt(this.value), statusSelectorId)
+      setTempo.call(context, parseInt(this.value), statusSelectorId)
     })
 
     var drumBeats = document.getElementsByClassName(drumBeatClass)
@@ -177,32 +176,29 @@ export default function DrumController (drums, containerId, tempo, volume) {
         el.setAttribute('active', 'false')
         stop(statusSelectorId)
       } else {
-        var boundStart = start.bind(context)
-        boundStart(statusSelectorId)
+        start.call(context, statusSelectorId)
       }
     })
 
     var drumVolumeEl = document.getElementById(drumVolumeSelector)
     drumVolumeEl.addEventListener('change', function __handler__ () {
-      var volumeModifier = this.value / 100
-      var boundSetVolume = setVolume.bind(context)
-      boundSetVolume(volumeModifier)
+      setVolume.call(context, this.value / 100)
     })
   }
 
   return {
-    drums: drums,
-    container: container,
-    tempo: tempo,
+    drums,
+    container,
+    tempo,
     startVolume: volume,
-    render: render,
-    parseTempo: parseTempo,
-    start: start,
-    stop: stop,
-    selectBeat: selectBeat,
-    selectDrum: selectDrum,
-    setTempo: setTempo,
-    setVolume: setVolume,
-    listen: listen
+    render,
+    parseTempo,
+    start,
+    stop,
+    selectBeat,
+    selectDrum,
+    setTempo,
+    setVolume,
+    listen
   }
 }
