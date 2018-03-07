@@ -7,7 +7,8 @@
     "watch": "webpack -w",
     "start": "webpack-dev-server --config './webpack.config.js'",
     "test": "jest",
-    "lint": "standard"
+    "lint": "standard",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",

@@ -6,7 +6,6 @@ module.exports = {
   entry: {
     app: './components/Main.js'
   },
-  watch: true,
   output: {
     path: path.join(__dirname, './dist/'),
     filename: '[name].bundle.js'
@@ -22,12 +21,20 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       hash: true,
-      title: 'My Awesome application',
-      myPageHeader: 'Hello World',
+      title: 'scribble',
+      myPageHeader: 'scribble',
       template: './src/index.html',
       chunks: ['vendor', 'shared', 'app'],
       path: path.join(__dirname, './dist/'),
       filename: 'index.html'
+    }),
+    new HtmlWebpackPlugin({
+      hash: true,
+      title: 'Error',
+      template: './src/error.html',
+      chunks: ['vendor', 'shared', 'app'],
+      path: path.join(__dirname, './dist/'),
+      filename: 'error.html'
     })
   ],
   module: {

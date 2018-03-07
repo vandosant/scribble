@@ -5,25 +5,27 @@ import oscillatorController from './OscillatorController'
 import DrumController from './DrumController'
 import drumMachine from './DrumMachine'
 import visualizer from './Visualizer'
-import recorder from './Recorder'
+//import recorder from './Recorder'
 import '../styles/application.scss'
 
-const start = document.querySelector('#record')
-const stop = document.querySelector('#stop')
-recorder()
-  .then(({ handleStart, handleStop }) => {
-    start.onclick = handleStart
-    stop.onclick = handleStop
-  })
+const DRUM_VOL = 1.3
 
-var drumVol = 1.3
-var viz = visualizer()
+//const start = document.querySelector('#record')
+//const stop = document.querySelector('#stop')
+//recorder()
+//  .then(({ handleStart, handleStop }) => {
+//    start.onclick = handleStart
+//    stop.onclick = handleStop
+//  })
+
+const viz = visualizer()
 const drumDefaults = {
   context,
   wave: 'sine',
-  gainVal: drumVol,
+  gainVal: DRUM_VOL,
   viz
 }
+
 var drums = [
   {
     identifier: 'bass',
@@ -78,8 +80,22 @@ var drums = [
   }
 ]
 
-const drumController = DrumController(drums, 'drums', 180, drumVol)
-document.addEventListener('DOMContentLoaded', () => {
+const drumController = DrumController(drums, 'drums', 180, DRUM_VOL)
+
+document.addEventListener('keydown', (event) => {
+  init()
+})
+
+const oscillatorCtrl = oscillatorController({
+  oscillators: [],
+  initialVolume: 0,
+  initialFrequency: 261.63,
+  oscillatorSelector: '.oscillator-wave'
+})
+oscillatorCtrl.initialize()
+
+document.addEventListener('DOMContentLoaded', function () {
+  // drums
   drumController.render()
   drumController.selectDrum({ target: document.getElementById('bass') })
   drumController.start('drum-status')
@@ -90,21 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
     statusSelectorId: 'drum-status',
     drumVolumeSelector: 'drum-volume'
   })
-})
 
-document.addEventListener('keydown', (event) => {
-  init()
-})
-
-var oscillatorCtrl = oscillatorController({
-  oscillators: [],
-  initialVolume: 0,
-  initialFrequency: 261.63,
-  oscillatorSelector: '.oscillator-wave'
-})
-oscillatorCtrl.initialize()
-
-document.addEventListener('DOMContentLoaded', function () {
+  // keys
   const oscillatorMode = document.querySelector('.oscillator-mode')
   oscillatorMode.addEventListener('change', function _updatOscillatorMode (event) {
     event.preventDefault()
@@ -128,19 +131,15 @@ document.addEventListener('DOMContentLoaded', function () {
     var id = Number(this.id)
     oscillatorCtrl.updateWave(id, event.target.value)
   })
-})
 
-document.addEventListener('DOMContentLoaded', function () {
-  var keyboard = keyboardModel({volumeSelector: 'keyboard-volume', oscillators: oscillatorCtrl.oscillators})
+  const keyboard = keyboardModel({volumeSelector: 'keyboard-volume', oscillators: oscillatorCtrl.oscillators})
   keyboard.initialize()
 
   var keyboardCtrl = keyboardController(keyboard)
   document.getElementById('octave-up').addEventListener('click', keyboardCtrl.handleOctaveIncreased)
   document.getElementById('octave-down').addEventListener('click', keyboardCtrl.handleOctaveDecreased)
 
-  var nodes = []
-  for (var i = 0; i < oscillatorCtrl.oscillators.length; i++) {
-    nodes.push(oscillatorCtrl.oscillators[i].gainNode1)
-  }
+  // visualization
+  const nodes = oscillatorCtrl.oscillators.map(o => o.gainNode1)
   viz.init('top', nodes)
 })

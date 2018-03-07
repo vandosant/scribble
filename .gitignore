@@ -7,3 +7,4 @@ public/stylesheets/variables.css.map
 public/stylesheets/application.css
 public/stylesheets/application.css.map
 dist/
+.DS_Store
