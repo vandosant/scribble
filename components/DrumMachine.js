@@ -1,11 +1,4 @@
-function drumMachine (options) {
-  var context = options['context']
-  var frequency = options['frequency']
-  var wave = options['wave']
-  var gainVal = options['gainVal']
-  var sustain = options['sustain']
-  var viz = options['viz']
-
+function drumMachine ({ context, frequency, wave, gainVal, sustain, viz } = {}) {
   var hit = function () {
     var drum1 = this.context.createOscillator(),
       node1 = this.context.createGain(),
