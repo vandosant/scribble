@@ -1,3 +1,4 @@
+import EventEmitter from 'events'
 import context, { init } from './Context'
 import keyboardModel from './Keyboard'
 import keyboardController from './keyboardController'
@@ -9,6 +10,35 @@ import visualizer from './Visualizer'
 import '../styles/application.scss'
 
 const DRUM_VOL = 1.3
+const INITIAL_TEMPO = 180
+
+const emitter = new EventEmitter()
+
+let previousStates = []
+let intervalHandles = []
+
+let state = {
+  beat: 1,
+  tempo: INITIAL_TEMPO
+}
+
+const setState = (nextState) => {
+  setImmediate(() => {
+    previousStates = previousStates.concat(state)
+    state = Object.assign({}, state, nextState)
+  })
+}
+
+
+const interval = setInterval(function () {
+  emitter.emit('beat', state)
+  if (state.beat >= 16) {
+    setState({ beat: 1 })
+  } else {
+    setState({ beat: state.beat+1 })
+  }
+}, (60 * 1000) / state.tempo)
+intervalHandles = intervalHandles.concat(interval)
 
 //const start = document.querySelector('#record')
 //const stop = document.querySelector('#stop')
@@ -80,7 +110,15 @@ var drums = [
   }
 ]
 
-const drumController = DrumController(drums, 'drums', 180, DRUM_VOL)
+const drumState = {
+  tempo: INITIAL_TEMPO,
+  volume: DRUM_VOL,
+  containerId: 'drums',
+  drums,
+  emitter
+}
+
+const drumController = DrumController(drumState, setState)
 
 document.addEventListener('keydown', (event) => {
   init()

@@ -1,19 +1,45 @@
-export default function DrumController (drums, containerId, tempo, volume) {
-  var container = document.getElementById(containerId)
+export default function DrumController ({
+  drums,
+  containerId,
+  emitter,
+  tempo,
+  volume
+} = {}, setState) {
+  let MAX_BEATS = 15
+  let container = document.getElementById(containerId)
+
+  emitter.on('beat', ({ beat }) => {
+    var activeDrumNodes = document.getElementsByClassName('drum-button-active')
+    if (activeDrumNodes.length > 0) {
+      for (var i = 0; i < activeDrumNodes.length; i++) {
+        activeDrumNodes[i].classList.remove('drum-button-active')
+      }
+    }
+    drums.forEach(function (drum) {
+      if (beat === 1) {
+        drum.beats[MAX_BEATS].el.classList.remove('drum-button-active')
+      } else {
+        drum.beats[beat - 1].el.classList.remove('drum-button-active')
+      }
+      drum.beats[beat - 1].el.classList.add('drum-button-active')
+      if (drum.beats[beat - 1].selected === true) {
+        drum[drum.identifier].machine.hit()
+      }
+    })
+  })
 
   function render () {
-    var container = document.getElementById(containerId)
-    var typeContainer = document.createElement('div')
+    let typeContainer = document.createElement('div')
     typeContainer.setAttribute('class', 'drum-container')
     typeContainer.setAttribute('id', 'drum-types')
     container.appendChild(typeContainer)
     drums.forEach(function (drum, key) {
       drum.beats = []
-      var buttonContainer = document.createElement('div')
+      let buttonContainer = document.createElement('div')
       buttonContainer.setAttribute('class', 'drum-container')
       buttonContainer.setAttribute('id', 'drum-' + key)
       for (var i = 0; i < 16; i++) {
-        var beatEl = document.createElement('div')
+        let beatEl = document.createElement('div')
         beatEl.setAttribute('class', 'drum-button')
         beatEl.textContent = (i + 1).toString()
 
@@ -42,35 +68,6 @@ export default function DrumController (drums, containerId, tempo, volume) {
   }
 
   function start (statusButtonId) {
-    var node = 0
-    var maxNodes = 15
-    clearInterval(DrumController.interval)
-    DrumController.interval = setInterval(function () {
-      var activeDrumNodes = document.getElementsByClassName('drum-button-active')
-      if (activeDrumNodes.length > 0) {
-        for (var i = 0; i < activeDrumNodes.length; i++) {
-          activeDrumNodes[i].classList.remove('drum-button-active')
-        }
-      }
-      drums.forEach(function (drum) {
-        if (node === 0) {
-          drum.beats[maxNodes].el.classList.remove('drum-button-active')
-        } else {
-          drum.beats[node - 1].el.classList.remove('drum-button-active')
-        }
-        drum.beats[node].el.classList.add('drum-button-active')
-        if (drum.beats[node].selected === true) {
-          drum[drum.identifier].machine.hit()
-        }
-      })
-
-      if (node === maxNodes) {
-        node = 0
-      } else {
-        node++
-      }
-    }, parseTempo(this.tempo))
-
     var statusButton = document.getElementById(statusButtonId)
     var statusDiv = document.createElement('div')
     statusDiv.setAttribute('id', 'pause')
@@ -130,11 +127,10 @@ export default function DrumController (drums, containerId, tempo, volume) {
   }
 
   function setTempo (newTempo, statusSelectorId) {
-    this.tempo = newTempo
+    setState({ tempo: newTempo })
     var statusButton = document.getElementById(statusSelectorId)
     if (statusButton.getAttribute('active') === 'true') {
-      var boundStart = start.bind(this)
-      boundStart('drum-status')
+      start.call(this, 'drum-status')
     }
   }
 
