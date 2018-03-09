@@ -35,62 +35,52 @@ var drums = [
     identifier: 'bass',
     active: true,
     selectedBeats: [1,3,5,14],
-    bass: {
-      machine: drumMachine({
-        ...drumDefaults,
-        frequency: 47,
-        sustain: 0.03
-      })
-    }
+    instance: drumMachine({
+      ...drumDefaults,
+      frequency: 47,
+      sustain: 0.03
+    })
   },
   {
     identifier: 'tom1',
     active: false,
     selectedBeats: [],
-    tom1: {
-      machine: drumMachine({
-        ...drumDefaults,
-        frequency: 64,
-        sustain: 0.05
-      })
-    }
+    instance: drumMachine({
+      ...drumDefaults,
+      frequency: 64,
+      sustain: 0.05
+    })
   },
   {
     identifier: 'tom2',
     active: false,
     selectedBeats: [],
-    tom2: {
-      machine: drumMachine({
-        ...drumDefaults,
-        frequency: 160,
-        sustain: 0.05
-      })
-    }
+    instance: drumMachine({
+      ...drumDefaults,
+      frequency: 160,
+      sustain: 0.05
+    })
   },
   {
     identifier: 'snare',
     active: false,
     selectedBeats: [],
-    snare: {
-      machine: drumMachine({
-        ...drumDefaults,
-        frequency: 188,
-        sustain: 0.07
-      })
-    }
+    instance: drumMachine({
+      ...drumDefaults,
+      frequency: 188,
+      sustain: 0.07
+    })
   },
   {
     identifier: 'pad',
     active: false,
     selectedBeats: [],
-    pad: {
-      machine: drumMachine({
-        ...drumDefaults,
-        frequency: 261.63,
-        wave: 'triangle',
-        sustain: 0.02
-      })
-    }
+    instance: drumMachine({
+      ...drumDefaults,
+      frequency: 261.63,
+      wave: 'triangle',
+      sustain: 0.02
+    })
   }
 ]
 
@@ -186,20 +176,29 @@ var view = (function (drums, drumType, drumButtonContainer, drumsContainer) {
         buttonContainer.setAttribute('id', 'drum-' + drum.identifier)
 
         if (active) {
+          let beats = []
           for (var i = 0; i < stateRepresentation.maxBeat; i++) {
             let beatEl = document.createElement('div')
             beatEl.classList.add('drum-button')
             beatEl.textContent = (i + 1).toString()
 
-            if (drum.selectedBeats[i + 1]) {
+            if (drum.selectedBeats.includes(i + 1)) {
               beatEl.classList.add('drum-button-selected')
             }
 
-            buttonContainer.appendChild(beatEl)
-            if (i === 7) {
+            if (stateRepresentation.beat === i + 1) {
+              beatEl.classList.add('drum-button-active')
+            }
+
+            beats = beats.concat(beatEl)
+          }
+
+          beats.forEach((beat, index) => {
+            buttonContainer.appendChild(beat)
+            if (index === 7) {
               buttonContainer.appendChild(document.createElement('br'))
             }
-          }
+          })
         }
 
         this.drums.appendChild(buttonContainer)
@@ -244,31 +243,32 @@ var model = (function (state) {
     drums,
     maxBeat: 16,
     present (data = {}) {
+      this.beat = data.beat || 1
       this.state.render(model)
     }
   }
 })(state)
 
-setInterval(function () {
-  if (model.state.beat > 16) {
-    model.present(
-      Object.assign(
-        {},
-        model.state,
-        {
-          beat: model.state.beat + 1
-        }
-      )
-    )
-  } else {
-    model.present(
-      Object.assign(
-        {},
-        model.state,
-        {
-          beat: model.state.beat + 1
-        }
-      )
-    )
+var actions = {
+  tick: function (data = {}, present) {
+    data.beat = data.beat || 1
+    data.beat = data.beat + 1
+    if (data.beat > 16) {
+      data.beat = 1
+    }
+    model.present(data)
+  },
+  hitDrumIfSelected: function (data = {}) {
+    if (data.drum.selectedBeats.includes(data.beat)) {
+      data.drum.instance.hit()
+    }
   }
+}
+
+setInterval(function () {
+  actions.tick({ beat: model.beat })
+  model.drums.forEach(drum => actions.hitDrumIfSelected({
+    beat: model.beat,
+    drum
+  }))
 }, (60 * 1000) / INITIAL_TEMPO)
