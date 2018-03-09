@@ -6,39 +6,13 @@ import oscillatorController from './OscillatorController'
 import DrumController from './DrumController'
 import drumMachine from './DrumMachine'
 import visualizer from './Visualizer'
-//import recorder from './Recorder'
+// import recorder from './Recorder'
 import '../styles/application.scss'
 
 const DRUM_VOL = 1.3
 const INITIAL_TEMPO = 180
 
 const emitter = new EventEmitter()
-
-let previousStates = []
-let intervalHandles = []
-
-let state = {
-  beat: 1,
-  tempo: INITIAL_TEMPO
-}
-
-const setState = (nextState) => {
-  setImmediate(() => {
-    previousStates = previousStates.concat(state)
-    state = Object.assign({}, state, nextState)
-  })
-}
-
-
-const interval = setInterval(function () {
-  emitter.emit('beat', state)
-  if (state.beat >= 16) {
-    setState({ beat: 1 })
-  } else {
-    setState({ beat: state.beat+1 })
-  }
-}, (60 * 1000) / state.tempo)
-intervalHandles = intervalHandles.concat(interval)
 
 //const start = document.querySelector('#record')
 //const stop = document.querySelector('#stop')
@@ -59,6 +33,8 @@ const drumDefaults = {
 var drums = [
   {
     identifier: 'bass',
+    active: true,
+    selectedBeats: [1,3,5,14],
     bass: {
       machine: drumMachine({
         ...drumDefaults,
@@ -69,6 +45,8 @@ var drums = [
   },
   {
     identifier: 'tom1',
+    active: false,
+    selectedBeats: [],
     tom1: {
       machine: drumMachine({
         ...drumDefaults,
@@ -79,6 +57,8 @@ var drums = [
   },
   {
     identifier: 'tom2',
+    active: false,
+    selectedBeats: [],
     tom2: {
       machine: drumMachine({
         ...drumDefaults,
@@ -89,6 +69,8 @@ var drums = [
   },
   {
     identifier: 'snare',
+    active: false,
+    selectedBeats: [],
     snare: {
       machine: drumMachine({
         ...drumDefaults,
@@ -99,6 +81,8 @@ var drums = [
   },
   {
     identifier: 'pad',
+    active: false,
+    selectedBeats: [],
     pad: {
       machine: drumMachine({
         ...drumDefaults,
@@ -118,7 +102,7 @@ const drumState = {
   emitter
 }
 
-const drumController = DrumController(drumState, setState)
+const drumController = DrumController(drumState)
 
 document.addEventListener('keydown', (event) => {
   init()
@@ -134,16 +118,16 @@ oscillatorCtrl.initialize()
 
 document.addEventListener('DOMContentLoaded', function () {
   // drums
-  drumController.render()
-  drumController.selectDrum({ target: document.getElementById('bass') })
-  drumController.start('drum-status')
-  drumController.listen({
-    tempoId: 'tempo',
-    drumBeatClass: 'drum-button',
-    drumTypeClass: 'drum-type',
-    statusSelectorId: 'drum-status',
-    drumVolumeSelector: 'drum-volume'
-  })
+  //drumController.render()
+  //drumController.selectDrum({ target: document.getElementById('bass') })
+  //drumController.start('drum-status')
+  //drumController.listen({
+  //  tempoId: 'tempo',
+  //  drumBeatClass: 'drum-button',
+  //  drumTypeClass: 'drum-type',
+  //  statusSelectorId: 'drum-status',
+  //  drumVolumeSelector: 'drum-volume'
+  //})
 
   // keys
   const oscillatorMode = document.querySelector('.oscillator-mode')
@@ -181,3 +165,110 @@ document.addEventListener('DOMContentLoaded', function () {
   const nodes = oscillatorCtrl.oscillators.map(o => o.gainNode1)
   viz.init('top', nodes)
 })
+
+var view = (function (drums, drumType, drumButtonContainer, drumsContainer) {
+  return {
+    drums,
+    drumType,
+    drumButtonContainer,
+    drumsContainer,
+    display (stateRepresentation) {
+      this.drums.innerHTML = ''
+      this.drumType.innerHTML = ''
+      this.drumButtonContainer.innerHTML = ''
+      this.drumType.setAttribute('class', 'drum-container')
+      this.drums.appendChild(this.drumType)
+
+      stateRepresentation.drums.forEach(drum => {
+        const active = drum.active
+        let buttonContainer = document.createElement('div')
+        buttonContainer.classList.add('drum-container')
+        buttonContainer.setAttribute('id', 'drum-' + drum.identifier)
+
+        if (active) {
+          for (var i = 0; i < stateRepresentation.maxBeat; i++) {
+            let beatEl = document.createElement('div')
+            beatEl.classList.add('drum-button')
+            beatEl.textContent = (i + 1).toString()
+
+            if (drum.selectedBeats[i + 1]) {
+              beatEl.classList.add('drum-button-selected')
+            }
+
+            buttonContainer.appendChild(beatEl)
+            if (i === 7) {
+              buttonContainer.appendChild(document.createElement('br'))
+            }
+          }
+        }
+
+        this.drums.appendChild(buttonContainer)
+        let typeButton = document.createElement('div')
+        typeButton.classList.add('drum-type')
+        if (active) {
+          typeButton.classList.add('drum-button-selected')
+        }
+        typeButton.setAttribute('id', drum.identifier)
+        typeButton.textContent = drum.identifier
+        this.drumType.appendChild(typeButton)
+      })
+    }
+  }
+})(
+  document.getElementById('drums'),
+  document.getElementById('drum-types'),
+  document.createElement('div'),
+  document.getElementById('drums-container')
+)
+
+var state = (function () {
+  return {
+    render: function (model) {
+      const stateRepresentation = {
+        beat: model.beat,
+        maxBeat: model.maxBeat,
+        tempo: model.tempo,
+        drums: model.drums
+      }
+
+      view.display(stateRepresentation)
+    }
+  }
+})()
+
+var model = (function (state) {
+  return {
+    state,
+    beat: 1,
+    tempo: INITIAL_TEMPO,
+    drums,
+    maxBeat: 16,
+    present (data = {}) {
+      this.state.render(model)
+    }
+  }
+})(state)
+
+setInterval(function () {
+  if (model.state.beat > 16) {
+    model.present(
+      Object.assign(
+        {},
+        model.state,
+        {
+          beat: model.state.beat + 1
+        }
+      )
+    )
+  } else {
+    model.present(
+      Object.assign(
+        {},
+        model.state,
+        {
+          beat: model.state.beat + 1
+        }
+      )
+    )
+  }
+}, (60 * 1000) / INITIAL_TEMPO)

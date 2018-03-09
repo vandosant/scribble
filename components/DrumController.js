@@ -4,7 +4,7 @@ export default function DrumController ({
   emitter,
   tempo,
   volume
-} = {}, setState) {
+} = {}) {
   let MAX_BEATS = 15
   let container = document.getElementById(containerId)
 
@@ -127,7 +127,6 @@ export default function DrumController ({
   }
 
   function setTempo (newTempo, statusSelectorId) {
-    setState({ tempo: newTempo })
     var statusButton = document.getElementById(statusSelectorId)
     if (statusButton.getAttribute('active') === 'true') {
       start.call(this, 'drum-status')
