@@ -162,22 +162,18 @@ var view = (function (drums, drumType, drumButtonContainer, drumsContainer) {
     drumType,
     drumButtonContainer,
     drumsContainer,
-    display (stateRepresentation) {
+    display (state) {
       this.drums.innerHTML = ''
-      this.drumType.innerHTML = ''
       this.drumButtonContainer.innerHTML = ''
-      this.drumType.setAttribute('class', 'drum-container')
-      this.drums.appendChild(this.drumType)
 
-      stateRepresentation.drums.forEach(drum => {
+      state.drums.forEach(drum => {
         const active = drum.active
-        let buttonContainer = document.createElement('div')
-        buttonContainer.classList.add('drum-container')
-        buttonContainer.setAttribute('id', 'drum-' + drum.identifier)
-
         if (active) {
+          let buttonContainer = document.createElement('div')
+          buttonContainer.classList.add('drum-container')
+          buttonContainer.setAttribute('id', 'drum-' + drum.identifier)
           let beats = []
-          for (var i = 0; i < stateRepresentation.maxBeat; i++) {
+          for (var i = 0; i < state.maxBeat; i++) {
             let beatEl = document.createElement('div')
             beatEl.classList.add('drum-button')
             beatEl.textContent = (i + 1).toString()
@@ -186,7 +182,7 @@ var view = (function (drums, drumType, drumButtonContainer, drumsContainer) {
               beatEl.classList.add('drum-button-selected')
             }
 
-            if (stateRepresentation.beat === i + 1) {
+            if (state.beat === i + 1) {
               beatEl.classList.add('drum-button-active')
             }
 
@@ -199,12 +195,17 @@ var view = (function (drums, drumType, drumButtonContainer, drumsContainer) {
               buttonContainer.appendChild(document.createElement('br'))
             }
           })
-        }
 
-        this.drums.appendChild(buttonContainer)
+          this.drums.appendChild(buttonContainer)
+        }
+      })
+    },
+    init: function (state) {
+      this.drumType.classList.add('drum-container')
+      state.drums.forEach(drum => {
         let typeButton = document.createElement('div')
         typeButton.classList.add('drum-type')
-        if (active) {
+        if (drum.active) {
           typeButton.classList.add('drum-button-selected')
         }
         typeButton.setAttribute('id', drum.identifier)
@@ -223,14 +224,22 @@ var view = (function (drums, drumType, drumButtonContainer, drumsContainer) {
 var state = (function () {
   return {
     render: function (model) {
-      const stateRepresentation = {
-        beat: model.beat,
-        maxBeat: model.maxBeat,
-        tempo: model.tempo,
-        drums: model.drums
+      this.representation(model)
+    },
+    representation: function (model) {
+      var representation = ''
+      if (this.ticking(model)) {
+        representation = {
+          beat: model.beat,
+          maxBeat: model.maxBeat,
+          tempo: model.tempo,
+          drums: model.drums
+        }
       }
-
-      view.display(stateRepresentation)
+      view.display(representation)
+    },
+    ticking: function (model) {
+      return model.started && !model.stopped
     }
   }
 })()
@@ -238,6 +247,8 @@ var state = (function () {
 var model = (function (state) {
   return {
     state,
+    started: true,
+    stopped: false,
     beat: 1,
     tempo: INITIAL_TEMPO,
     drums,
@@ -248,6 +259,8 @@ var model = (function (state) {
     }
   }
 })(state)
+
+view.init(model)
 
 var actions = {
   tick: function (data = {}, present) {
