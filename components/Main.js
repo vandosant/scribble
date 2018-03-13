@@ -34,7 +34,7 @@ var drums = [
   {
     identifier: 'bass',
     active: true,
-    selectedBeats: [1,3,5,14],
+    selectedBeats: [1],
     instance: drumMachine({
       ...drumDefaults,
       frequency: 47,
@@ -92,9 +92,10 @@ const drumState = {
   emitter
 }
 
-const drumController = DrumController(drumState)
-
 document.addEventListener('keydown', (event) => {
+  init()
+})
+document.addEventListener('click', (event) => {
   init()
 })
 
@@ -167,7 +168,7 @@ var view = (function (drums, drumType, drumButtonContainer, drumsContainer) {
       this.drumButtonContainer.innerHTML = ''
 
       state.drums.forEach(drum => {
-        const active = drum.active
+        const active = drum.identifier === state.drumType
         if (active) {
           let buttonContainer = document.createElement('div')
           buttonContainer.classList.add('drum-container')
@@ -205,7 +206,7 @@ var view = (function (drums, drumType, drumButtonContainer, drumsContainer) {
       state.drums.forEach(drum => {
         let typeButton = document.createElement('div')
         typeButton.classList.add('drum-type')
-        if (drum.active) {
+        if (drum.identifier === state.drumType) {
           typeButton.classList.add('drum-button-selected')
         }
         typeButton.setAttribute('id', drum.identifier)
@@ -233,7 +234,8 @@ var state = (function () {
           beat: model.beat,
           maxBeat: model.maxBeat,
           tempo: model.tempo,
-          drums: model.drums
+          drums: model.drums,
+          drumType: model.drumType
         }
       }
       view.display(representation)
@@ -251,10 +253,12 @@ var model = (function (state) {
     stopped: false,
     beat: 1,
     tempo: INITIAL_TEMPO,
+    drumType: 'bass',
     drums,
     maxBeat: 16,
     present (data = {}) {
       this.beat = data.beat || 1
+      this.drumType = data.selected || this.drumType
       this.state.render(model)
     }
   }
@@ -275,6 +279,9 @@ var actions = {
     if (data.drum.selectedBeats.includes(data.beat)) {
       data.drum.instance.hit()
     }
+  },
+  selectDrum: function (data = {}) {
+    model.present({ selected: data.identifier })
   }
 }
 
@@ -285,3 +292,13 @@ setInterval(function () {
     drum
   }))
 }, (60 * 1000) / INITIAL_TEMPO)
+
+const mouseClick = function (e) {
+  e.preventDefault()
+  if (e.target.classList.contains('drum-type')) {
+    const drumType = e.target.innerText
+    actions.selectDrum({ identifier: drumType })
+  }
+}
+
+document.addEventListener('click', mouseClick, false)
