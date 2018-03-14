@@ -197,6 +197,7 @@ var view = (function (drums, drumType, drumButtonContainer, drumsContainer) {
       })
     },
     selected: function (state) {
+      this.drumType.innerHTML = ''
       this.drumType.classList.add('drum-container')
       state.drums.forEach(drum => {
         let typeButton = document.createElement('div')
@@ -237,15 +238,25 @@ var state = (function () {
       this.nextAction(model)
     },
     representation: function (model) {
-      var representation = {
-        beat: model.beat,
-        nextBeat: model.nextBeat,
-        maxBeat: model.maxBeat,
-        tempo: model.tempo,
-        drums: model.drums,
-        drumType: model.drumType
+      let representation = {}
+      if (this.ticking(model)) {
+        representation = {
+          beat: model.beat,
+          nextBeat: model.nextBeat,
+          maxBeat: model.maxBeat,
+          tempo: model.tempo,
+          drums: model.drums,
+          drumType: model.drumType
+        }
+        view.display(representation)
       }
-      view.display(representation)
+      if (this.selecting(model)) {
+        representation = {
+          drums: model.drums,
+          drumType: model.selectedDrumType
+        }
+        view.selected(representation)
+      }
     },
     nextAction: function (model) {
       if (this.ticking(model)) {
@@ -253,9 +264,17 @@ var state = (function () {
           beat: model.nextBeat
         }, model.present)
       }
+      if (this.selecting(model)) {
+        actions.updateDrumType({
+          drumType: model.selectedDrumType
+        })
+      }
     },
     ticking: function (model) {
       return model.started && !model.stopped && (model.beat !== model.nextBeat)
+    },
+    selecting: function (model) {
+      return model.drumType !== model.selectedDrumType
     }
   }
 })()
@@ -269,6 +288,7 @@ var model = (function (state) {
     nextBeat: 1,
     tempo: INITIAL_TEMPO,
     drumType: 'bass',
+    selectedDrumType: 'bass',
     drums,
     maxBeat: 16,
     present (data = {}) {
@@ -278,8 +298,11 @@ var model = (function (state) {
       if (data.nextBeat) {
         this.nextBeat = data.nextBeat
       }
-      if (data.selected) {
-        this.drumType = data.selected
+      if (data.selectedDrumType) {
+        this.selectedDrumType = data.selectedDrumType
+      }
+      if (data.drumType) {
+        this.drumType = data.drumType
       }
       this.state.render(model)
     }
@@ -298,7 +321,11 @@ var actions = {
     model.present({ nextBeat: data.nextBeat })
   },
   updateBeat: function (data = {}, present) {
-    data.nextBeat = data.beat
+    data.beat = data.beat || data.nextBeat
+    model.present(data)
+  },
+  updateDrumType: function (data = {}, present) {
+    data.drumType = data.drumType || data.selectedDrumType
     model.present(data)
   },
   hitDrumIfSelected: function (data = {}) {
@@ -307,7 +334,7 @@ var actions = {
     }
   },
   selectDrumType: function (data = {}) {
-    model.present({ selected: data.identifier })
+    model.present({ selectedDrumType: data.identifier })
   }
 }
 
