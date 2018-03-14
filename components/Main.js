@@ -3,7 +3,6 @@ import context, { init } from './Context'
 import keyboardModel from './Keyboard'
 import keyboardController from './keyboardController'
 import oscillatorController from './OscillatorController'
-import DrumController from './DrumController'
 import drumMachine from './DrumMachine'
 import visualizer from './Visualizer'
 // import recorder from './Recorder'
@@ -11,8 +10,6 @@ import '../styles/application.scss'
 
 const DRUM_VOL = 1.3
 const INITIAL_TEMPO = 180
-
-const emitter = new EventEmitter()
 
 //const start = document.querySelector('#record')
 //const stop = document.querySelector('#stop')
@@ -34,7 +31,7 @@ var drums = [
   {
     identifier: 'bass',
     active: true,
-    selectedBeats: [1],
+    selectedBeats: [],
     instance: drumMachine({
       ...drumDefaults,
       frequency: 47,
@@ -83,14 +80,6 @@ var drums = [
     })
   }
 ]
-
-const drumState = {
-  tempo: INITIAL_TEMPO,
-  volume: DRUM_VOL,
-  containerId: 'drums',
-  drums,
-  emitter
-}
 
 document.addEventListener('keydown', (event) => {
   init()
@@ -181,7 +170,7 @@ var view = (function (drums, drumType, drumButtonContainer, drumsContainer) {
             if (drum.selectedBeats.includes(i + 1)) {
               beatEl.classList.add('drum-button-selected')
             }
-            if (state.beat === i + 1) {
+            if (state.nextBeat === i + 1) {
               beatEl.classList.add('drum-button-active')
             }
             beats = beats.concat(beatEl)
@@ -298,6 +287,19 @@ var model = (function (state) {
       if (data.nextBeat) {
         this.nextBeat = data.nextBeat
       }
+      if (data.selectedDrumBeat) {
+        this.drums = this.drums.map(d => {
+          if (this.drumType !== d.identifier) {
+            return d
+          }
+          const nextDrum = {
+            ...d,
+            selectedBeats: [].concat(d.selectedBeats, data.selectedDrumBeat)
+          }
+          console.log(nextDrum)
+          return nextDrum
+        })
+      }
       if (data.selectedDrumType) {
         this.selectedDrumType = data.selectedDrumType
       }
@@ -335,6 +337,9 @@ var actions = {
   },
   selectDrumType: function (data = {}) {
     model.present({ selectedDrumType: data.identifier })
+  },
+  selectDrumBeat: function (data = {}) {
+    model.present({ selectedDrumBeat: data.beat })
   }
 }
 
@@ -351,6 +356,9 @@ const mouseClick = function (e) {
   if (e.target.classList.contains('drum-type')) {
     const drumType = e.target.innerText
     actions.selectDrumType({ identifier: drumType })
+  }
+  if (e.target.classList.contains('drum-button')) {
+    actions.selectDrumBeat({ beat: parseInt(e.target.innerText, 10) })
   }
 }
 

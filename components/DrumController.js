@@ -80,11 +80,6 @@ export default function DrumController ({
       drumBeats[i].addEventListener('click', toggleDrumBeat)
     }
 
-    var drumTypes = document.getElementsByClassName(drumTypeClass)
-    for (var j = 0; j < drumTypes.length; j++) {
-      drumTypes[j].addEventListener('click', selectDrum)
-    }
-
     var statusButton = document.getElementById(statusSelectorId)
     statusButton.addEventListener('click', function __handler__ () {
       var el = this
