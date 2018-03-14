@@ -178,30 +178,25 @@ var view = (function (drums, drumType, drumButtonContainer, drumsContainer) {
             let beatEl = document.createElement('div')
             beatEl.classList.add('drum-button')
             beatEl.textContent = (i + 1).toString()
-
             if (drum.selectedBeats.includes(i + 1)) {
               beatEl.classList.add('drum-button-selected')
             }
-
             if (state.beat === i + 1) {
               beatEl.classList.add('drum-button-active')
             }
-
             beats = beats.concat(beatEl)
           }
-
           beats.forEach((beat, index) => {
             buttonContainer.appendChild(beat)
             if (index === 7) {
               buttonContainer.appendChild(document.createElement('br'))
             }
           })
-
           this.drums.appendChild(buttonContainer)
         }
       })
     },
-    init: function (state) {
+    selected: function (state) {
       this.drumType.classList.add('drum-container')
       state.drums.forEach(drum => {
         let typeButton = document.createElement('div')
@@ -211,6 +206,19 @@ var view = (function (drums, drumType, drumButtonContainer, drumsContainer) {
         }
         typeButton.setAttribute('id', drum.identifier)
         typeButton.textContent = drum.identifier
+        this.drumType.appendChild(typeButton)
+      })
+    },
+    init: function (state) {
+      this.drumType.classList.add('drum-container')
+      state.drums.forEach(drum => {
+        let typeButton = document.createElement('div')
+        typeButton.classList.add('drum-type')
+        typeButton.setAttribute('id', drum.identifier)
+        typeButton.textContent = drum.identifier
+        if (drum.identifier === state.drumType) {
+          typeButton.classList.add('drum-button-selected')
+        }
         this.drumType.appendChild(typeButton)
       })
     }
@@ -226,22 +234,28 @@ var state = (function () {
   return {
     render: function (model) {
       this.representation(model)
+      this.nextAction(model)
     },
     representation: function (model) {
-      var representation = ''
-      if (this.ticking(model)) {
-        representation = {
-          beat: model.beat,
-          maxBeat: model.maxBeat,
-          tempo: model.tempo,
-          drums: model.drums,
-          drumType: model.drumType
-        }
+      var representation = {
+        beat: model.beat,
+        nextBeat: model.nextBeat,
+        maxBeat: model.maxBeat,
+        tempo: model.tempo,
+        drums: model.drums,
+        drumType: model.drumType
       }
       view.display(representation)
     },
+    nextAction: function (model) {
+      if (this.ticking(model)) {
+        actions.updateBeat({
+          beat: model.nextBeat
+        }, model.present)
+      }
+    },
     ticking: function (model) {
-      return model.started && !model.stopped
+      return model.started && !model.stopped && (model.beat !== model.nextBeat)
     }
   }
 })()
@@ -252,13 +266,21 @@ var model = (function (state) {
     started: true,
     stopped: false,
     beat: 1,
+    nextBeat: 1,
     tempo: INITIAL_TEMPO,
     drumType: 'bass',
     drums,
     maxBeat: 16,
     present (data = {}) {
-      this.beat = data.beat || 1
-      this.drumType = data.selected || this.drumType
+      if (data.beat) {
+        this.beat = data.beat
+      }
+      if (data.nextBeat) {
+        this.nextBeat = data.nextBeat
+      }
+      if (data.selected) {
+        this.drumType = data.selected
+      }
       this.state.render(model)
     }
   }
@@ -269,10 +291,14 @@ view.init(model)
 var actions = {
   tick: function (data = {}, present) {
     data.beat = data.beat || 1
-    data.beat = data.beat + 1
-    if (data.beat > 16) {
-      data.beat = 1
+    data.nextBeat = data.beat + 1
+    if (data.nextBeat > 16) {
+      data.nextBeat = 1
     }
+    model.present({ nextBeat: data.nextBeat })
+  },
+  updateBeat: function (data = {}, present) {
+    data.nextBeat = data.beat
     model.present(data)
   },
   hitDrumIfSelected: function (data = {}) {
@@ -280,7 +306,7 @@ var actions = {
       data.drum.instance.hit()
     }
   },
-  selectDrum: function (data = {}) {
+  selectDrumType: function (data = {}) {
     model.present({ selected: data.identifier })
   }
 }
@@ -297,7 +323,7 @@ const mouseClick = function (e) {
   e.preventDefault()
   if (e.target.classList.contains('drum-type')) {
     const drumType = e.target.innerText
-    actions.selectDrum({ identifier: drumType })
+    actions.selectDrumType({ identifier: drumType })
   }
 }
 
