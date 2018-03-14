@@ -5,63 +5,7 @@ export default function DrumController ({
   tempo,
   volume
 } = {}) {
-  let MAX_BEATS = 15
   let container = document.getElementById(containerId)
-
-  emitter.on('beat', ({ beat }) => {
-    var activeDrumNodes = document.getElementsByClassName('drum-button-active')
-    if (activeDrumNodes.length > 0) {
-      for (var i = 0; i < activeDrumNodes.length; i++) {
-        activeDrumNodes[i].classList.remove('drum-button-active')
-      }
-    }
-    drums.forEach(function (drum) {
-      if (beat === 1) {
-        drum.beats[MAX_BEATS].el.classList.remove('drum-button-active')
-      } else {
-        drum.beats[beat - 1].el.classList.remove('drum-button-active')
-      }
-      drum.beats[beat - 1].el.classList.add('drum-button-active')
-      if (drum.beats[beat - 1].selected === true) {
-        drum[drum.identifier].machine.hit()
-      }
-    })
-  })
-
-  function render () {
-    let typeContainer = document.createElement('div')
-    typeContainer.setAttribute('class', 'drum-container')
-    typeContainer.setAttribute('id', 'drum-types')
-    container.appendChild(typeContainer)
-    drums.forEach(function (drum, key) {
-      drum.beats = []
-      let buttonContainer = document.createElement('div')
-      buttonContainer.setAttribute('class', 'drum-container')
-      buttonContainer.setAttribute('id', 'drum-' + key)
-      for (var i = 0; i < 16; i++) {
-        let beatEl = document.createElement('div')
-        beatEl.setAttribute('class', 'drum-button')
-        beatEl.textContent = (i + 1).toString()
-
-        drum.beats.push({
-          selected: false,
-          el: beatEl
-        })
-
-        buttonContainer.appendChild(beatEl)
-        if (i === 7) {
-          buttonContainer.appendChild(document.createElement('br'))
-        }
-      }
-      container.appendChild(buttonContainer)
-
-      var typeButton = document.createElement('div')
-      typeButton.setAttribute('class', 'drum-type')
-      typeButton.setAttribute('id', drum.identifier)
-      typeButton.textContent = drum.identifier
-      typeContainer.appendChild(typeButton)
-    })
-  }
 
   function parseTempo (tempo) {
     return (60 * 1000) / tempo
@@ -102,28 +46,6 @@ export default function DrumController ({
       e.target.classList.remove('drum-button-selected')
       drums[type].beats[index].selected = false
     }
-  }
-
-  function selectDrum (e) {
-    var id = e.target.id
-    var drumTypes = document.getElementsByClassName('drum-type')
-    for (var i = 0; i < drumTypes.length; i++) {
-      drumTypes[i].classList.remove('drum-button-selected')
-    }
-    e.target.classList.add('drum-button-selected')
-
-    drums.forEach(function (drum, key) {
-      var drumEl = document.getElementById('drum-' + key)
-      if (drum.identifier === id) {
-        drumEl.setAttribute('visibility', 'visible')
-        drumEl.setAttribute('height', '')
-        drumEl.hidden = false
-      } else {
-        drumEl.setAttribute('visibility', 'hidden')
-        drumEl.hidden = true
-        drumEl.setAttribute('height', '0')
-      }
-    })
   }
 
   function setTempo (newTempo, statusSelectorId) {
@@ -185,11 +107,9 @@ export default function DrumController ({
     container,
     tempo,
     startVolume: volume,
-    render,
     parseTempo,
     start,
     stop,
-    selectDrum,
     setTempo,
     setVolume,
     listen
