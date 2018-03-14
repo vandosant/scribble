@@ -35,19 +35,6 @@ export default function DrumController ({
     statusButton.appendChild(statusDiv)
   }
 
-  function toggleDrumBeat (e) {
-    const index = parseInt(e.target.innerText) - 1
-    const id = e.target.parentNode.getAttribute('id')
-    const type = id.split('-')[1]
-    if (!e.target.classList.contains('drum-button-selected')) {
-      e.target.classList.add('drum-button-selected')
-      drums[type].beats[index].selected = true
-    } else {
-      e.target.classList.remove('drum-button-selected')
-      drums[type].beats[index].selected = false
-    }
-  }
-
   function setTempo (newTempo, statusSelectorId) {
     var statusButton = document.getElementById(statusSelectorId)
     if (statusButton.getAttribute('active') === 'true') {
@@ -74,11 +61,6 @@ export default function DrumController ({
     tempoEl.addEventListener('change', function __handler__ () {
       setTempo.call(context, parseInt(this.value), statusSelectorId)
     })
-
-    var drumBeats = document.getElementsByClassName(drumBeatClass)
-    for (var i = 0; i < drumBeats.length; i++) {
-      drumBeats[i].addEventListener('click', toggleDrumBeat)
-    }
 
     var statusButton = document.getElementById(statusSelectorId)
     statusButton.addEventListener('click', function __handler__ () {
