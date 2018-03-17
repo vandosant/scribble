@@ -1,4 +1,3 @@
-import EventEmitter from 'events'
 import context, { init } from './Context'
 import keyboardModel from './Keyboard'
 import keyboardController from './keyboardController'
@@ -146,79 +145,76 @@ document.addEventListener('DOMContentLoaded', function () {
   viz.init('top', nodes)
 })
 
-var view = (function (drums, drumType, drumButtonContainer, drumsContainer) {
-  return {
-    drums,
-    drumType,
-    drumButtonContainer,
-    drumsContainer,
-    display (state) {
-      this.drums.innerHTML = ''
-      this.drumButtonContainer.innerHTML = ''
+let view = {}
 
-      state.drums.forEach(drum => {
-        const active = drum.identifier === state.drumType
-        if (active) {
-          let buttonContainer = document.createElement('div')
-          buttonContainer.classList.add('drum-container')
-          buttonContainer.setAttribute('id', 'drum-' + drum.identifier)
-          let beats = []
-          for (var i = 0; i < state.maxBeat; i++) {
-            let beatEl = document.createElement('div')
-            beatEl.classList.add('drum-button')
-            beatEl.textContent = (i + 1).toString()
-            if (drum.selectedBeats.includes(i + 1)) {
-              beatEl.classList.add('drum-button-selected')
-            }
-            if (state.nextBeat === i + 1) {
-              beatEl.classList.add('drum-button-active')
-            }
-            beats = beats.concat(beatEl)
-          }
-          beats.forEach((beat, index) => {
-            buttonContainer.appendChild(beat)
-            if (index === 7) {
-              buttonContainer.appendChild(document.createElement('br'))
-            }
-          })
-          this.drums.appendChild(buttonContainer)
+view.display = function (state) {
+  const drums = document.getElementById('drums')
+  const drumButtonContainer = document.createElement('div')
+  drums.innerHTML = ''
+  drumButtonContainer.innerHTML = ''
+
+  state.drums.forEach(drum => {
+    const active = drum.identifier === state.drumType
+    if (active) {
+      let buttonContainer = document.createElement('div')
+      buttonContainer.classList.add('drum-container')
+      buttonContainer.setAttribute('id', 'drum-' + drum.identifier)
+      let beats = []
+      for (var i = 0; i < state.maxBeat; i++) {
+        let beatEl = document.createElement('div')
+        beatEl.classList.add('drum-button')
+        beatEl.textContent = (i + 1).toString()
+        if (drum.selectedBeats.includes(i + 1)) {
+          beatEl.classList.add('drum-button-selected')
+        }
+        if (state.nextBeat === i + 1) {
+          beatEl.classList.add('drum-button-active')
+        }
+        beats = beats.concat(beatEl)
+      }
+      beats.forEach((beat, index) => {
+        buttonContainer.appendChild(beat)
+        if (index === 7) {
+          buttonContainer.appendChild(document.createElement('br'))
         }
       })
-    },
-    selected: function (state) {
-      this.drumType.innerHTML = ''
-      this.drumType.classList.add('drum-container')
-      state.drums.forEach(drum => {
-        let typeButton = document.createElement('div')
-        typeButton.classList.add('drum-type')
-        if (drum.identifier === state.drumType) {
-          typeButton.classList.add('drum-button-selected')
-        }
-        typeButton.setAttribute('id', drum.identifier)
-        typeButton.textContent = drum.identifier
-        this.drumType.appendChild(typeButton)
-      })
-    },
-    init: function (state) {
-      this.drumType.classList.add('drum-container')
-      state.drums.forEach(drum => {
-        let typeButton = document.createElement('div')
-        typeButton.classList.add('drum-type')
-        typeButton.setAttribute('id', drum.identifier)
-        typeButton.textContent = drum.identifier
-        if (drum.identifier === state.drumType) {
-          typeButton.classList.add('drum-button-selected')
-        }
-        this.drumType.appendChild(typeButton)
-      })
+      drums.appendChild(buttonContainer)
     }
-  }
-})(
-  document.getElementById('drums'),
-  document.getElementById('drum-types'),
-  document.createElement('div'),
-  document.getElementById('drums-container')
-)
+  })
+}
+
+view.selected = function (state) {
+  const drumType = document.getElementById('drum-types')
+  drumType.innerHTML = ''
+  drumType.classList.add('drum-container')
+
+  state.drums.forEach(drum => {
+    let typeButton = document.createElement('div')
+    typeButton.classList.add('drum-type')
+    if (drum.identifier === state.drumType) {
+      typeButton.classList.add('drum-button-selected')
+    }
+    typeButton.setAttribute('id', drum.identifier)
+    typeButton.textContent = drum.identifier
+    drumType.appendChild(typeButton)
+  })
+}
+
+view.init = function (state) {
+  const drumType = document.getElementById('drum-types')
+  drumType.classList.add('drum-container')
+
+  state.drums.forEach(drum => {
+    let typeButton = document.createElement('div')
+    typeButton.classList.add('drum-type')
+    typeButton.setAttribute('id', drum.identifier)
+    typeButton.textContent = drum.identifier
+    if (drum.identifier === state.drumType) {
+      typeButton.classList.add('drum-button-selected')
+    }
+    drumType.appendChild(typeButton)
+  })
+}
 
 var state = (function () {
   return {
@@ -296,7 +292,6 @@ var model = (function (state) {
             ...d,
             selectedBeats: [].concat(d.selectedBeats, data.selectedDrumBeat)
           }
-          console.log(nextDrum)
           return nextDrum
         })
       }
