@@ -210,10 +210,7 @@ const view = {
       drumType.appendChild(typeButton)
     })
 
-    const statusButton = document.getElementById('drum-status')
-    const statusDiv = document.createElement('div')
-    statusDiv.setAttribute('id', 'pause')
-    statusButton.appendChild(statusDiv)
+    this.started(state)
   }
 }
 
