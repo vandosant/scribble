@@ -272,18 +272,22 @@ const state = {
   }
 }
 
+const initialState = {
+  started: true,
+  stopped: false,
+  beat: 1,
+  nextBeat: 1,
+  tempo: INITIAL_TEMPO,
+  drumType: 'bass',
+  selectedDrumType: 'bass',
+  drums,
+  maxBeat: 16
+}
+
 var model = (function (state) {
   return {
     state,
-    started: true,
-    stopped: false,
-    beat: 1,
-    nextBeat: 1,
-    tempo: INITIAL_TEMPO,
-    drumType: 'bass',
-    selectedDrumType: 'bass',
-    drums,
-    maxBeat: 16,
+    ...initialState,
     present (data = {}) {
       if (data.beat) {
         this.beat = data.beat
@@ -292,16 +296,15 @@ var model = (function (state) {
         this.nextBeat = data.nextBeat
       }
       if (data.selectedDrumBeat) {
-        this.drums = this.drums.map(d => {
-          if (this.drumType !== d.identifier) {
-            return d
-          }
-          const nextDrum = {
-            ...d,
-            selectedBeats: [].concat(d.selectedBeats, data.selectedDrumBeat)
-          }
-          return nextDrum
-        })
+        const selectedDrumIndex = this.drums.findIndex(drum => drum.identifier === this.drumType)
+        const selectedDrum = this.drums[selectedDrumIndex]
+        this.drums = [
+          ...this.drums.slice(0, selectedDrumIndex), {
+            ...selectedDrum,
+            selectedBeats: [].concat(selectedDrum.selectedBeats, data.selectedDrumBeat)
+          },
+          ...this.drums.slice(selectedDrumIndex + 1)
+        ]
       }
       if (data.selectedDrumType) {
         this.selectedDrumType = data.selectedDrumType
@@ -309,7 +312,7 @@ var model = (function (state) {
       if (data.drumType) {
         this.drumType = data.drumType
       }
-      if (typeof(data.stopped) !== 'undefined') {
+      if (typeof data.stopped !== 'undefined') {
         this.stopped = data.stopped
       }
       this.state.render(model)
