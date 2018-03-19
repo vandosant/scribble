@@ -176,6 +176,25 @@ const view = {
       drumType.appendChild(typeButton)
     })
   },
+  stopped: function (state) {
+    const statusButton = document.getElementById('drum-status')
+    statusButton.innerHtml = ''
+    const statusDiv = document.createElement('div')
+    statusDiv.setAttribute('id', 'play')
+    while (statusButton.firstChild) {
+      statusButton.removeChild(statusButton.firstChild)
+    }
+    statusButton.appendChild(statusDiv)
+  },
+  started: function (state) {
+    const statusButton = document.getElementById('drum-status')
+    const statusDiv = document.createElement('div')
+    statusDiv.setAttribute('id', 'pause')
+    while (statusButton.firstChild) {
+      statusButton.removeChild(statusButton.firstChild)
+    }
+    statusButton.appendChild(statusDiv)
+  },
   init: function (state) {
     const drumType = document.getElementById('drum-types')
     drumType.classList.add('drum-container')
@@ -190,6 +209,11 @@ const view = {
       }
       drumType.appendChild(typeButton)
     })
+
+    const statusButton = document.getElementById('drum-status')
+    const statusDiv = document.createElement('div')
+    statusDiv.setAttribute('id', 'pause')
+    statusButton.appendChild(statusDiv)
   }
 }
 
@@ -218,6 +242,12 @@ const state = {
       }
       view.selected(representation)
     }
+    if (this.stopping(model)) {
+      view.stopped(representation)
+    }
+    if (this.starting(model)) {
+      view.started(representation)
+    }
   },
   nextAction: function (model) {
     if (this.ticking(model)) {
@@ -236,6 +266,12 @@ const state = {
   },
   selecting: function (model) {
     return model.drumType !== model.selectedDrumType
+  },
+  stopping: function (model) {
+    return model.started && model.stopped
+  },
+  starting: function (model) {
+    return model.started && !model.stopped && !this.ticking(model)
   }
 }
 
@@ -276,6 +312,9 @@ var model = (function (state) {
       if (data.drumType) {
         this.drumType = data.drumType
       }
+      if (typeof(data.stopped) !== 'undefined') {
+        this.stopped = data.stopped
+      }
       this.state.render(model)
     }
   }
@@ -310,16 +349,27 @@ var actions = {
   },
   selectDrumBeat: function (data = {}) {
     model.present({ selectedDrumBeat: data.beat })
+  },
+  stopDrum: function (data = {}) {
+    model.present({ stopped: true })
+  },
+  startDrum: function (data = {}) {
+    model.present({ stopped: false })
   }
 }
+let drumBeatInterval
 
-setInterval(function () {
-  actions.tick({ beat: model.beat })
-  model.drums.forEach(drum => actions.hitDrumIfSelected({
-    beat: model.beat,
-    drum
-  }))
-}, (60 * 1000) / INITIAL_TEMPO)
+const startDrum = function () {
+  drumBeatInterval = setInterval(function () {
+    actions.tick({ beat: model.beat })
+    model.drums.forEach(drum => actions.hitDrumIfSelected({
+      beat: model.beat,
+      drum
+    }))
+  }, (60 * 1000) / INITIAL_TEMPO)
+}
+
+startDrum()
 
 const mouseClick = function (e) {
   e.preventDefault()
@@ -329,6 +379,14 @@ const mouseClick = function (e) {
   }
   if (e.target.classList.contains('drum-button')) {
     actions.selectDrumBeat({ beat: parseInt(e.target.innerText, 10) })
+  }
+  if (e.target.id === 'pause') {
+    actions.stopDrum()
+    clearInterval(drumBeatInterval)
+  }
+  if (e.target.id === 'play') {
+    actions.startDrum()
+    startDrum()
   }
 }
 
