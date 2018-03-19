@@ -216,53 +216,51 @@ view.init = function (state) {
   })
 }
 
-var state = (function () {
-  return {
-    render: function (model) {
-      this.representation(model)
-      this.nextAction(model)
-    },
-    representation: function (model) {
-      let representation = {}
-      if (this.ticking(model)) {
-        representation = {
-          beat: model.beat,
-          nextBeat: model.nextBeat,
-          maxBeat: model.maxBeat,
-          tempo: model.tempo,
-          drums: model.drums,
-          drumType: model.drumType
-        }
-        view.display(representation)
+var state = {
+  render: function (model) {
+    this.representation(model)
+    this.nextAction(model)
+  },
+  representation: function (model) {
+    let representation = {}
+    if (this.ticking(model)) {
+      representation = {
+        beat: model.beat,
+        nextBeat: model.nextBeat,
+        maxBeat: model.maxBeat,
+        tempo: model.tempo,
+        drums: model.drums,
+        drumType: model.drumType
       }
-      if (this.selecting(model)) {
-        representation = {
-          drums: model.drums,
-          drumType: model.selectedDrumType
-        }
-        view.selected(representation)
-      }
-    },
-    nextAction: function (model) {
-      if (this.ticking(model)) {
-        actions.updateBeat({
-          beat: model.nextBeat
-        }, model.present)
-      }
-      if (this.selecting(model)) {
-        actions.updateDrumType({
-          drumType: model.selectedDrumType
-        })
-      }
-    },
-    ticking: function (model) {
-      return model.started && !model.stopped && (model.beat !== model.nextBeat)
-    },
-    selecting: function (model) {
-      return model.drumType !== model.selectedDrumType
+      view.display(representation)
     }
+    if (this.selecting(model)) {
+      representation = {
+        drums: model.drums,
+        drumType: model.selectedDrumType
+      }
+      view.selected(representation)
+    }
+  },
+  nextAction: function (model) {
+    if (this.ticking(model)) {
+      actions.updateBeat({
+        beat: model.nextBeat
+      }, model.present)
+    }
+    if (this.selecting(model)) {
+      actions.updateDrumType({
+        drumType: model.selectedDrumType
+      })
+    }
+  },
+  ticking: function (model) {
+    return model.started && !model.stopped && (model.beat !== model.nextBeat)
+  },
+  selecting: function (model) {
+    return model.drumType !== model.selectedDrumType
   }
-})()
+}
 
 var model = (function (state) {
   return {
