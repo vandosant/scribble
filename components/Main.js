@@ -6,14 +6,13 @@ import drumMachine from './DrumMachine'
 import visualizer from './Visualizer'
 import '../styles/application.scss'
 
-const DRUM_VOL = 1.3
 const INITIAL_TEMPO = 180
 
 const viz = visualizer()
 const drumDefaults = {
   context,
   wave: 'sine',
-  gainVal: DRUM_VOL,
+  gainVal: 1.0,
   viz
 }
 
@@ -315,6 +314,15 @@ var model = (function (state) {
       if (typeof data.stopped !== 'undefined') {
         this.stopped = data.stopped
       }
+      if (typeof data.drumVolume !== 'undefined') {
+        this.drums = this.drums.map(drum => ({
+          ...drum,
+          instance: {
+            ...drum.instance,
+            gainVal: data.drumVolume
+          }
+        }))
+      }
       this.state.render(model)
     }
   }
@@ -350,6 +358,9 @@ var actions = {
   selectDrumBeat: function (data = {}) {
     model.present({ selectedDrumBeat: data.beat })
   },
+  setDrumVolume: function (data = {}) {
+    model.present({ drumVolume: data.volume })
+  },
   stopDrum: function (data = {}) {
     model.present({ stopped: true })
   },
@@ -359,14 +370,14 @@ var actions = {
 }
 let drumBeatInterval
 
-const startDrum = function () {
+const startDrum = function (tempo = INITIAL_TEMPO) {
   drumBeatInterval = setInterval(function () {
     actions.tick({ beat: model.beat })
     model.drums.forEach(drum => actions.hitDrumIfSelected({
       beat: model.beat,
       drum
     }))
-  }, (60 * 1000) / INITIAL_TEMPO)
+  }, (60 * 1000) / tempo)
 }
 
 startDrum()
@@ -390,4 +401,17 @@ const mouseClick = function (e) {
   }
 }
 
+const handleChange = function (e) {
+  e.preventDefault()
+  if (e.target.id === 'drum-volume') {
+    actions.setDrumVolume({ volume: e.target.value / 100 })
+  }
+  if (e.target.id === 'tempo') {
+    clearInterval(drumBeatInterval)
+    startDrum(parseInt(e.target.value))
+  }
+}
+
 document.addEventListener('click', mouseClick, false)
+
+document.addEventListener('change', handleChange)
