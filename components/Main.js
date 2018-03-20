@@ -24,7 +24,7 @@ var drums = [
     instance: drumMachine({
       ...drumDefaults,
       frequency: 47,
-      sustain: 0.03
+      sustain: 0.01
     })
   },
   {
@@ -33,8 +33,8 @@ var drums = [
     selectedBeats: [],
     instance: drumMachine({
       ...drumDefaults,
-      frequency: 64,
-      sustain: 0.05
+      frequency: 84,
+      sustain: 0.03
     })
   },
   {
@@ -44,7 +44,7 @@ var drums = [
     instance: drumMachine({
       ...drumDefaults,
       frequency: 160,
-      sustain: 0.05
+      sustain: 0.03
     })
   },
   {
@@ -54,11 +54,11 @@ var drums = [
     instance: drumMachine({
       ...drumDefaults,
       frequency: 188,
-      sustain: 0.07
+      sustain: 0.05
     })
   },
   {
-    identifier: 'pad',
+    identifier: 'pad1',
     active: false,
     selectedBeats: [],
     instance: drumMachine({
@@ -67,7 +67,18 @@ var drums = [
       wave: 'triangle',
       sustain: 0.02
     })
-  }
+  },
+  {
+    identifier: 'pad2',
+    active: false,
+    selectedBeats: [],
+    instance: drumMachine({
+      ...drumDefaults,
+      frequency: 192,
+      wave: 'square',
+      sustain: 0.009
+    })
+  },
 ]
 
 document.addEventListener('keydown', (event) => {
