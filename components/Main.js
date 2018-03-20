@@ -368,21 +368,27 @@ var actions = {
     model.present({ stopped: false })
   }
 }
-let drumBeatInterval
-
-const startDrum = function (tempo = INITIAL_TEMPO) {
-  drumBeatInterval = setInterval(function () {
-    actions.tick({ beat: model.beat })
-    model.drums.forEach(drum => actions.hitDrumIfSelected({
-      beat: model.beat,
-      drum
-    }))
-  }, (60 * 1000) / tempo)
+let drum = {
+  beatInterval: null,
+  tempo: INITIAL_TEMPO,
+  start: function () {
+    clearInterval(this.beatInterval)
+    this.beatInterval = setInterval(function () {
+      actions.tick({ beat: model.beat })
+      model.drums.forEach(drum => actions.hitDrumIfSelected({
+        beat: model.beat,
+        drum
+      }))
+    }, (60 * 1000) / this.tempo)
+  },
+  stop: function () {
+    clearInterval(this.beatInterval)
+  }
 }
 
-startDrum()
+drum.start()
 
-const mouseClick = function (e) {
+const handleClick = function (e) {
   e.preventDefault()
   if (e.target.classList.contains('drum-type')) {
     const drumType = e.target.innerText
@@ -393,11 +399,11 @@ const mouseClick = function (e) {
   }
   if (e.target.id === 'pause') {
     actions.stopDrum()
-    clearInterval(drumBeatInterval)
+    drum.stop()
   }
   if (e.target.id === 'play') {
     actions.startDrum()
-    startDrum()
+    drum.start()
   }
 }
 
@@ -407,11 +413,11 @@ const handleChange = function (e) {
     actions.setDrumVolume({ volume: e.target.value / 100 })
   }
   if (e.target.id === 'tempo') {
-    clearInterval(drumBeatInterval)
-    startDrum(parseInt(e.target.value))
+    drum.tempo = parseInt(e.target.value, 10)
+    drum.stop()
+    drum.start()
   }
 }
 
-document.addEventListener('click', mouseClick, false)
-
+document.addEventListener('click', handleClick, false)
 document.addEventListener('change', handleChange)
