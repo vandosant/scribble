@@ -400,7 +400,6 @@ let drum = {
 drum.start()
 
 const handleClick = function (e) {
-  e.preventDefault()
   if (e.target.classList.contains('drum-type')) {
     const drumType = e.target.innerText
     actions.selectDrumType({ identifier: drumType })
@@ -419,7 +418,6 @@ const handleClick = function (e) {
 }
 
 const handleChange = function (e) {
-  e.preventDefault()
   if (e.target.id === 'drum-volume') {
     actions.setDrumVolume({ volume: e.target.value / 100 })
   }
