@@ -35,7 +35,7 @@ function visualize () {
       canvasCtx.fillRect(0, 0, WIDTH, HEIGHT)
 
       canvasCtx.lineWidth = 2
-      canvasCtx.strokeStyle = 'rgb(0, 0, 0)'
+      canvasCtx.strokeStyle = 'rgb(69, 58, 56)'
 
       canvasCtx.beginPath()
       const sliceWidth = WIDTH * 1.0 / bufferLength
