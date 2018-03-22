@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 
 const view = {
-  display: function (state) {
+  tick: function (state) {
     const drums = document.getElementById('drums')
     const drumButtonContainer = document.createElement('div')
     drums.innerHTML = ''
@@ -146,7 +146,6 @@ const view = {
       if (active) {
         let buttonContainer = document.createElement('div')
         buttonContainer.classList.add('drum-container')
-        buttonContainer.setAttribute('id', 'drum-' + drum.identifier)
         let beats = []
         for (var i = 0; i < state.maxBeat; i++) {
           let beatEl = document.createElement('div')
@@ -240,7 +239,7 @@ const state = {
         drums: model.drums,
         drumType: model.drumType
       }
-      view.display(representation)
+      view.tick(representation)
     }
     if (this.selecting(model)) {
       representation = {
@@ -308,10 +307,16 @@ var model = (function (state) {
       if (data.selectedDrumBeat) {
         const selectedDrumIndex = this.drums.findIndex(drum => drum.identifier === this.drumType)
         const selectedDrum = this.drums[selectedDrumIndex]
+        let selectedBeats
+        if (selectedDrum.selectedBeats.includes(data.selectedDrumBeat)) {
+          selectedBeats = selectedDrum.selectedBeats.filter(beat => beat !== data.selectedDrumBeat)
+        } else {
+          selectedBeats = [].concat(selectedDrum.selectedBeats, data.selectedDrumBeat)
+        }
         this.drums = [
           ...this.drums.slice(0, selectedDrumIndex), {
             ...selectedDrum,
-            selectedBeats: [].concat(selectedDrum.selectedBeats, data.selectedDrumBeat)
+            selectedBeats
           },
           ...this.drums.slice(selectedDrumIndex + 1)
         ]
@@ -428,5 +433,5 @@ const handleChange = function (e) {
   }
 }
 
-document.addEventListener('click', handleClick, false)
+document.addEventListener('click', handleClick)
 document.addEventListener('change', handleChange)
