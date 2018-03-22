@@ -1,21 +1,20 @@
 import $ from 'jquery'
 function keyboardModel (obj) {
-  var volumeSelector, volume, keysDown, keys, oscillators
+  let volumeSelector
+  let keysDown = []
+  let volume = 0.25
 
-  keysDown = []
   if (obj && obj.volume) {
     volume = obj.volume
-  } else {
-    volume = 0.25
   }
 
   if (obj && obj.volumeSelector) {
     volumeSelector = obj.volumeSelector
   }
 
-  oscillators = obj.oscillators
+  let oscillators = obj.oscillators
 
-  keys = {
+  const keys = {
     'A': {
       key: 65,
       index: 0,
@@ -84,13 +83,12 @@ function keyboardModel (obj) {
   }
 
   var keydown = function keydown (keyChar) {
-    var that = this
     if (keysDown.indexOf(keyChar.which) === -1) {
-      var char = String.fromCharCode(keyChar.which)
-      var key = keys[char]
+      const char = String.fromCharCode(keyChar.which)
+      const key = keys[char]
       if (key) {
         oscillators[key.index].updateNote(key.freq)
-        oscillators[key.index].updateVolume(that.volume)
+        oscillators[key.index].updateVolume(this.volume)
         keysDown.push(keyChar.which)
         $('#key-' + char).addClass('keyon')
       }
@@ -98,9 +96,9 @@ function keyboardModel (obj) {
   }
 
   var keyup = function (keyChar) {
-    var char = String.fromCharCode(keyChar.which)
-    var key = keys[char]
-    var keyIndex = keysDown.indexOf(keyChar.which)
+    const char = String.fromCharCode(keyChar.which)
+    const key = keys[char]
+    const keyIndex = keysDown.indexOf(keyChar.which)
     if (keyIndex >= 0) {
       oscillators[key.index].updateVolume(0)
       delete keysDown[keyIndex]
@@ -112,7 +110,7 @@ function keyboardModel (obj) {
     this.volume = (rangeVal / 100) * 0.25
   }
 
-  var muteIfHidden = function () {
+  const muteIfHidden = function () {
     if (typeof document.addEventListener && typeof document.visibilityState) {
       document.addEventListener('visibilitychange', function () {
         if (document.hidden) {
@@ -124,20 +122,19 @@ function keyboardModel (obj) {
     }
   }
 
-  var initialize = function () {
-    var that = this
+  const initialize = function () {
     $(document).keydown(function (e) {
-      that.keydown(e)
-    })
+      this.keydown(e)
+    }.bind(this))
 
     $(document).keyup(function (e) {
-      that.keyup(e)
-    })
-    var volumeElement = document.getElementById(volumeSelector)
+      this.keyup(e)
+    }.bind(this))
+    const volumeElement = document.getElementById(volumeSelector)
     if (volumeElement) {
-      volumeElement.addEventListener('change', function () {
-        that.updateVolume(this.value)
-      })
+      volumeElement.addEventListener('change', function (e) {
+        this.updateVolume(e.target.value)
+      }.bind(this))
     }
 
     muteIfHidden()
