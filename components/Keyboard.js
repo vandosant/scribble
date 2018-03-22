@@ -68,7 +68,7 @@ const keys = {
   }
 }
 
-function keyboardModel (obj) {
+function keyboard (obj) {
   let volumeSelector
   let keysDown = []
   let volume = 0.25
@@ -157,4 +157,4 @@ function keyboardModel (obj) {
   }
 }
 
-export default keyboardModel
+export default keyboard

@@ -20,7 +20,8 @@ function visualize () {
       nodes[i].connect(dest)
     }
 
-    analyser.fftSize = 2048
+    analyser.fftSize = 1024
+    analyser.smoothingTimeConstant = 1
     const bufferLength = analyser.frequencyBinCount // half the FFT value
     const dataArray = new Uint8Array(bufferLength) // create an array to store the data
 
@@ -41,7 +42,7 @@ function visualize () {
       const sliceWidth = WIDTH * 1.0 / bufferLength
       let x = 0
 
-      for (var i = 0; i < bufferLength; i++) {
+      for (let i = 0; i < bufferLength; i++) {
         const v = dataArray[i] / 128.0
         const y = v * HEIGHT / 2
 
