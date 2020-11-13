@@ -2,7 +2,7 @@ import html from "choo/html";
 import key from "./key";
 import styles from "./keyboard.css";
 
-export default function ({ keys }) {
+export default function ({ keys }, emit) {
   return html`<div class="${styles.container}">
     <div class="octave">
       <div id="octave-down">
@@ -20,8 +20,8 @@ export default function ({ keys }) {
       </div>
     </div>
   </div> `;
-}
 
-function mapKey(k, index) {
-  return key({ flat: k.flat, y: 0, x: index * 10 });
+  function mapKey(k, index) {
+    return key({ ...k, y: 0, x: index * 10 }, emit);
+  }
 }

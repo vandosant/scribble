@@ -7,8 +7,10 @@ let app = choo();
 app.use(function (state, emitter) {
   state.keys = KEYS;
 
-  emitter.on("keyPressed", function () {
-    console.log("haha");
+  emitter.on("activateKey", function (key) {
+    console.log(state.keys, key, state.keys[key]);
+    state.keys[key].active = !state.keys[key].active;
+    emitter.emit("render");
   });
 });
 
