@@ -1,11 +1,14 @@
 import html from "choo/html";
+import _styles from "./key.css";
 
 export default function ({ flat, pressed, x, y }) {
-  return html`<div
-    class="${flat ? "key-flat" : "key"} ${pressed ? "keyon" : null}"
-  >
-
-  <!-- Rounded corner rectangle -->
-  <rect x="${x}" y="${y}" width="10" height="40" rx="2" />
-  </div>`;
+  console.log(flat);
+  return html`<rect
+    x="${x}"
+    y="${y}"
+    width="10"
+    height="${flat ? 30 : "40"}"
+    rx="2"
+    fill="${flat ? "black" : "white"}"
+  /> `;
 }

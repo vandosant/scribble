@@ -1,0 +1,11 @@
+{
+  .container {
+    color: white;
+  }
+  .containerActive {
+    stroke: 2px solid pink;
+  }
+  .containerFlat {
+    color: black;
+  }
+}
