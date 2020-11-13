@@ -1,7 +1,7 @@
 import html from "choo/html";
 import key from "./key";
 
-export default function (state) {
+export default function ({ keys }) {
   return html`<div class="keyboard-container">
     <div class="octave">
       <div id="octave-down">
@@ -9,7 +9,9 @@ export default function (state) {
       </div>
     </div>
     <div class="keyboard">
-      ${Object.values(state.keys.sort((a, b) => b.index < a.index)).map(key)}
+      ${Object.values(keys)
+        .sort((a, b) => b.index < a.index)
+        .map(key)}
     </div>
     <div class="octave">
       <div id="octave-up">

@@ -1,12 +1,11 @@
-import choo from "choo.mjs";
-import KEYS from "../components/Keyboard";
-import main from "./main.js";
+import choo from "choo";
+import { KEYS } from "../components/Keyboard";
+import main from "./main";
 
-var app = choo();
+let app = choo();
 
 app.use(function (state, emitter) {
   state.keys = KEYS;
-  state.keys;
 
   emitter.on("keyPressed", function () {
     console.log("haha");

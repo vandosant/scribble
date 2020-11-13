@@ -79,102 +79,102 @@ export const KEYS = {
   },
 };
 
-function keyboard(obj) {
-  let volumeSelector;
-  let keysDown = [];
-  let volume = 0.25;
-
-  if (obj && obj.volume) {
-    volume = obj.volume;
-  }
-
-  if (obj && obj.volumeSelector) {
-    volumeSelector = obj.volumeSelector;
-  }
-
-  let oscillators = obj.oscillators;
-
-  const isKeyPressed = (keyChar) => keysDown.indexOf(keyChar.which) >= 0;
-
-  const keydown = function keydown(keyChar) {
-    if (!isKeyPressed(keyChar)) {
-      const char = String.fromCharCode(keyChar.which);
-      const key = keys[char];
-      if (key) {
-        oscillators[key.index].updateNote(key.freq);
-        oscillators[key.index].updateVolume(this.volume);
-        keysDown = keysDown.concat(keyChar.which);
-        $("#key-" + char).addClass("keyon");
-      }
-    }
-  };
-
-  const keyup = function (keyChar) {
-    if (isKeyPressed(keyChar)) {
-      const char = String.fromCharCode(keyChar.which);
-      const key = keys[char];
-      const keyIndex = keysDown.indexOf(keyChar.which);
-      if (keyIndex >= 0) {
-        oscillators[key.index].updateVolume(0);
-        keysDown = [].concat(
-          keysDown.slice(0, keyIndex),
-          keysDown.slice(keyIndex + 1)
-        );
-        $("#key-" + char).removeClass("keyon");
-      }
-    }
-  };
-
-  var updateVolume = function (rangeVal) {
-    this.volume = (rangeVal / 100) * 0.25;
-  };
-
-  const initialize = function () {
-    $(document).keydown(
-      function (e) {
-        this.keydown(e);
-      }.bind(this)
-    );
-
-    $(document).keyup(
-      function (e) {
-        this.keyup(e);
-      }.bind(this)
-    );
-
-    const volumeElement = document.getElementById(volumeSelector);
-    if (volumeElement) {
-      volumeElement.addEventListener(
-        "change",
-        function (e) {
-          this.updateVolume(e.target.value);
-        }.bind(this)
-      );
-    }
-
-    // mute if hidden
-    if (typeof document.addEventListener && typeof document.visibilityState) {
-      document.addEventListener(
-        "visibilitychange",
-        function () {
-          if (document.hidden) {
-            oscillators.forEach(function (o) {
-              o.updateVolume(0);
-            });
-          }
-        },
-        false
-      );
-    }
-  };
-
-  return {
-    initialize,
-    keys,
-    keydown,
-    keyup,
-    updateVolume,
-    volume,
-    volumeSelector,
-  };
-}
+//function keyboard(obj) {
+//  let volumeSelector;
+//  let keysDown = [];
+//  let volume = 0.25;
+//
+//  if (obj && obj.volume) {
+//    volume = obj.volume;
+//  }
+//
+//  if (obj && obj.volumeSelector) {
+//    volumeSelector = obj.volumeSelector;
+//  }
+//
+//  let oscillators = obj.oscillators;
+//
+//  const isKeyPressed = (keyChar) => keysDown.indexOf(keyChar.which) >= 0;
+//
+//  const keydown = function keydown(keyChar) {
+//    if (!isKeyPressed(keyChar)) {
+//      const char = String.fromCharCode(keyChar.which);
+//      const key = keys[char];
+//      if (key) {
+//        oscillators[key.index].updateNote(key.freq);
+//        oscillators[key.index].updateVolume(this.volume);
+//        keysDown = keysDown.concat(keyChar.which);
+//        $("#key-" + char).addClass("keyon");
+//      }
+//    }
+//  };
+//
+//  const keyup = function (keyChar) {
+//    if (isKeyPressed(keyChar)) {
+//      const char = String.fromCharCode(keyChar.which);
+//      const key = keys[char];
+//      const keyIndex = keysDown.indexOf(keyChar.which);
+//      if (keyIndex >= 0) {
+//        oscillators[key.index].updateVolume(0);
+//        keysDown = [].concat(
+//          keysDown.slice(0, keyIndex),
+//          keysDown.slice(keyIndex + 1)
+//        );
+//        $("#key-" + char).removeClass("keyon");
+//      }
+//    }
+//  };
+//
+//  var updateVolume = function (rangeVal) {
+//    this.volume = (rangeVal / 100) * 0.25;
+//  };
+//
+//  const initialize = function () {
+//    $(document).keydown(
+//      function (e) {
+//        this.keydown(e);
+//      }.bind(this)
+//    );
+//
+//    $(document).keyup(
+//      function (e) {
+//        this.keyup(e);
+//      }.bind(this)
+//    );
+//
+//    const volumeElement = document.getElementById(volumeSelector);
+//    if (volumeElement) {
+//      volumeElement.addEventListener(
+//        "change",
+//        function (e) {
+//          this.updateVolume(e.target.value);
+//        }.bind(this)
+//      );
+//    }
+//
+//    // mute if hidden
+//    if (typeof document.addEventListener && typeof document.visibilityState) {
+//      document.addEventListener(
+//        "visibilitychange",
+//        function () {
+//          if (document.hidden) {
+//            oscillators.forEach(function (o) {
+//              o.updateVolume(0);
+//            });
+//          }
+//        },
+//        false
+//      );
+//    }
+//  };
+//
+//  return {
+//    initialize,
+//    keys,
+//    keydown,
+//    keyup,
+//    updateVolume,
+//    volume,
+//    volumeSelector,
+//  };
+//}
