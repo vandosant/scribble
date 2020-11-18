@@ -30,6 +30,10 @@ module.exports = {
           loader: "babel-loader",
           options: {
             presets: ["@babel/preset-env"],
+            plugins: [
+              "@babel/plugin-transform-runtime",
+              "@babel/plugin-transform-async-to-generator",
+            ],
           },
         },
       },
@@ -39,6 +43,10 @@ module.exports = {
           "style-loader",
           { loader: "css-loader", options: { modules: true } },
         ],
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif|wav)$/i,
+        type: "asset/resource",
       },
     ],
   },
