@@ -19,19 +19,18 @@ const start = ({ context, gainNode }) => {
 };
 
 const pause = ({ context, gainNode }) => {
-  for (let i = 1.0, j = 0; i > 0.0; i -= 0.1, j += 0.01) {
-    gainNode.gain.setValueAtTime(i, context.currentTime + j);
-  }
+  gainNode.gain.linearRampToValueAtTime(0.01, context.currentTime + 1.0);
+  gainNode.gain.setValueAtTime(0.0, context.currentTime + 1.1);
 };
 
 const effects = {
   compressor: ({ context }) => {
     var compressor = context.createDynamicsCompressor();
     compressor.threshold.setValueAtTime(-90, context.currentTime);
-    compressor.knee.setValueAtTime(40, context.currentTime);
+    compressor.knee.setValueAtTime(60, context.currentTime);
     compressor.ratio.setValueAtTime(12, context.currentTime);
     compressor.attack.setValueAtTime(0, context.currentTime);
-    compressor.release.setValueAtTime(0.5, context.currentTime);
+    compressor.release.setValueAtTime(0.2, context.currentTime);
     return compressor;
   },
   distortion: ({ context }) => {
@@ -51,12 +50,12 @@ const effects = {
       return curve;
     }
 
-    distortion.curve = makeDistortionCurve(800);
+    distortion.curve = makeDistortionCurve(100);
     distortion.oversample = "4x";
     return distortion;
   },
   filter: ({ context }) => {
-    const filterNumber = 2;
+    const filterNumber = 3;
 
     let lowPassCoefs = [
       {
@@ -103,12 +102,10 @@ const oscillation = {
     oscillator.type = type;
     const filter = effects.filter({ context });
     const compressor = effects.compressor({ context });
-    // const distortion = effects.distortion({ context });
-    oscillator
-      .connect(filter)
-      .connect(reverb)
-      .connect(compressor)
-      .connect(gainNode);
+    const distortion = effects.distortion({ context });
+    oscillator.connect(filter).connect(compressor).connect(gainNode);
+    oscillator.connect(reverb).connect(compressor).connect(gainNode);
+    oscillator.connect(distortion).connect(compressor).connect(gainNode);
     oscillator.frequency.setValueAtTime(frequency, context.currentTime);
     oscillator.start(0);
     return oscillator;
