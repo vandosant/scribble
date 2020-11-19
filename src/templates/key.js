@@ -1,6 +1,6 @@
 import html from "choo/html";
 
-export default function ({ key, flat, active, x, y }, emit) {
+export default function ({ active, flat, onClick, x, y }) {
   return html`<rect
     onclick=${onClick}
     x="${x}"
@@ -11,8 +11,4 @@ export default function ({ key, flat, active, x, y }, emit) {
     fill="${flat ? "black" : "white"}"
     stroke="${active ? "purple" : "none"}"
   /> `;
-
-  function onClick() {
-    emit("activateKey", key);
-  }
 }

@@ -15,21 +15,23 @@ const start = ({ context, gainNode }) => {
     context.resume();
   }
 
-  gainNode.gain.value = 0.1;
+  gainNode.gain.setValueAtTime(1, context.currentTime);
 };
 
-const pause = ({ gainNode }) => {
-  gainNode.gain.value = 0.0;
+const pause = ({ context, gainNode }) => {
+  for (let i = 1.0, j = 0; i > 0.0; i -= 0.1, j += 0.01) {
+    gainNode.gain.setValueAtTime(i, context.currentTime + j);
+  }
 };
 
 const effects = {
   compressor: ({ context }) => {
     var compressor = context.createDynamicsCompressor();
-    compressor.threshold.setValueAtTime(-80, context.currentTime);
+    compressor.threshold.setValueAtTime(-90, context.currentTime);
     compressor.knee.setValueAtTime(40, context.currentTime);
     compressor.ratio.setValueAtTime(12, context.currentTime);
     compressor.attack.setValueAtTime(0, context.currentTime);
-    compressor.release.setValueAtTime(0.25, context.currentTime);
+    compressor.release.setValueAtTime(0.5, context.currentTime);
     return compressor;
   },
   distortion: ({ context }) => {
@@ -114,27 +116,33 @@ const oscillation = {
 };
 
 const nodes = {
-  gain: ({ context }) => context.createGain(),
+  gain: ({ context }) => {
+    let gainNode = context.createGain();
+    gainNode.gain.value = 0.0;
+    gainNode.connect(context.destination);
+    return gainNode;
+  },
 };
 
 const create = async ({ context, frequency, reverb }) => {
-  const gainNode = nodes.gain({ context });
-  ["sine", "sawtooth", "sine", "sawtooth"].forEach((type) =>
+  let gainNodes = [];
+  [("sine", "sawtooth", "sine", "sawtooth")].forEach((type) => {
+    const gainNode = nodes.gain({ context });
+    gainNodes = gainNodes.concat(gainNode);
     oscillation.node({
       context,
       gainNode,
       frequency,
       type,
       reverb,
-    })
-  );
+    });
+  });
 
-  gainNode.gain.value = 0.0;
-  gainNode.connect(context.destination);
   return {
-    gainNode,
-    start: ({ context }) => start({ context, gainNode }),
-    pause: () => pause({ gainNode }),
+    start: ({ context }) =>
+      gainNodes.forEach((gainNode) => start({ context, gainNode })),
+    pause: ({ context }) =>
+      gainNodes.forEach((gainNode) => pause({ context, gainNode })),
   };
 };
 
@@ -156,6 +164,13 @@ app.use(async function (state, emitter) {
   emitter.on("activateKey", function (key) {
     state.synthesizers[key].start({ context: state.context });
     state.activeKeys = state.activeKeys.concat(key);
+    emitter.emit("render");
+  });
+  emitter.on("deactivateKey", function (key) {
+    state.synthesizers[key].pause({ context: state.context });
+    state.activeKeys = state.activeKeys.filter(
+      (activeKey) => key !== activeKey
+    );
     emitter.emit("render");
   });
 });

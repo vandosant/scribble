@@ -1,8 +1,8 @@
 import html from "choo/html";
-import key from "./key";
+import Key from "./key";
 import styles from "./keyboard.css";
 
-export default function ({ keys }, emit) {
+export default function ({ activeKeys, keys, synthesizers }, emit) {
   return html`<div class="${styles.container}">
     <div class="octave">
       <div id="octave-down">
@@ -21,7 +21,23 @@ export default function ({ keys }, emit) {
     </div>
   </div> `;
 
-  function mapKey(k, index) {
-    return key({ ...k, y: 0, x: index * 10 }, emit);
+  function mapKey({ flat, key }, index) {
+    const active = activeKeys.includes(key);
+    return Key(
+      {
+        flat,
+        active,
+        y: 0,
+        x: index * 10,
+        onClick: () => {
+          if (activeKeys.includes(key)) {
+            emit("deactivateKey", key);
+          } else {
+            emit("activateKey", key);
+          }
+        },
+      },
+      emit
+    );
   }
 }
