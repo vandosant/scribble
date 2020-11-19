@@ -15,22 +15,22 @@ const start = ({ context, gainNode }) => {
     context.resume();
   }
 
-  gainNode.gain.setValueAtTime(1, context.currentTime);
+  gainNode.gain.linearRampToValueAtTime(1.0, context.currentTime + 0.2);
 };
 
 const pause = ({ context, gainNode }) => {
-  gainNode.gain.linearRampToValueAtTime(0.01, context.currentTime + 1.0);
-  gainNode.gain.setValueAtTime(0.0, context.currentTime + 1.1);
+  gainNode.gain.linearRampToValueAtTime(0.001, context.currentTime + 0.2);
+  gainNode.gain.setValueAtTime(0.0, context.currentTime + 0.2);
 };
 
 const effects = {
   compressor: ({ context }) => {
     var compressor = context.createDynamicsCompressor();
-    compressor.threshold.setValueAtTime(-90, context.currentTime);
-    compressor.knee.setValueAtTime(60, context.currentTime);
-    compressor.ratio.setValueAtTime(12, context.currentTime);
-    compressor.attack.setValueAtTime(0, context.currentTime);
-    compressor.release.setValueAtTime(0.2, context.currentTime);
+    compressor.threshold.setValueAtTime(-100, context.currentTime);
+    compressor.knee.setValueAtTime(1, context.currentTime);
+    compressor.ratio.setValueAtTime(20, context.currentTime);
+    compressor.attack.setValueAtTime(1, context.currentTime);
+    compressor.release.setValueAtTime(0.5, context.currentTime);
     return compressor;
   },
   distortion: ({ context }) => {
@@ -55,7 +55,7 @@ const effects = {
     return distortion;
   },
   filter: ({ context }) => {
-    const filterNumber = 3;
+    const filterNumber = 2;
 
     let lowPassCoefs = [
       {
@@ -103,9 +103,8 @@ const oscillation = {
     const filter = effects.filter({ context });
     const compressor = effects.compressor({ context });
     const distortion = effects.distortion({ context });
-    oscillator.connect(filter).connect(compressor).connect(gainNode);
+    oscillator.connect(distortion).connect(filter).connect(gainNode);
     oscillator.connect(reverb).connect(compressor).connect(gainNode);
-    oscillator.connect(distortion).connect(compressor).connect(gainNode);
     oscillator.frequency.setValueAtTime(frequency, context.currentTime);
     oscillator.start(0);
     return oscillator;
@@ -123,7 +122,7 @@ const nodes = {
 
 const create = async ({ context, frequency, reverb }) => {
   let gainNodes = [];
-  [("sine", "sawtooth", "sine", "sawtooth")].forEach((type) => {
+  ["sine", "sawtooth", "sine"].forEach((type) => {
     const gainNode = nodes.gain({ context });
     gainNodes = gainNodes.concat(gainNode);
     oscillation.node({
@@ -148,6 +147,30 @@ app.use(async function (state, emitter) {
   state.activeKeys = [];
   state.context = createAudioContext(window);
   state.synthesizers = {};
+  emitter.on("DOMContentLoaded", function () {
+    document.addEventListener("keydown", ({ key }) => {
+      emitter.emit("activateKey", key.toUpperCase());
+    });
+    document.addEventListener("keyup", ({ key }) => {
+      emitter.emit("deactivateKey", key.toUpperCase());
+    });
+  });
+  emitter.on("activateKey", function (key) {
+    if (!state.activeKeys.includes(key)) {
+      state.synthesizers[key]?.start({ context: state.context });
+      state.activeKeys = state.activeKeys.concat(key);
+      emitter.emit("render");
+    }
+  });
+  emitter.on("deactivateKey", function (key) {
+    if (state.activeKeys.includes(key)) {
+      state.synthesizers[key]?.pause({ context: state.context });
+      state.activeKeys = state.activeKeys.filter(
+        (activeKey) => key !== activeKey
+      );
+      emitter.emit("render");
+    }
+  });
   const reverb = await effects.reverb({ context: state.context });
   for (const key in KEYS) {
     const { freq } = KEYS[key];
@@ -157,19 +180,6 @@ app.use(async function (state, emitter) {
       reverb,
     });
   }
-
-  emitter.on("activateKey", function (key) {
-    state.synthesizers[key].start({ context: state.context });
-    state.activeKeys = state.activeKeys.concat(key);
-    emitter.emit("render");
-  });
-  emitter.on("deactivateKey", function (key) {
-    state.synthesizers[key].pause({ context: state.context });
-    state.activeKeys = state.activeKeys.filter(
-      (activeKey) => key !== activeKey
-    );
-    emitter.emit("render");
-  });
 });
 
 app.route("/", main);

@@ -2,7 +2,7 @@ import html from "choo/html";
 import Key from "./key";
 import styles from "./keyboard.css";
 
-export default function ({ activeKeys, keys, synthesizers }, emit) {
+export default function ({ activeKeys, keys }, emit) {
   return html`<div class="${styles.container}">
     <div class="octave">
       <div id="octave-down">
@@ -29,15 +29,17 @@ export default function ({ activeKeys, keys, synthesizers }, emit) {
         active,
         y: 0,
         x: index * 10,
-        onClick: () => {
-          if (activeKeys.includes(key)) {
-            emit("deactivateKey", key);
-          } else {
-            emit("activateKey", key);
-          }
-        },
+        onClick: () => activateKey({ activeKeys, key }, emit),
       },
       emit
     );
+  }
+}
+
+export function activateKey({ activeKeys, key }, emit) {
+  if (activeKeys.includes(key)) {
+    emit("deactivateKey", key);
+  } else {
+    emit("activateKey", key);
   }
 }
